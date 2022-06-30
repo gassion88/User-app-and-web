@@ -1,4 +1,4 @@
-package com.dostavka.app
+package com.hvarna.app
 
 import io.flutter.embedding.android.FlutterActivity
 
