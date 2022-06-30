@@ -1,6 +1,7 @@
 import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/util/styles.dart';
+import 'package:efood_multivendor/view/base/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +14,7 @@ class GuestButton extends StatelessWidget {
         minimumSize: Size(1, 40),
       ),
       onPressed: () async {
+        Get.dialog(CustomLoader(), barrierDismissible: false);
         AddressModel _address = await Get.find<LocationController>()
             .getCurrentLocation(true,
                 defaultLatLng: LatLng(42.2128383, 43.9553117));
