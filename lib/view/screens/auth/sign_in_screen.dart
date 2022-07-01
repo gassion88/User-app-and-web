@@ -155,14 +155,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(children: [
                           Row(children: [
                             CodePickerWidget(
-                              onChanged: (CountryCode countryCode) {
-                                _countryDialCode = countryCode.dialCode;
-                              },
-                              initialSelection: _countryDialCode != null
-                                  ? _countryDialCode
-                                  : Get.find<LocalizationController>()
-                                      .locale
-                                      .countryCode,
+                              enabled: false,
+                              initialSelection: 'RU',
                               favorite: [_countryDialCode],
                               showDropDownButton: true,
                               padding: EdgeInsets.zero,
