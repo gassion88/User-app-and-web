@@ -137,10 +137,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       Row(children: [
                         CodePickerWidget(
-                          onChanged: (CountryCode countryCode) {
-                            _countryDialCode = countryCode.dialCode;
-                          },
-                          initialSelection: _countryDialCode,
+                          initialSelection: 'RU',
                           favorite: [_countryDialCode],
                           showDropDownButton: true,
                           padding: EdgeInsets.zero,
