@@ -329,7 +329,7 @@
   "more": "More",
   "we_are_under_maintenance": "We Are Under Maintenance",
   "we_will_be_right_back": "We Will Be Right Back",
-  "are_you_sure_to_switch": "Are you sure you want to switch this order to Cash On Delivery?",
+  "are_you_sure_to_switch": "Вы уверены, что хотите переключить этот заказ на наложенный платеж?",
   "search_location": "Search Location",
   "profile_updated_successfully": "Profile updated successfully",
   "password_updated_successfully": "Password updated successfully",
@@ -362,6 +362,6 @@
   "coupon_code_copied": "Coupon code copied",
   "join_as_a_delivery_man": "Join as a Delivery Man",
   "join_as_a_restaurant": "Join as a Restaurant",
-  "are_you_sure_want_to_delete_address": "Are you sure want to delete address",
+  "are_you_sure_want_to_delete_address": "Вы уверены, что хотите удалить адрес?",
   "join_us": "Join Us"
 }
