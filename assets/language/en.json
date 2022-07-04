@@ -159,7 +159,7 @@
   "save_location": "Сохранить адрес",
   "pick_address": "Pick Address",
   "are_you_sure_to_reset": "Вы уверены, что хотите сбросить заказ?",
-  "if_you_change_location": "You have some foods in your cart. If you change your location, your cart and other data related to your current delivery location will be reset.",
+  "if_you_change_location": "У вас есть продукты в корзине. Если выйдите, ваша корзина и другие данные, связанные с вашим текущим местоположением доставки, будут сброшены.",
   "if_you_continue": "У вас есть еда из другого ресторана в корзине. Если вы продолжите, вся ваша предыдущая еда из корзины будет удалена.",
   "yes_and_continue": "Yes and Continue",
   "total_order": "Количество заказов",

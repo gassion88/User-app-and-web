@@ -93,7 +93,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
               return GetBuilder<LocationController>(
                   builder: (locationController) {
-                _addressController.text = locationController.address;
+                _addressController.text = '';
 
                 return Column(children: [
                   Expanded(

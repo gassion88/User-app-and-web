@@ -97,8 +97,6 @@ class HomeScreen extends StatelessWidget {
                         child: Row(children: [
                           Expanded(
                               child: InkWell(
-                            onTap: () => Get.toNamed(
-                                RouteHelper.getAccessLocationRoute('home')),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: Dimensions.PADDING_SIZE_SMALL,
