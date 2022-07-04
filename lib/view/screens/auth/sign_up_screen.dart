@@ -137,6 +137,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       Row(children: [
                         CodePickerWidget(
+                          enabled: false,
                           initialSelection: 'RU',
                           favorite: [_countryDialCode],
                           showDropDownButton: true,
