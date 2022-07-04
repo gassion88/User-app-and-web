@@ -201,7 +201,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           ]),
                           DropdownButton(
-                            value: orderController.addressIndex,
+                            value:  _addressList[1].value != null ? 0 : orderController.addressIndex,
                             items: _addressList,
                             itemHeight: ResponsiveHelper.isMobile(context) ? 70 : 85, elevation: 0, iconSize: 30, underline: SizedBox(),
                             onChanged: (int index) => orderController.setAddressIndex(index),

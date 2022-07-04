@@ -7,6 +7,7 @@ import 'package:efood_multivendor/controller/notification_controller.dart';
 import 'package:efood_multivendor/controller/product_controller.dart';
 import 'package:efood_multivendor/controller/restaurant_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/controller/theme_controller.dart';
 import 'package:efood_multivendor/controller/user_controller.dart';
 import 'package:efood_multivendor/data/model/response/config_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
@@ -96,8 +97,6 @@ class HomeScreen extends StatelessWidget {
                         child: Row(children: [
                           Expanded(
                               child: InkWell(
-                            onTap: () => Get.toNamed(
-                                RouteHelper.getAccessLocationRoute('home')),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: Dimensions.PADDING_SIZE_SMALL,
@@ -129,6 +128,18 @@ class HomeScreen extends StatelessWidget {
                         }),*/
                             ),
                           )),
+                          IconButton(
+                            icon: new Icon(
+                                Get.isDarkMode
+                                    ? Icons.light_mode_outlined
+                                    : Icons.dark_mode_outlined,
+                                color: Get.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black),
+                            onPressed: () {
+                              Get.find<ThemeController>().toggleTheme();
+                            },
+                          ),
                           InkWell(
                             child: GetBuilder<NotificationController>(
                                 builder: (notificationController) {

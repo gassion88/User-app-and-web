@@ -14,6 +14,7 @@ import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
+import 'package:efood_multivendor/view/base/custom_loader.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/custom_text_field.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
@@ -154,14 +155,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: Column(children: [
                           Row(children: [
                             CodePickerWidget(
-                              onChanged: (CountryCode countryCode) {
-                                _countryDialCode = countryCode.dialCode;
-                              },
-                              initialSelection: _countryDialCode != null
-                                  ? _countryDialCode
-                                  : Get.find<LocalizationController>()
-                                      .locale
-                                      .countryCode,
+                              enabled: false,
+                              initialSelection: 'RU',
                               favorite: [_countryDialCode],
                               showDropDownButton: true,
                               padding: EdgeInsets.zero,
@@ -308,6 +303,7 @@ class _SignInScreenState extends State<SignInScreen> {
             Get.toNamed(RouteHelper.getVerificationRoute(
                 _numberWithCountryCode, _token, RouteHelper.signUp, _data));
           } else {
+            Get.dialog(CustomLoader(), barrierDismissible: false);
             AddressModel _address = await Get.find<LocationController>()
                 .getCurrentLocation(true,
                     defaultLatLng: LatLng(42.2128383, 43.9553117));
