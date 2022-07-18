@@ -173,7 +173,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                           ? Dimensions.PADDING_SIZE_SMALL
                                           : 0),
 
-                                  Get.find<SplashController>()
+                                /*  Get.find<SplashController>()
                                           .configModel
                                           .orderDeliveryVerification
                                       ? Row(children: [
@@ -185,7 +185,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                                   .PADDING_SIZE_EXTRA_SMALL),
                                           Text(_order.otp, style: robotoMedium),
                                         ])
-                                      : SizedBox(),
+                                      : SizedBox(),*/
                                   SizedBox(
                                       height: Get.find<SplashController>()
                                               .configModel
@@ -258,8 +258,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                               .PADDING_SIZE_EXTRA_SMALL),
                                       Text(
                                         _order.orderStatus == 'delivered'
-                                            ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered,  locale)}'
-                                            : _order.orderStatus,
+                                            ? '${'доставлено'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered,  locale)}'
+                                            : _order.orderStatus == 'pending' ? 'ожидается подтверждение ресторана' : _order.orderStatus == 'processing' ? 'приготовление еды' : _order.orderStatus == 'handover' ? 'передаём ваш заказ курьеру' : _order.orderStatus == 'picked_up' ? 'в пути' : _order.orderStatus,
                                         style: robotoRegular.copyWith(
                                             fontSize: Dimensions.fontSizeSmall),
                                       ),
