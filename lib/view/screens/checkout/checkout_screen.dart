@@ -75,13 +75,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       appBar: CustomAppBar(title: 'checkout'.tr),
       body: _isLoggedIn ? GetBuilder<LocationController>(builder: (locationController) {
         List<DropdownMenuItem<int>> _addressList = [];
-        _addressList.add(DropdownMenuItem<int>(value: -1, child: SizedBox(
-          width: context.width > Dimensions.WEB_MAX_WIDTH ? Dimensions.WEB_MAX_WIDTH-50 : context.width-50,
-          child: AddressWidget(
-            address: Get.find<LocationController>().getUserAddress(),
-            fromAddress: false, fromCheckout: true,
-          ),
-        )));
         if(locationController.addressList != null) {
           for(int index=0; index<locationController.addressList.length; index++) {
             if(locationController.addressList[index].zoneId == Get.find<LocationController>().getUserAddress().zoneId) {
@@ -195,13 +188,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Text('deliver_to'.tr, style: robotoMedium),
                             TextButton.icon(
-                              onPressed: () => Get.toNamed(RouteHelper.getAddAddressRoute(true)),
+                              onPressed: () {
+                                Get.toNamed(RouteHelper.getAddAddressRoute(true));
+                                setState(() {
+                                  
+                                });
+                              } ,
                               icon: Icon(Icons.add, size: 20),
                               label: Text('add'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall)),
                             ),
                           ]),
+                          _addressList.length == 0 ? Text('Адрес не обнаружен,добавьте его чтобы продолжить') :
                           DropdownButton(
-                            value:  _addressList[1].value != null ? 0 : orderController.addressIndex,
+                            value: _addressList[0].value,
                             items: _addressList,
                             itemHeight: ResponsiveHelper.isMobile(context) ? 70 : 85, elevation: 0, iconSize: 30, underline: SizedBox(),
                             onChanged: (int index) => orderController.setAddressIndex(index),
