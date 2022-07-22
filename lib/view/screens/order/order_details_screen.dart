@@ -259,7 +259,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       Text(
                                         _order.orderStatus == 'delivered'
                                             ? '${'доставлено'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered,  locale)}'
-                                            : _order.orderStatus == 'pending' ? 'ожидается подтверждение ресторана' : _order.orderStatus == 'processing' ? 'приготовление еды' : _order.orderStatus == 'handover' ? 'передаём ваш заказ курьеру' : _order.orderStatus == 'picked_up' ? 'в пути' : _order.orderStatus,
+                                            : _order.orderStatus == 'pending' ? 'ожидается подтверждение ресторана' : _order.orderStatus == 'processing' ? 'приготовление еды' : _order.orderStatus == 'handover' ? 'передаём ваш заказ курьеру' : _order.orderStatus == 'picked_up' ? 'в пути' : _order.orderStatus == 'canceled' ? 'отменено' : _order.orderStatus,
                                         style: robotoRegular.copyWith(
                                             fontSize: Dimensions.fontSizeSmall),
                                       ),
