@@ -2,8 +2,9 @@ import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class DateConverter {
 
+
+class DateConverter {
   static String formatDate(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd hh:mm:ss a').format(dateTime);
   }
@@ -16,8 +17,8 @@ class DateConverter {
     return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
   }
 
-  static String dateTimeStringToDateTime(String dateTime) {
-    return DateFormat('dd MMM yyyy  ${_timeFormatter()}').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
+  static String dateTimeStringToDateTime(String dateTime, String locale) {
+    return DateFormat('dd MMM yyyy  ${_timeFormatter()}', locale).format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
   }
 
   static String dateTimeStringToDateOnly(String dateTime) {
@@ -33,6 +34,7 @@ class DateConverter {
   }
 
   static String isoStringToDateTimeString(String dateTime) {
+   
     return DateFormat('dd MMM yyyy  ${_timeFormatter()}').format(isoStringToLocalDate(dateTime));
   }
 

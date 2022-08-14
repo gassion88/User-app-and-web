@@ -54,6 +54,7 @@ class ForgetPassScreen extends StatelessWidget {
               ),
               child: Row(children: [
                 CodePickerWidget(
+                  enabled: false,
                   initialSelection: 'RU',
                   favorite: [_countryDialCode],
                   showDropDownButton: true,
