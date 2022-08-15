@@ -2,10 +2,10 @@ import 'package:efood_multivendor/data/model/response/language_model.dart';
 import 'package:efood_multivendor/util/images.dart';
 
 class AppConstants {
-  static const String APP_NAME = 'StackFood';
+  static const String APP_NAME = 'Hvarna';
   static const double APP_VERSION = 5.7;
 
-  static const String BASE_URL = 'https://stackfood-admin.6amtech.com';
+  static const String BASE_URL = 'https://hvarna.ru';
   static const String CATEGORY_URI = '/api/v1/categories';
   static const String BANNER_URI = '/api/v1/banners';
   static const String RESTAURANT_PRODUCT_URI = '/api/v1/products/latest';
