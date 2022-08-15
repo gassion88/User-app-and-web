@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:country_code_picker/country_code.dart';
 import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/localization_controller.dart';
+import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
@@ -21,6 +23,7 @@ import 'package:efood_multivendor/view/screens/auth/widget/guest_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phone_number/phone_number.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -251,7 +254,12 @@ class _SignInScreenState extends State<SignInScreen> {
             String _data = base64Encode(_encoded);
             Get.toNamed(RouteHelper.getVerificationRoute(_numberWithCountryCode, _token, RouteHelper.signUp, _data));
           }else {
-            Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
+            AddressModel _address = await Get.find<LocationController>()
+                .getCurrentLocation(true,
+                    defaultLatLng: LatLng(42.2128383, 43.9553117));
+            Get.find<LocationController>()
+                .saveAddressAndNavigate(_address, false, '/', '/' != null);
+            //Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
           }
         }else {
           showCustomSnackBar(status.message);
