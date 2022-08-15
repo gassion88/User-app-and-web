@@ -36,15 +36,20 @@ class OrderProductWidget extends StatelessWidget {
     
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-          child: CustomImage(
-            height: 50, width: 50, fit: BoxFit.cover,
-            image: '${Get.find<SplashController>().configModel.baseUrls.productImageUrl}/'
-                '${orderDetails.foodDetails.image}',
+        orderDetails.foodDetails.image != null && orderDetails.foodDetails.image.isNotEmpty ?
+        Padding(
+          padding: const EdgeInsets.only(right: Dimensions.PADDING_SIZE_SMALL),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+            child: CustomImage(
+              height: 50, width: 50, fit: BoxFit.cover,
+              image: '${orderDetails.itemCampaignId != null ? Get.find<SplashController>().configModel.baseUrls.campaignImageUrl
+                  : Get.find<SplashController>().configModel.baseUrls.productImageUrl}/'
+                  '${orderDetails.foodDetails.image}',
+            ),
           ),
-        ),
-        SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+        ) : SizedBox.shrink(),
+
         Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
@@ -60,10 +65,23 @@ class OrderProductWidget extends StatelessWidget {
               ),
             ]),
             SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-            Text(
-              PriceConverter.convertPrice(orderDetails.price),
-              style: robotoMedium,
-            ),
+            Row(children: [
+              Expanded(child: Text(
+                PriceConverter.convertPrice(orderDetails.price),
+                style: robotoMedium,
+              )),
+              Get.find<SplashController>().configModel.toggleVegNonVeg ? Container(
+                padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL, horizontal: Dimensions.PADDING_SIZE_SMALL),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Text(
+                  orderDetails.foodDetails.veg == 0 ? 'non_veg'.tr : 'veg'.tr,
+                  style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Colors.white),
+                ),
+              ) : SizedBox(),
+            ]),
 
           ]),
         ),

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:efood_multivendor/util/images.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CustomImage extends StatelessWidget {
   final String image;
@@ -12,10 +12,13 @@ class CustomImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: image, height: height, width: width, fit: fit,
-      placeholder: (context, url) => Image.asset(Images.placeholder, height: height, width: width, fit: fit),
-      errorWidget: (context, url, error) => Image.asset(placeholder, height: height, width: width, fit: fit),
+    return Container(
+      color: Theme.of(context).cardColor,
+      child: CachedNetworkImage(
+        imageUrl: image, height: height, width: width, fit: fit,
+        placeholder: (context, url) => Image.asset(Images.placeholder, height: height, width: width, fit: fit),
+        errorWidget: (context, url, error) => Image.asset(placeholder, height: height, width: width, fit: fit),
+      ),
     );
   }
 }

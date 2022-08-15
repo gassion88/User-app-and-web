@@ -15,12 +15,14 @@ class CouponController extends GetxController implements GetxService {
   double _discount = 0.0;
   bool _isLoading = false;
   bool _freeDelivery = false;
+  String _checkoutCouponCode = '';
 
   CouponModel get coupon => _coupon;
   double get discount => _discount;
   bool get isLoading => _isLoading;
   bool get freeDelivery => _freeDelivery;
   List<CouponModel> get couponList => _couponList;
+  String get checkoutCouponCode => _checkoutCouponCode;
 
   Future<void> getCouponList() async {
     Response response = await couponRepo.getCouponList();
@@ -90,5 +92,10 @@ class CouponController extends GetxController implements GetxService {
     if(notify) {
       update();
     }
+  }
+
+  void setCoupon(String code){
+    _checkoutCouponCode = code;
+    update();
   }
 }

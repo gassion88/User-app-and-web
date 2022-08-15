@@ -1,4 +1,0 @@
-io/flutter/plugins/GeneratedPluginRegistrant.java
- io.flutter.plugins.GeneratedPluginRegistrant
-com/hvarna/app/BuildConfig.java
- com.hvarna.app.BuildConfig

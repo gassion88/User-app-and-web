@@ -72,7 +72,10 @@ class WishListController extends GetxController implements GetxService {
         _wishProductIdList.add(_product.id);
       });
       response.body['restaurant'].forEach((restaurant) async {
-        Restaurant _restaurant = Restaurant.fromJson(restaurant);
+        Restaurant _restaurant;
+        try{
+          _restaurant = Restaurant.fromJson(restaurant);
+        }catch(e){}
         _wishRestList.add(_restaurant);
         _wishRestIdList.add(_restaurant.id);
       });

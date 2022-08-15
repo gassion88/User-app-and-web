@@ -1,3 +1,4 @@
+import 'package:efood_multivendor/controller/theme_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/view/base/rating_bar.dart';
@@ -35,7 +36,7 @@ class ProductShimmer extends StatelessWidget {
                   height: _desktop ? 120 : 65, width: _desktop ? 120 : 80,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                    color: Colors.grey[300],
+                    color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                   ),
                 ),
                 SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
@@ -43,11 +44,11 @@ class ProductShimmer extends StatelessWidget {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
 
-                    Container(height: _desktop ? 20 : 10, width: double.maxFinite, color: Colors.grey[300]),
+                    Container(height: _desktop ? 20 : 10, width: double.maxFinite, color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
                     SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                     Container(
-                      height: _desktop ? 15 : 10, width: double.maxFinite, color: Colors.grey[300],
+                      height: _desktop ? 15 : 10, width: double.maxFinite, color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                       margin: EdgeInsets.only(right: Dimensions.PADDING_SIZE_LARGE),
                     ),
                     SizedBox(height: isRestaurant ? Dimensions.PADDING_SIZE_SMALL : 0),
@@ -57,9 +58,9 @@ class ProductShimmer extends StatelessWidget {
                       rating: 0, size: _desktop ? 15 : 12,
                       ratingCount: 0,
                     ) : Row(children: [
-                      Container(height: _desktop ? 20 : 15, width: 30, color: Colors.grey[300]),
+                      Container(height: _desktop ? 20 : 15, width: 30, color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                      Container(height: _desktop ? 15 : 10, width: 20, color: Colors.grey[300]),
+                      Container(height: _desktop ? 15 : 10, width: 20, color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
                     ]),
 
                   ]),

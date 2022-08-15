@@ -5,10 +5,21 @@ import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ItemCampaignScreen extends StatelessWidget {
+class ItemCampaignScreen extends StatefulWidget {
+  @override
+  State<ItemCampaignScreen> createState() => _ItemCampaignScreenState();
+}
+
+class _ItemCampaignScreenState extends State<ItemCampaignScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    Get.find<CampaignController>().getItemCampaignList(false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    Get.find<CampaignController>().getItemCampaignList(false);
 
     return Scaffold(
       appBar: CustomAppBar(title: 'campaigns'.tr),
@@ -23,4 +34,5 @@ class ItemCampaignScreen extends StatelessWidget {
       )))),
     );
   }
+
 }

@@ -1,9 +1,11 @@
 import 'package:efood_multivendor/controller/auth_controller.dart';
+import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/search_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
+import 'package:efood_multivendor/view/base/bottom_cart_widget.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
@@ -56,6 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
               Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Row(children: [
                 SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+
                 Expanded(child: SearchField(
                   controller: _searchController,
                   hint: 'search_food_or_restaurant'.tr,
@@ -78,6 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   searchController.historyList.length > 0 ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     Text('history'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
+
                     InkWell(
                       onTap: () => searchController.clearSearchAddress(),
                       child: Padding(
@@ -127,6 +131,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     'suggestions'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
                   ) : SizedBox(),
                   SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+
                   (_isLoggedIn && searchController.suggestedFoodList != null) ? searchController.suggestedFoodList.length > 0 ?  GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: ResponsiveHelper.isMobile(context) ? 2 : 4, childAspectRatio: (1/ 0.4),
@@ -152,6 +157,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                           child: Row(children: [
                             SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+
                             ClipRRect(
                               borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                               child: CustomImage(
@@ -161,11 +167,12 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                             ),
                             SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-                            Text(
+
+                            Expanded(child: Text(
                               searchController.suggestedFoodList[index].name,
                               style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                               maxLines: 2, overflow: TextOverflow.ellipsis,
-                            ),
+                            )),
                           ]),
                         ),
                       );
@@ -177,6 +184,10 @@ class _SearchScreenState extends State<SearchScreen> {
             ]);
           }),
         )),
+
+        bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
+          return cartController.cartList.length > 0 && !ResponsiveHelper.isDesktop(context) ? BottomCartWidget() : SizedBox();
+        }),
       ),
     );
   }

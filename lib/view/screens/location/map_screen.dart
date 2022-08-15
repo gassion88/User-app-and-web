@@ -42,6 +42,7 @@ class _MapScreenState extends State<MapScreen> {
           child: Stack(children: [
             GoogleMap(
               initialCameraPosition: CameraPosition(target: _latLng, zoom: 17),
+              minMaxZoomPreference: MinMaxZoomPreference(0, 16),
               zoomGesturesEnabled: true,
               myLocationButtonEnabled: false,
               zoomControlsEnabled: false,
@@ -87,6 +88,10 @@ class _MapScreenState extends State<MapScreen> {
                             )),
 
                             Text(widget.address.address, style: robotoMedium),
+
+                            (widget.address.road != null && widget.address.road.isNotEmpty) ? Text('${'street_number'.tr}: ${widget.address.road}', style: robotoMedium) : SizedBox.shrink(),
+                            (widget.address.house != null && widget.address.house.isNotEmpty) ? Text('${'house'.tr}: ${widget.address.house}', style: robotoMedium) : SizedBox.shrink(),
+                            (widget.address.floor != null && widget.address.floor.isNotEmpty) ? Text('${'floor'.tr}: ${widget.address.floor}', style: robotoMedium) : SizedBox.shrink(),
 
                           ]),
                         ),

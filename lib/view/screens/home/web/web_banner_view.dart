@@ -1,5 +1,6 @@
 import 'package:efood_multivendor/controller/banner_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/controller/theme_controller.dart';
 import 'package:efood_multivendor/data/model/response/basic_campaign_model.dart';
 import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/data/model/response/restaurant_model.dart';
@@ -122,7 +123,7 @@ class WebBannerView extends StatelessWidget {
       );
     }else if(bannerController.bannerDataList[index] is BasicCampaignModel) {
       BasicCampaignModel _campaign = bannerController.bannerDataList[index];
-      Get.toNamed(RouteHelper.getBasicCampaignRoute(_campaign.id, _campaign.title, _campaign.image));
+      Get.toNamed(RouteHelper.getBasicCampaignRoute(_campaign));
     }
   }
 }
@@ -142,14 +143,14 @@ class WebBannerShimmer extends StatelessWidget {
 
           Expanded(child: Container(
             height: 220,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Colors.grey[300]),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
           )),
 
           SizedBox(width: Dimensions.PADDING_SIZE_LARGE),
 
           Expanded(child: Container(
             height: 220,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Colors.grey[300]),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
           )),
 
         ]),

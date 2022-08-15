@@ -151,7 +151,7 @@ class SearchController extends GetxController implements GetxService {
     }
     if(_isAvailableFoods || _isDiscountedFoods) {
       if(_isAvailableFoods) {
-        _searchRestList.removeWhere((restaurant) => !DateConverter.isAvailable(restaurant.openingTime, restaurant.closeingTime));
+        _searchRestList.removeWhere((restaurant) => restaurant.open == 0);
       }
       if(_isDiscountedFoods) {
         _searchRestList.removeWhere((restaurant) => restaurant.discount == null);

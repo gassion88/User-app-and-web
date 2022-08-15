@@ -66,6 +66,8 @@ class OrderModel {
   double restaurantDiscountAmount;
   String failed;
   int detailsCount;
+  double dmTips;
+  int processingTime;
   DeliveryMan deliveryMan;
   Restaurant restaurant;
   AddressModel deliveryAddress;
@@ -101,6 +103,8 @@ class OrderModel {
         this.scheduled,
         this.restaurantDiscountAmount,
         this.failed,
+        this.dmTips,
+        this.processingTime,
         this.detailsCount,
         this.deliveryMan,
         this.deliveryAddress,
@@ -136,9 +140,11 @@ class OrderModel {
     refundRequested = json['refund_requested'];
     refunded = json['refunded'];
     scheduled = json['scheduled'];
+    dmTips = json['dm_tips'].toDouble();
     restaurantDiscountAmount = json['restaurant_discount_amount'].toDouble();
     failed = json['failed'];
     detailsCount = json['details_count'];
+    processingTime = json['processing_time'];
     deliveryMan = json['delivery_man'] != null
         ? new DeliveryMan.fromJson(json['delivery_man'])
         : null;
@@ -182,6 +188,8 @@ class OrderModel {
     data['scheduled'] = this.scheduled;
     data['restaurant_discount_amount'] = this.restaurantDiscountAmount;
     data['failed'] = this.failed;
+    data['dm_tips'] = this.dmTips;
+    data['processing_time'] = this.processingTime;
     data['details_count'] = this.detailsCount;
     if (this.deliveryMan != null) {
       data['delivery_man'] = this.deliveryMan.toJson();

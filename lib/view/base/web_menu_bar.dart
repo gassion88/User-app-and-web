@@ -11,7 +11,7 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/screens/menu/menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -21,15 +21,15 @@ class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
     List<PopupMenuEntry> _entryList = [];
     if(Get.find<SplashController>().configModel.toggleDmRegistration) {
       _entryList.add(PopupMenuItem(child: Text('join_as_a_delivery_man'.tr), onTap: () async {
-        if(await canLaunch('${AppConstants.BASE_URL}/deliveryman/apply')) {
-          launch('${AppConstants.BASE_URL}/deliveryman/apply');
+        if(await canLaunchUrlString('${AppConstants.BASE_URL}/deliveryman/apply')) {
+          launchUrlString('${AppConstants.BASE_URL}/deliveryman/apply', mode: LaunchMode.externalApplication);
         }
       }));
     }
     if(Get.find<SplashController>().configModel.toggleRestaurantRegistration) {
       _entryList.add(PopupMenuItem(child: Text('join_as_a_restaurant'.tr), onTap: () async {
-        if(await canLaunch('${AppConstants.BASE_URL}/restaurant/apply')) {
-          launch('${AppConstants.BASE_URL}/restaurant/apply');
+        if(await canLaunchUrlString('${AppConstants.BASE_URL}/restaurant/apply')) {
+          launchUrlString('${AppConstants.BASE_URL}/restaurant/apply', mode: LaunchMode.externalApplication);
         }
       }));
     }

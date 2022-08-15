@@ -10,7 +10,7 @@ class SearchRepo {
   SearchRepo({@required this.apiClient, @required this.sharedPreferences});
 
   Future<Response> getSearchData(String query, bool isRestaurant) async {
-    return await apiClient.getData('${AppConstants.SEARCH_URI}${isRestaurant ? 'restaurants' : 'products'}/search?name=$query');
+    return await apiClient.getData('${AppConstants.SEARCH_URI}${isRestaurant ? 'restaurants' : 'products'}/search?name=$query&offset=1&limit=50');
   }
 
   Future<Response> getSuggestedFoods() async {

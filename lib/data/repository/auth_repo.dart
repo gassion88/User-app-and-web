@@ -33,7 +33,8 @@ class AuthRepo {
 
   Future<Response> updateToken() async {
     String _deviceToken;
-    if (GetPlatform.isIOS) {
+    if (GetPlatform.isIOS && !GetPlatform.isWeb) {
+      FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
       NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
         alert: true, announcement: false, badge: true, carPlay: false,
         criticalAlert: false, provisional: false, sound: true,
@@ -51,9 +52,11 @@ class AuthRepo {
   }
 
   Future<String> _saveDeviceToken() async {
-    String _deviceToken = '';
+    String _deviceToken = '@';
     if(!GetPlatform.isWeb) {
-      _deviceToken = await FirebaseMessaging.instance.getToken();
+      try {
+        _deviceToken = await FirebaseMessaging.instance.getToken();
+      }catch(e) {}
     }
     if (_deviceToken != null) {
       print('--------Device Token---------- '+_deviceToken);
@@ -82,6 +85,10 @@ class AuthRepo {
 
   Future<Response> verifyEmail(String email, String token) async {
     return await apiClient.postData(AppConstants.VERIFY_EMAIL_URI, {"email": email, "token": token});
+  }
+
+  Future<Response> updateZone() async {
+    return await apiClient.getData(AppConstants.UPDATE_ZONE_URL);
   }
 
   Future<Response> verifyPhone(String phone, String otp) async {
@@ -162,4 +169,10 @@ class AuthRepo {
     await sharedPreferences.remove(AppConstants.USER_COUNTRY_CODE);
     return await sharedPreferences.remove(AppConstants.USER_NUMBER);
   }
+
+  bool clearSharedAddress(){
+    sharedPreferences.remove(AppConstants.USER_ADDRESS);
+    return true;
+  }
+
 }

@@ -1,6 +1,8 @@
 import 'package:efood_multivendor/controller/order_controller.dart';
+import 'package:efood_multivendor/controller/theme_controller.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class OrderShimmer extends StatelessWidget {
@@ -25,20 +27,20 @@ class OrderShimmer extends StatelessWidget {
                 Row(children: [
                   Container(
                     height: 60, width: 60,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Colors.grey[300]),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
                   ),
                   SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Container(height: 15, width: 100, color: Colors.grey[300]),
+                    Container(height: 15, width: 100, color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
                     SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                    Container(height: 15, width: 150, color: Colors.grey[300]),
+                    Container(height: 15, width: 150, color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300]),
                   ])),
                   Column(children: [
                     Container(
                       height: 20, width: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                        color: Colors.grey[300],
+                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                       ),
                     ),
                     SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
@@ -46,7 +48,7 @@ class OrderShimmer extends StatelessWidget {
                       height: 20, width: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                        color: Colors.grey[300],
+                        color: Colors.grey[Get.find<ThemeController>().darkTheme ? 700 : 300],
                       ),
                     )
                   ]),

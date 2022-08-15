@@ -17,7 +17,10 @@ class CustomTextField extends StatefulWidget {
   final int maxLines;
   final TextCapitalization capitalization;
   final String prefixIcon;
+  final double prefixSize;
   final bool divider;
+  final TextAlign textAlign;
+  final bool isAmount;
 
   CustomTextField(
       {this.hintText = 'Write something...',
@@ -33,8 +36,11 @@ class CustomTextField extends StatefulWidget {
       this.prefixIcon,
       this.capitalization = TextCapitalization.none,
       this.isPassword = false,
-      this.divider = false}
-  );
+      this.prefixSize = Dimensions.PADDING_SIZE_SMALL,
+      this.divider = false,
+      this.textAlign = TextAlign.start,
+      this.isAmount = false,
+      });
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -51,15 +57,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
           maxLines: widget.maxLines,
           controller: widget.controller,
           focusNode: widget.focusNode,
+          textAlign: widget.textAlign,
           style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
           textInputAction: widget.inputAction,
-          keyboardType: widget.inputType,
+          keyboardType: widget.isAmount ? TextInputType.number : widget.inputType,
           cursorColor: Theme.of(context).primaryColor,
           textCapitalization: widget.capitalization,
           enabled: widget.isEnabled,
           autofocus: false,
           obscureText: widget.isPassword ? _obscureText : false,
-          inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))] : null,
+          inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))]
+              : widget.isAmount ? [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))] : null,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
@@ -71,7 +79,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor),
             filled: true,
             prefixIcon: widget.prefixIcon != null ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
+              padding: EdgeInsets.symmetric(horizontal: widget.prefixSize),
               child: Image.asset(widget.prefixIcon, height: 20, width: 20),
             ) : null,
             suffixIcon: widget.isPassword ? IconButton(

@@ -45,6 +45,7 @@ class _ProductReviewWidgetState extends State<ProductReviewWidget> {
                 // Product details
                 Row(
                   children: [
+                    (widget.orderDetailsList[index].foodDetails.image != null && widget.orderDetailsList[index].foodDetails.image.isNotEmpty) ?
                     ClipRRect(
                       borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                       child: CustomImage(
@@ -52,14 +53,14 @@ class _ProductReviewWidgetState extends State<ProductReviewWidget> {
                         image: '${Get.find<SplashController>().configModel.baseUrls.productImageUrl}'
                             '/${widget.orderDetailsList[index].foodDetails.image}',
                       ),
-                    ),
+                    ) : SizedBox(),
                     SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-                    Expanded(child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+
+                    Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(widget.orderDetailsList[index].foodDetails.name, style: robotoMedium, maxLines: 2, overflow: TextOverflow.ellipsis),
                         SizedBox(height: 10),
+
                         Text(PriceConverter.convertPrice(widget.orderDetailsList[index].foodDetails.price), style: robotoBold),
                       ],
                     )),
@@ -84,6 +85,7 @@ class _ProductReviewWidgetState extends State<ProductReviewWidget> {
                   style: robotoMedium.copyWith(color: Theme.of(context).disabledColor), overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+
                 SizedBox(
                   height: 30,
                   child: ListView.builder(

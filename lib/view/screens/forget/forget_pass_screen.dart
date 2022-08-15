@@ -15,19 +15,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phone_number/phone_number.dart';
 
-class ForgetPassScreen extends StatelessWidget {
+class ForgetPassScreen extends StatefulWidget {
   final bool fromSocialLogin;
   final SocialLogInBody socialLogInBody;
   ForgetPassScreen({@required this.fromSocialLogin, @required this.socialLogInBody});
 
+  @override
+  State<ForgetPassScreen> createState() => _ForgetPassScreenState();
+}
+
+class _ForgetPassScreenState extends State<ForgetPassScreen> {
   final TextEditingController _numberController = TextEditingController();
+  String _countryDialCode = CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).dialCode;
 
   @override
   Widget build(BuildContext context) {
-    String _countryDialCode = CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).dialCode;
-
     return Scaffold(
-      appBar: CustomAppBar(title: fromSocialLogin ? 'phone'.tr : 'forgot_password'.tr),
+      appBar: CustomAppBar(title: widget.fromSocialLogin ? 'phone'.tr : 'forgot_password'.tr),
       body: SafeArea(child: Center(child: Scrollbar(child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
@@ -54,12 +58,15 @@ class ForgetPassScreen extends StatelessWidget {
               ),
               child: Row(children: [
                 CodePickerWidget(
-                  enabled: false,
-                  initialSelection: 'RU',
-                  favorite: [_countryDialCode],
+                  onChanged: (CountryCode countryCode) {
+                    _countryDialCode = countryCode.dialCode;
+                  },
+                  initialSelection: CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code,
+                  favorite: [CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code],
                   showDropDownButton: true,
                   padding: EdgeInsets.zero,
                   showFlagMain: true,
+                  dialogBackgroundColor: Theme.of(context).cardColor,
                   textStyle: robotoRegular.copyWith(
                     fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
                   ),
@@ -106,9 +113,9 @@ class ForgetPassScreen extends StatelessWidget {
     }else if (!_isValid) {
       showCustomSnackBar('invalid_phone_number'.tr);
     }else {
-      if(fromSocialLogin) {
-        socialLogInBody.phone = _numberWithCountryCode;
-        Get.find<AuthController>().registerWithSocialMedia(socialLogInBody);
+      if(widget.fromSocialLogin) {
+        widget.socialLogInBody.phone = _numberWithCountryCode;
+        Get.find<AuthController>().registerWithSocialMedia(widget.socialLogInBody);
       }else {
         Get.find<AuthController>().forgetPassword(_numberWithCountryCode).then((status) async {
           if (status.isSuccess) {

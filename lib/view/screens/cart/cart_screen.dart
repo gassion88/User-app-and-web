@@ -1,7 +1,5 @@
 import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/coupon_controller.dart';
-import 'package:efood_multivendor/data/model/response/product_model.dart';
-import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
@@ -15,41 +13,27 @@ import 'package:efood_multivendor/view/screens/cart/widget/cart_product_widget.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   final fromNav;
   CartScreen({@required this.fromNav});
 
   @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Get.find<CartController>().calculationCart();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'my_cart'.tr, isBackButtonExist: (ResponsiveHelper.isDesktop(context) || !fromNav)),
-      body: GetBuilder<CartController>(
-        builder: (cartController) {
-          List<List<AddOns>> _addOnsList = [];
-          List<bool> _availableList = [];
-          double _itemPrice = 0;
-          double _addOns = 0;
-          cartController.cartList.forEach((cartModel) {
-
-            List<AddOns> _addOnList = [];
-            cartModel.addOnIds.forEach((addOnId) {
-              for(AddOns addOns in cartModel.product.addOns) {
-                if(addOns.id == addOnId.id) {
-                  _addOnList.add(addOns);
-                  break;
-                }
-              }
-            });
-            _addOnsList.add(_addOnList);
-
-            _availableList.add(DateConverter.isAvailable(cartModel.product.availableTimeStarts, cartModel.product.availableTimeEnds));
-
-            for(int index=0; index<_addOnList.length; index++) {
-              _addOns = _addOns + (_addOnList[index].price * cartModel.addOnIds[index].quantity);
-            }
-            _itemPrice = _itemPrice + (cartModel.price * cartModel.quantity);
-          });
-          double _subTotal = _itemPrice + _addOns;
+      appBar: CustomAppBar(title: 'my_cart'.tr, isBackButtonExist: (ResponsiveHelper.isDesktop(context) || !widget.fromNav)),
+      body: GetBuilder<CartController>(builder: (cartController) {
 
           return cartController.cartList.length > 0 ? Column(
             children: [
@@ -69,7 +53,7 @@ class CartScreen extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: cartController.cartList.length,
                             itemBuilder: (context, index) {
-                              return CartProductWidget(cart: cartController.cartList[index], cartIndex: index, addOns: _addOnsList[index], isAvailable: _availableList[index]);
+                              return CartProductWidget(cart: cartController.cartList[index], cartIndex: index, addOns: cartController.addOnsList[index] , isAvailable: cartController.availableList[index]);
                             },
                           ),
                           SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
@@ -77,13 +61,13 @@ class CartScreen extends StatelessWidget {
                           // Total
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Text('item_price'.tr, style: robotoRegular),
-                            Text(PriceConverter.convertPrice(_itemPrice), style: robotoRegular),
+                            Text(PriceConverter.convertPrice(cartController.itemPrice), style: robotoRegular),
                           ]),
                           SizedBox(height: 10),
 
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Text('addons'.tr, style: robotoRegular),
-                            Text('(+) ${PriceConverter.convertPrice(_addOns)}', style: robotoRegular),
+                            Text('(+) ${PriceConverter.convertPrice(cartController.addOns)}', style: robotoRegular),
                           ]),
 
                           Padding(
@@ -93,7 +77,7 @@ class CartScreen extends StatelessWidget {
 
                           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Text('subtotal'.tr, style: robotoMedium),
-                            Text(PriceConverter.convertPrice(_subTotal), style: robotoMedium),
+                            Text(PriceConverter.convertPrice(cartController.subTotal), style: robotoMedium),
                           ]),
 
 
@@ -108,7 +92,7 @@ class CartScreen extends StatelessWidget {
                 width: Dimensions.WEB_MAX_WIDTH,
                 padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                 child: CustomButton(buttonText: 'proceed_to_checkout'.tr, onPressed: () {
-                  if(!cartController.cartList.first.product.scheduleOrder && _availableList.contains(false)) {
+                  if(!cartController.cartList.first.product.scheduleOrder && cartController.availableList.contains(false)) {
                     showCustomSnackBar('one_or_more_product_unavailable'.tr);
                   } else {
                     Get.find<CouponController>().removeCouponData(false);

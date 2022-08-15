@@ -6,7 +6,6 @@ import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DeliveryManWidget extends StatelessWidget {
   final DeliveryMan deliveryMan;
@@ -37,15 +36,15 @@ class DeliveryManWidget extends StatelessWidget {
             '${deliveryMan.fName} ${deliveryMan.lName}',
             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
           ),
-          subtitle: RatingBar(rating: deliveryMan.avgRating, size: 15, ratingCount: 0),
-          trailing: InkWell(
-            onTap: () => launch('tel:${deliveryMan.phone}'),
-            child: Container(
-              padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-              decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).disabledColor.withOpacity(0.2)),
-              child: Icon(Icons.call_outlined),
-            ),
-          ),
+          subtitle: RatingBar(rating: deliveryMan.avgRating, size: 15, ratingCount: deliveryMan.ratingCount ?? 0),
+          // trailing: InkWell(
+          //   onTap: () => launchUrlString('tel:${deliveryMan.phone}', mode: LaunchMode.externalApplication),
+          //   child: Container(
+          //     padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+          //     decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).disabledColor.withOpacity(0.2)),
+          //     child: Icon(Icons.call_outlined),
+          //   ),
+          // ),
         ),
       ]),
     );

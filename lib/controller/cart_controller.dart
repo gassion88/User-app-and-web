@@ -1,5 +1,7 @@
 import 'package:efood_multivendor/data/model/response/cart_model.dart';
+import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/data/repository/cart_repo.dart';
+import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,28 +10,69 @@ class CartController extends GetxController implements GetxService {
   CartController({@required this.cartRepo});
 
   List<CartModel> _cartList = [];
-  double _amount = 0.0;
 
   List<CartModel> get cartList => _cartList;
-  double get amount => _amount;
+
+  double _subTotal = 0;
+  double _itemPrice = 0;
+  double _addOns = 0;
+  List<List<AddOns>> _addOnsList = [];
+  List<bool> _availableList = [];
+
+  double get subTotal => _subTotal;
+  double get itemPrice => _itemPrice;
+  double get addOns => _addOns;
+  List<List<AddOns>> get addOnsList => _addOnsList;
+  List<bool> get availableList => _availableList;
+
+
+  double calculationCart(){
+    _itemPrice = 0 ;
+    _subTotal = 0;
+    _addOns = 0;
+    _availableList= [];
+    _addOnsList = [];
+    _cartList.forEach((cartModel) {
+      List<AddOns> _addOnList = [];
+      cartModel.addOnIds.forEach((addOnId) {
+        for(AddOns addOns in cartModel.product.addOns) {
+          if(addOns.id == addOnId.id) {
+            _addOnList.add(addOns);
+            break;
+          }
+        }
+      });
+      _addOnsList.add(_addOnList);
+
+      _availableList.add(DateConverter.isAvailable(cartModel.product.availableTimeStarts, cartModel.product.availableTimeEnds));
+
+      for(int index=0; index<_addOnList.length; index++) {
+        _addOns = _addOns + (_addOnList[index].price * cartModel.addOnIds[index].quantity);
+      }
+      _itemPrice = _itemPrice + (cartModel.price * cartModel.quantity);
+    });
+    _subTotal = _itemPrice + _addOns;
+
+    return _subTotal;
+  }
 
   void getCartData() {
     _cartList = [];
     _cartList.addAll(cartRepo.getCartList());
-    _cartList.forEach((cart) {
-      _amount = _amount + (cart.discountedPrice * cart.quantity);
-    });
+
+    calculationCart();
   }
 
   void addToCart(CartModel cartModel, int index) {
-    if(index != null) {
-      _amount = _amount - (_cartList[index].discountedPrice * _cartList[index].quantity);
-      _cartList.replaceRange(index, index+1, [cartModel]);
+    if(index != null && index != -1) {
+      _cartList.replaceRange(index, index + 1, [cartModel]);
+
     }else {
       _cartList.add(cartModel);
     }
-    _amount = _amount + (cartModel.discountedPrice * cartModel.quantity);
     cartRepo.addToCartList(_cartList);
+    calculationCart();
+
     update();
   }
 
@@ -37,10 +80,8 @@ class CartController extends GetxController implements GetxService {
     int index = _cartList.indexOf(cart);
     if (isIncrement) {
       _cartList[index].quantity = _cartList[index].quantity + 1;
-      _amount = _amount + _cartList[index].discountedPrice;
     } else {
       _cartList[index].quantity = _cartList[index].quantity - 1;
-      _amount = _amount - _cartList[index].discountedPrice;
     }
     cartRepo.addToCartList(_cartList);
 
@@ -48,37 +89,56 @@ class CartController extends GetxController implements GetxService {
   }
 
   void removeFromCart(int index) {
-    _amount = _amount - (_cartList[index].discountedPrice * _cartList[index].quantity);
     _cartList.removeAt(index);
     cartRepo.addToCartList(_cartList);
+    calculationCart();
     update();
   }
 
   void removeAddOn(int index, int addOnIndex) {
     _cartList[index].addOnIds.removeAt(addOnIndex);
     cartRepo.addToCartList(_cartList);
+    calculationCart();
     update();
   }
 
   void clearCartList() {
     _cartList = [];
-    _amount = 0;
     cartRepo.addToCartList(_cartList);
+    calculationCart();
     update();
   }
 
-  bool isExistInCart(CartModel cartModel, bool isUpdate, int cartIndex) {
+
+  int isExistInCart(int productID, String variationType, bool isUpdate, int cartIndex) {
     for(int index=0; index<_cartList.length; index++) {
-      if(_cartList[index].product.id == cartModel.product.id && (_cartList[index].variation.length > 0 ? _cartList[index].variation[0].type
-          == cartModel.variation[0].type : true)) {
+      if(_cartList[index].product.id == productID && (_cartList[index].variation.length > 0 ? _cartList[index].variation[0].type == variationType : true)) {
         if((isUpdate && index == cartIndex)) {
-          return false;
+          return -1;
         }else {
-          return true;
+          return index;
         }
       }
     }
-    return false;
+    return -1;
+  }
+
+
+  int getCartIndex (Product product) {
+    for(int index = 0; index < _cartList.length; index ++) {
+      if(_cartList[index].product.id == product.id ) {
+        if(_cartList[index].product.variations[0].type  != null){
+          if(_cartList[index].product.variations[0].type == product.variations[0].type){
+            return index;
+          }
+        }
+        else{
+          return index;
+        }
+
+      }
+    }
+    return null;
   }
 
   bool existAnotherRestaurantProduct(int restaurantID) {
@@ -93,8 +153,8 @@ class CartController extends GetxController implements GetxService {
   void removeAllAndAddToCart(CartModel cartModel) {
     _cartList = [];
     _cartList.add(cartModel);
-    _amount = cartModel.discountedPrice * cartModel.quantity;
     cartRepo.addToCartList(_cartList);
+    calculationCart();
     update();
   }
 

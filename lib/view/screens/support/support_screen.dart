@@ -6,7 +6,7 @@ import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/screens/support/widget/support_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SupportScreen extends StatelessWidget {
   @override
@@ -41,8 +41,8 @@ class SupportScreen extends StatelessWidget {
             icon: Icons.call, title: 'call'.tr, color: Colors.red,
             info: Get.find<SplashController>().configModel.phone,
             onTap: () async {
-              if(await canLaunch('tel:${Get.find<SplashController>().configModel.phone}')) {
-                launch('tel:${Get.find<SplashController>().configModel.phone}');
+              if(await canLaunchUrlString('tel:${Get.find<SplashController>().configModel.phone}')) {
+                launchUrlString('tel:${Get.find<SplashController>().configModel.phone}', mode: LaunchMode.externalApplication);
               }else {
                 showCustomSnackBar('${'can_not_launch'.tr} ${Get.find<SplashController>().configModel.phone}');
               }
@@ -58,7 +58,7 @@ class SupportScreen extends StatelessWidget {
                 scheme: 'mailto',
                 path: Get.find<SplashController>().configModel.email,
               );
-              launch(emailLaunchUri.toString());
+              launchUrlString(emailLaunchUri.toString(), mode: LaunchMode.externalApplication);
             },
           ),
 

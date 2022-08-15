@@ -12,8 +12,13 @@ import 'package:efood_multivendor/view/screens/notification/widget/notification_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
 
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
   void _loadData() async {
     Get.find<NotificationController>().clearNotification();
     if(Get.find<SplashController>().configModel == null) {
@@ -23,10 +28,15 @@ class NotificationScreen extends StatelessWidget {
       Get.find<NotificationController>().getNotificationList(true);
     }
   }
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _loadData();
+
 
     return Scaffold(
       appBar: CustomAppBar(title: 'notification'.tr),

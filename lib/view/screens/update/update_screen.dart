@@ -6,7 +6,7 @@ import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class UpdateScreen extends StatelessWidget {
   final bool isUpdate;
@@ -48,8 +48,8 @@ class UpdateScreen extends StatelessWidget {
               }else if(GetPlatform.isIOS) {
                 _appUrl = Get.find<SplashController>().configModel.appUrlIos;
               }
-              if(await canLaunch(_appUrl)) {
-                launch(_appUrl);
+              if(await canLaunchUrlString(_appUrl)) {
+                launchUrlString(_appUrl, mode: LaunchMode.externalApplication);
               }else {
                 showCustomSnackBar('${'can_not_launch'.tr} $_appUrl');
               }

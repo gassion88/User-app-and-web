@@ -1,4 +1,5 @@
 import 'package:efood_multivendor/controller/order_controller.dart';
+import 'package:efood_multivendor/controller/user_controller.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
@@ -46,28 +47,31 @@ class ConfirmationDialog extends StatelessWidget {
             ),
             SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
-            GetBuilder<OrderController>(builder: (orderController) {
-              return !orderController.isLoading ? Row(children: [
-                Expanded(child: TextButton(
-                  onPressed: () => isLogOut ? onYesPressed() : onNoPressed != null ? onNoPressed() : Get.back(),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).disabledColor.withOpacity(0.3), minimumSize: Size(Dimensions.WEB_MAX_WIDTH, 40), padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL)),
-                  ),
-                  child: Text(
-                    isLogOut ? 'yes'.tr : 'no'.tr, textAlign: TextAlign.center,
-                    style: robotoBold.copyWith(color: Theme.of(context).textTheme.bodyText1.color),
-                  ),
-                )),
-                SizedBox(width: Dimensions.PADDING_SIZE_LARGE),
+            GetBuilder<UserController>(builder: (userController) {
+                return GetBuilder<OrderController>(builder: (orderController) {
+                  return (orderController.isLoading || userController.isLoading) ? Center(child: CircularProgressIndicator()) : Row(children: [
+                    Expanded(child: TextButton(
+                      onPressed: () => isLogOut ? onYesPressed() : onNoPressed != null ? onNoPressed() : Get.back(),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Theme.of(context).disabledColor.withOpacity(0.3), minimumSize: Size(Dimensions.WEB_MAX_WIDTH, 40), padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL)),
+                      ),
+                      child: Text(
+                        isLogOut ? 'yes'.tr : 'no'.tr, textAlign: TextAlign.center,
+                        style: robotoBold.copyWith(color: Theme.of(context).textTheme.bodyText1.color),
+                      ),
+                    )),
+                    SizedBox(width: Dimensions.PADDING_SIZE_LARGE),
 
-                Expanded(child: CustomButton(
-                  buttonText: isLogOut ? 'no'.tr : 'yes'.tr,
-                  onPressed: () => isLogOut ? Get.back() : onYesPressed(),
-                  radius: Dimensions.RADIUS_SMALL, height: 40,
-                )),
-              ]) : Center(child: CircularProgressIndicator());
-            }),
+                    Expanded(child: CustomButton(
+                      buttonText: isLogOut ? 'no'.tr : 'yes'.tr,
+                      onPressed: () => isLogOut ? Get.back() : onYesPressed(),
+                      radius: Dimensions.RADIUS_SMALL, height: 40,
+                    )),
+                  ]);
+                });
+              }
+            ),
 
           ]),
         )),

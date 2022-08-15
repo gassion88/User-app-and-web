@@ -16,18 +16,31 @@ class PaymentButton extends StatelessWidget {
     return GetBuilder<OrderController>(builder: (orderController) {
       bool _selected = orderController.paymentMethodIndex == index;
       return Padding(
-        padding: EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_SMALL),
+        padding: EdgeInsets.only(right: Dimensions.PADDING_SIZE_SMALL, bottom:  Dimensions.PADDING_SIZE_SMALL),
         child: InkWell(
           onTap: () => orderController.setPaymentMethod(index),
           child: Container(
+            width: 200, padding: EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT),
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-              boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], blurRadius: 5, spreadRadius: 1)],
+              border: Border.all(color: _selected ? Theme.of(context).primaryColor : Theme.of(context).disabledColor, width: 1.5)
+              // boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], blurRadius: 5, spreadRadius: 1)],
             ),
-            child: ListTile(
+            child: Row(children: [
+              Image.asset(
+                icon, width: 20, height: 20,
+                color: _selected ? Theme.of(context).primaryColor : Theme.of(context).disabledColor,
+              ),
+              SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+
+              Text(title, style: robotoBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: _selected ? Theme.of(context).primaryColor : Theme.of(context).disabledColor)),
+
+            ]),
+
+            /*child: ListTile(
               leading: Image.asset(
-                icon, width: 40, height: 40,
+                icon, width: 20, height: 20,
                 color: _selected ? Theme.of(context).primaryColor : Theme.of(context).disabledColor,
               ),
               title: Text(
@@ -40,7 +53,7 @@ class PaymentButton extends StatelessWidget {
                 maxLines: 1, overflow: TextOverflow.ellipsis,
               ),
               trailing: _selected ? Icon(Icons.check_circle, color: Theme.of(context).primaryColor) : null,
-            ),
+            ),*/
           ),
         ),
       );

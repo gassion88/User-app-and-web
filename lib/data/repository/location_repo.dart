@@ -31,9 +31,9 @@ class LocationRepo {
     return await apiClient.putData('${AppConstants.UPDATE_ADDRESS_URI}$addressId', addressModel.toJson());
   }
 
-  Future<bool> saveUserAddress(String address, int zoneID) async {
+  Future<bool> saveUserAddress(String address, List<int> zoneIDs) async {
     apiClient.updateHeader(
-      sharedPreferences.getString(AppConstants.TOKEN), zoneID.toString(),
+      sharedPreferences.getString(AppConstants.TOKEN), zoneIDs,
       sharedPreferences.getString(AppConstants.LANGUAGE_CODE),
     );
     return await sharedPreferences.setString(AppConstants.USER_ADDRESS, address);

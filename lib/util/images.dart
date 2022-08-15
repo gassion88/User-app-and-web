@@ -1,7 +1,7 @@
 class Images {
   static const String logo = 'assets/image/logo.png';
   static const String logo_name = 'assets/image/logo_name.png';
-  static const String placeholder = 'assets/image/placeholder.jpg';
+  static const String placeholder = 'assets/image/placeholder.png';
   static const String arabic = 'assets/image/arabic.png';
   static const String call = 'assets/image/call.png';
   static const String checked = 'assets/image/checked.png';
@@ -50,4 +50,19 @@ class Images {
   static const String facebook = 'assets/image/facebook.png';
   static const String restaurant_join = 'assets/image/restaurant_join.png';
   static const String delivery_man_join = 'assets/image/delivery_man_join.png';
+  static const String wallet = 'assets/image/wallet.png';
+  static const String loyal = 'assets/image/loyal.png';
+  static const String gift_box = 'assets/image/giftbox.gif';
+  static const String refer_code = 'assets/image/refer_code.png';
+  static const String animate_delivery_man = 'assets/image/delivery-man.gif';
+  static const String gift_box1 = 'assets/image/gift_box1.gif';
+  static const String earn_money = 'assets/image/earn_money.png';
+  static const String refer_image = 'assets/image/refer_a_friend.png';
+  static const String cooking_gif = 'assets/image/cooking.gif';
+  static const String on_the_way_gif = 'assets/image/on_the_way.gif';
+  static const String home_delivery = 'assets/image/home_delivery.png';
+  static const String takeaway = 'assets/image/takeaway.png';
+  static const String pending_gif = 'assets/image/pending.gif';
+  static const String processing_gif = 'assets/image/processing.gif';
+  static const String handover_gif = 'assets/image/handover.gif';
 }

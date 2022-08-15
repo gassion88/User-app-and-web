@@ -1,41 +1,35 @@
 class ProductModel {
-  int _totalSize;
-  String _limit;
-  String _offset;
-  List<Product> _products;
+  int totalSize;
+  String limit;
+  int offset;
+  List<Product> products;
 
-  ProductModel(
-      {int totalSize, String limit, String offset, List<Product> products}) {
-    this._totalSize = totalSize;
-    this._limit = limit;
-    this._offset = offset;
-    this._products = products;
-  }
-
-  int get totalSize => _totalSize;
-  String get limit => _limit;
-  String get offset => _offset;
-  List<Product> get products => _products;
+  ProductModel( {
+    this.totalSize ,
+    this.limit ,
+    this.offset ,
+    this.products
+  });
 
   ProductModel.fromJson(Map<String, dynamic> json) {
-    _totalSize = json['total_size'];
-    _limit = json['limit'].toString();
-    _offset = json['offset'].toString();
+    totalSize = json['total_size'];
+    limit = json['limit'].toString();
+    offset = (json['offset'] != null && json['offset'].toString().trim().isNotEmpty) ? int.parse(json['offset'].toString()) : null;
     if (json['products'] != null) {
-      _products = [];
+      products = [];
       json['products'].forEach((v) {
-        _products.add(new Product.fromJson(v));
+        products.add(new Product.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['total_size'] = this._totalSize;
-    data['limit'] = this._limit;
-    data['offset'] = this._offset;
-    if (this._products != null) {
-      data['products'] = this._products.map((v) => v.toJson()).toList();
+    data['total_size'] = this.totalSize;
+    data['limit'] = this.limit;
+    data['offset'] = this.offset;
+    if (this.products != null) {
+      data['products'] = this.products.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -60,8 +54,6 @@ class Product {
   int restaurantId;
   String restaurantName;
   double restaurantDiscount;
-  String restaurantOpeningTime;
-  String restaurantClosingTime;
   bool scheduleOrder;
   double avgRating;
   int ratingCount;
@@ -86,8 +78,6 @@ class Product {
         this.restaurantId,
         this.restaurantName,
         this.restaurantDiscount,
-        this.restaurantOpeningTime,
-        this.restaurantClosingTime,
         this.scheduleOrder,
         this.avgRating,
         this.ratingCount,
@@ -133,12 +123,10 @@ class Product {
     restaurantId = json['restaurant_id'];
     restaurantName = json['restaurant_name'];
     restaurantDiscount = json['restaurant_discount'].toDouble();
-    restaurantOpeningTime = json['restaurant_opening_time'];
-    restaurantClosingTime = json['restaurant_closing_time'];
     scheduleOrder = json['schedule_order'];
     avgRating = json['avg_rating'].toDouble();
     ratingCount = json['rating_count'];
-    veg = json['rating_count'];
+    veg = json['veg'] != null ? int.parse(json['veg'].toString()) : 0;
   }
 
   Map<String, dynamic> toJson() {

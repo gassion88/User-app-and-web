@@ -21,6 +21,10 @@ class PlaceOrderBody {
   String _contactPersonName;
   String _contactPersonNumber;
   String _addressType;
+  String _road;
+  String _house;
+  String _floor;
+  String _dmTips;
 
   PlaceOrderBody(
       {@required List<Cart> cart,
@@ -42,6 +46,10 @@ class PlaceOrderBody {
         @required String contactPersonName,
         @required String contactPersonNumber,
         @required String addressType,
+        @required String road,
+        @required String house,
+        @required String floor,
+        @required String dmTips,
       }) {
     this._cart = cart;
     this._couponDiscountAmount = couponDiscountAmount;
@@ -62,6 +70,10 @@ class PlaceOrderBody {
     this._contactPersonName = contactPersonName;
     this._contactPersonNumber = contactPersonNumber;
     this._addressType = addressType;
+    this._road = road;
+    this._house = house;
+    this._floor = floor;
+    this._dmTips = dmTips;
   }
 
   List<Cart> get cart => _cart;
@@ -82,6 +94,10 @@ class PlaceOrderBody {
   String get longitude => _longitude;
   String get contactPersonName => _contactPersonName;
   String get contactPersonNumber => _contactPersonNumber;
+  String get road => _road;
+  String get house => _house;
+  String get floor => _floor;
+  String get dmTips => _dmTips;
 
   PlaceOrderBody.fromJson(Map<String, dynamic> json) {
     if (json['cart'] != null) {
@@ -108,6 +124,10 @@ class PlaceOrderBody {
     _contactPersonName = json['contact_person_name'];
     _contactPersonNumber = json['contact_person_number'];
     _addressType = json['address_type'];
+    _road = json['road'];
+    _house = json['house'];
+    _floor = json['floor'];
+    _dmTips = json['dm_tips'];
   }
 
   Map<String, dynamic> toJson() {
@@ -133,6 +153,10 @@ class PlaceOrderBody {
     data['contact_person_name'] = this._contactPersonName;
     data['contact_person_number'] = this._contactPersonNumber;
     data['address_type'] = this._addressType;
+    data['road'] = this._road;
+    data['house'] = this._house;
+    data['floor'] = this._floor;
+    data['dm_tips'] = this._dmTips;
     return data;
   }
 }

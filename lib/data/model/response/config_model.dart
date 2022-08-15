@@ -38,48 +38,70 @@ class ConfigModel {
   bool toggleDmRegistration;
   bool toggleRestaurantRegistration;
   List<SocialLogin> socialLogin;
+  int scheduleOrderSlotDuration;
+  int digitAfterDecimalPoint;
+  int loyaltyPointExchangeRate;
+  double loyaltyPointItemPurchasePoint;
+  int loyaltyPointStatus;
+  int minimumPointToTransfer;
+  int customerWalletStatus;
+  int dmTipsStatus;
+  int refEarningStatus;
+  double refEarningExchangeRate;
+  int theme;
 
-  ConfigModel({
-    this.businessName,
-    this.logo,
-    this.address,
-    this.phone,
-    this.email,
-    this.baseUrls,
-    this.currencySymbol,
-    this.cashOnDelivery,
-    this.digitalPayment,
-    this.termsAndConditions,
-    this.privacyPolicy,
-    this.aboutUs,
-    this.country,
-    this.defaultLocation,
-    this.appUrlAndroid,
-    this.appUrlIos,
-    this.customerVerification,
-    this.orderDeliveryVerification,
-    this.currencySymbolDirection,
-    this.appMinimumVersionAndroid,
-    this.appMinimumVersionIos,
-    this.perKmShippingCharge,
-    this.minimumShippingCharge,
-    this.freeDeliveryOver,
-    this.demo,
-    this.maintenanceMode,
-    this.popularFood,
-    this.popularRestaurant,
-    this.mostReviewedFoods,
-    this.newRestaurant,
-    this.orderConfirmationModel,
-    this.showDmEarning,
-    this.canceledByDeliveryman,
-    this.canceledByRestaurant,
-    this.timeformat,
-    this.toggleVegNonVeg,
-    this.toggleDmRegistration,
-    this.toggleRestaurantRegistration,
-    this.socialLogin,
-  });
+  ConfigModel(
+      {this.businessName,
+        this.logo,
+        this.address,
+        this.phone,
+        this.email,
+        this.baseUrls,
+        this.currencySymbol,
+        this.cashOnDelivery,
+        this.digitalPayment,
+        this.termsAndConditions,
+        this.privacyPolicy,
+        this.aboutUs,
+        this.country,
+        this.defaultLocation,
+        this.appUrlAndroid,
+        this.appUrlIos,
+        this.customerVerification,
+        this.orderDeliveryVerification,
+        this.currencySymbolDirection,
+        this.appMinimumVersionAndroid,
+        this.appMinimumVersionIos,
+        this.perKmShippingCharge,
+        this.minimumShippingCharge,
+        this.freeDeliveryOver,
+        this.demo,
+        this.maintenanceMode,
+        this.popularFood,
+        this.popularRestaurant,
+        this.mostReviewedFoods,
+        this.newRestaurant,
+        this.orderConfirmationModel,
+        this.showDmEarning,
+        this.canceledByDeliveryman,
+        this.canceledByRestaurant,
+        this.timeformat,
+        this.toggleVegNonVeg,
+        this.toggleDmRegistration,
+        this.toggleRestaurantRegistration,
+        this.socialLogin,
+        this.scheduleOrderSlotDuration,
+        this.digitAfterDecimalPoint,
+        this.loyaltyPointExchangeRate,
+        this.loyaltyPointItemPurchasePoint,
+        this.loyaltyPointStatus,
+        this.minimumPointToTransfer,
+        this.customerWalletStatus,
+        this.dmTipsStatus,
+        this.refEarningStatus,
+        this.refEarningExchangeRate,
+        this.theme
+      });
 
   ConfigModel.fromJson(Map<String, dynamic> json) {
     businessName = json['business_name'];
@@ -87,8 +109,7 @@ class ConfigModel {
     address = json['address'];
     phone = json['phone'];
     email = json['email'];
-    baseUrls =
-        json['base_urls'] != null ? BaseUrls.fromJson(json['base_urls']) : null;
+    baseUrls = json['base_urls'] != null ? BaseUrls.fromJson(json['base_urls']) : null;
     currencySymbol = json['currency_symbol'];
     cashOnDelivery = json['cash_on_delivery'];
     digitalPayment = json['digital_payment'];
@@ -96,9 +117,7 @@ class ConfigModel {
     privacyPolicy = json['privacy_policy'];
     aboutUs = json['about_us'];
     country = json['country'];
-    defaultLocation = json['default_location'] != null
-        ? DefaultLocation.fromJson(json['default_location'])
-        : null;
+    defaultLocation = json['default_location'] != null ? DefaultLocation.fromJson(json['default_location']) : null;
     appUrlAndroid = json['app_url_android'];
     appUrlIos = json['app_url_ios'];
     customerVerification = json['customer_verification'];
@@ -108,9 +127,7 @@ class ConfigModel {
     appMinimumVersionIos = json['app_minimum_version_ios'];
     perKmShippingCharge = json['per_km_shipping_charge'].toDouble();
     minimumShippingCharge = json['minimum_shipping_charge'].toDouble();
-    freeDeliveryOver = json['free_delivery_over'] != null
-        ? json['free_delivery_over'].toDouble()
-        : null;
+    freeDeliveryOver = json['free_delivery_over'] != null ? json['free_delivery_over'].toDouble() : null;
     demo = json['demo'];
     maintenanceMode = json['maintenance_mode'];
     popularFood = json['popular_food'];
@@ -131,6 +148,17 @@ class ConfigModel {
         socialLogin.add(new SocialLogin.fromJson(v));
       });
     }
+    scheduleOrderSlotDuration = json['schedule_order_slot_duration'] == 0 ? 30 : json['schedule_order_slot_duration'];
+    digitAfterDecimalPoint = json['digit_after_decimal_point'];
+    loyaltyPointExchangeRate = json['loyalty_point_exchange_rate'];
+    loyaltyPointItemPurchasePoint = json['loyalty_point_item_purchase_point'].toDouble();
+    loyaltyPointStatus = json['loyalty_point_status'];
+    minimumPointToTransfer = json['minimum_point_to_transfer'];
+    customerWalletStatus = json['customer_wallet_status'];
+    dmTipsStatus = json['dm_tips_status'];
+    refEarningStatus = json['ref_earning_status'];
+    refEarningExchangeRate = json['ref_earning_exchange_rate'].toDouble();
+    theme = json['theme'];
   }
 
   Map<String, dynamic> toJson() {
@@ -180,6 +208,17 @@ class ConfigModel {
     if (this.socialLogin != null) {
       data['social_login'] = this.socialLogin.map((v) => v.toJson()).toList();
     }
+    data['schedule_order_slot_duration'] = this.scheduleOrderSlotDuration;
+    data['digit_after_decimal_point'] = this.digitAfterDecimalPoint;
+    data['loyalty_point_exchange_rate'] = this.loyaltyPointExchangeRate;
+    data['loyalty_point_item_purchase_point'] = this.loyaltyPointItemPurchasePoint;
+    data['loyalty_point_status'] = this.loyaltyPointStatus;
+    data['minimum_point_to_transfer'] = this.minimumPointToTransfer;
+    data['customer_wallet_status'] = this.customerWalletStatus;
+    data['dm_tips_status'] = this.dmTipsStatus;
+    data['ref_earning_status'] = this.refEarningStatus;
+    data['ref_earning_exchange_rate'] = this.refEarningExchangeRate;
+    data['theme'] = this.theme;
     return data;
   }
 }
@@ -200,17 +239,17 @@ class BaseUrls {
 
   BaseUrls(
       {this.productImageUrl,
-      this.customerImageUrl,
-      this.bannerImageUrl,
-      this.categoryImageUrl,
-      this.reviewImageUrl,
-      this.notificationImageUrl,
-      this.restaurantImageUrl,
-      this.restaurantCoverPhotoUrl,
-      this.deliveryManImageUrl,
-      this.chatImageUrl,
-      this.campaignImageUrl,
-      this.businessLogoUrl});
+        this.customerImageUrl,
+        this.bannerImageUrl,
+        this.categoryImageUrl,
+        this.reviewImageUrl,
+        this.notificationImageUrl,
+        this.restaurantImageUrl,
+        this.restaurantCoverPhotoUrl,
+        this.deliveryManImageUrl,
+        this.chatImageUrl,
+        this.campaignImageUrl,
+        this.businessLogoUrl});
 
   BaseUrls.fromJson(Map<String, dynamic> json) {
     productImageUrl = json['product_image_url'];

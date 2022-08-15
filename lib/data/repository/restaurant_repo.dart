@@ -7,7 +7,7 @@ class RestaurantRepo {
   final ApiClient apiClient;
   RestaurantRepo({@required this.apiClient});
 
-  Future<Response> getRestaurantList(String offset, String filterBy) async {
+  Future<Response> getRestaurantList(int offset, String filterBy) async {
     return await apiClient.getData('${AppConstants.RESTAURANT_URI}/$filterBy?offset=$offset&limit=10');
   }
 
@@ -26,6 +26,12 @@ class RestaurantRepo {
   Future<Response> getRestaurantProductList(int restaurantID, int offset, int categoryID, String type) async {
     return await apiClient.getData(
       '${AppConstants.RESTAURANT_PRODUCT_URI}?restaurant_id=$restaurantID&category_id=$categoryID&offset=$offset&limit=10&type=$type',
+    );
+  }
+
+  Future<Response> getRestaurantSearchProductList(String searchText, String storeID, int offset, String type) async {
+    return await apiClient.getData(
+      '${AppConstants.SEARCH_URI}products/search?restaurant_id=$storeID&name=$searchText&offset=$offset&limit=10&type=$type',
     );
   }
 

@@ -24,7 +24,6 @@ class OrderView extends StatelessWidget {
 
     return Scaffold(
       body: GetBuilder<OrderController>(builder: (orderController) {
-        String locale = Localizations.localeOf(context).languageCode;
         List<OrderModel> orderList;
         bool paginate = false;
         int pageSize = 1;
@@ -94,7 +93,7 @@ class OrderView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                                 child: CustomImage(
                                   image: '${Get.find<SplashController>().configModel.baseUrls.restaurantImageUrl}'
-                                      '/${orderList[index].restaurant.logo}',
+                                      '/${orderList[index].restaurant != null ? orderList[index].restaurant.logo : ''}',
                                   height: 60, width: 60, fit: BoxFit.cover,
                                 ),
                               ),
@@ -109,7 +108,7 @@ class OrderView extends StatelessWidget {
                                   ]),
                                   SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                                   Text(
-                                    DateConverter.dateTimeStringToDateTime(orderList[index].createdAt, locale),
+                                    DateConverter.dateTimeStringToDateTime(orderList[index].createdAt),
                                     style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
                                   ),
                                 ]),

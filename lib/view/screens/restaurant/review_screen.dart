@@ -7,20 +7,31 @@ import 'package:efood_multivendor/view/screens/restaurant/widget/review_widget.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ReviewScreen extends StatelessWidget {
+class ReviewScreen extends StatefulWidget {
   final String restaurantID;
   ReviewScreen({@required this.restaurantID});
 
   @override
-  Widget build(BuildContext context) {
-    Get.find<RestaurantController>().getRestaurantReviewList(restaurantID);
+  State<ReviewScreen> createState() => _ReviewScreenState();
+}
 
+class _ReviewScreenState extends State<ReviewScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Get.find<RestaurantController>().getRestaurantReviewList(widget.restaurantID);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'restaurant_reviews'.tr),
       body: GetBuilder<RestaurantController>(builder: (restController) {
         return restController.restaurantReviewList != null ? restController.restaurantReviewList.length > 0 ? RefreshIndicator(
           onRefresh: () async {
-            await restController.getRestaurantReviewList(restaurantID);
+            await restController.getRestaurantReviewList(widget.restaurantID);
           },
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),

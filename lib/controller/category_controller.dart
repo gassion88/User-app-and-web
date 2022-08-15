@@ -67,6 +67,7 @@ class CategoryController extends GetxController implements GetxService {
     _subCategoryIndex = 0;
     _subCategoryList = null;
     _categoryProductList = null;
+    _isRestaurant = false;
     Response response = await categoryRepo.getSubCategoryList(categoryID);
     if (response.statusCode == 200) {
       _subCategoryList= [];
@@ -81,11 +82,10 @@ class CategoryController extends GetxController implements GetxService {
   void setSubCategoryIndex(int index, String categoryID) {
     _subCategoryIndex = index;
     if(_isRestaurant) {
-      getCategoryRestaurantList(_subCategoryIndex == 0 ? categoryID : _subCategoryList[index].id.toString(), 1, _type, false);
+      getCategoryRestaurantList(_subCategoryIndex == 0 ? categoryID : _subCategoryList[index].id.toString(), 1, _type, true);
     }else {
-      getCategoryProductList(_subCategoryIndex == 0 ? categoryID : _subCategoryList[index].id.toString(), 1, _type, false);
+      getCategoryProductList(_subCategoryIndex == 0 ? categoryID : _subCategoryList[index].id.toString(), 1, _type, true);
     }
-    update();
   }
 
   void getCategoryProductList(String categoryID, int offset, String type, bool notify) async {

@@ -17,6 +17,7 @@ import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/discount_tag.dart';
+import 'package:efood_multivendor/view/base/discount_tag_without_image.dart';
 import 'package:efood_multivendor/view/base/quantity_button.dart';
 import 'package:efood_multivendor/view/base/rating_bar.dart';
 import 'package:efood_multivendor/view/screens/checkout/checkout_screen.dart';
@@ -48,6 +49,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       width: 550,
+      margin: EdgeInsets.only(top: GetPlatform.isWeb ? 0 : 30),
       padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_DEFAULT, bottom: Dimensions.PADDING_SIZE_DEFAULT),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -109,9 +111,8 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
           }
         }
         double priceWithAddons = priceWithQuantity + addonsCost;
-        bool _isRestAvailable = DateConverter.isAvailable(widget.product.restaurantOpeningTime, widget.product.restaurantClosingTime);
-        bool _isFoodAvailable = DateConverter.isAvailable(widget.product.availableTimeStarts, widget.product.availableTimeEnds);
-        bool _isAvailable = _isRestAvailable && _isFoodAvailable;
+        // bool _isRestAvailable = DateConverter.isAvailable(widget.product.restaurantOpeningTime, widget.product.restaurantClosingTime);
+        bool _isAvailable = DateConverter.isAvailable(widget.product.availableTimeStarts, widget.product.availableTimeEnds);
 
         CartModel _cartModel = CartModel(
           price, priceWithDiscount, _variation != null ? [_variation] : [],
@@ -122,29 +123,43 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
 
         return SingleChildScrollView(
           child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end, children: [
-            ResponsiveHelper.isDesktop(context) ? InkWell(onTap: () => Get.back(), child: Icon(Icons.close)) : SizedBox(),
+
+            InkWell(onTap: () => Get.back(), child: Padding(
+              padding:  EdgeInsets.only(right: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+              child: Icon(Icons.close),
+            )),
+
             Padding(
               padding: EdgeInsets.only(
                 right: Dimensions.PADDING_SIZE_DEFAULT, top: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_DEFAULT,
               ),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
+
                 //Product
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
 
-                  Stack(children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                      child: CustomImage(
-                        image: '${widget.isCampaign ? Get.find<SplashController>().configModel.baseUrls.campaignImageUrl
-                            : Get.find<SplashController>().configModel.baseUrls.productImageUrl}/${widget.product.image}',
-                        width: ResponsiveHelper.isMobile(context) ? 100 : 140,
-                        height: ResponsiveHelper.isMobile(context) ? 100 : 140,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    DiscountTag(discount: _discount, discountType: _discountType, fromTop: 20),
-                  ]),
-                  SizedBox(width: 10),
+                  (widget.product.image != null && widget.product.image.isNotEmpty) ? Padding(padding: const EdgeInsets.only(right: 10.0),
+                          child: InkWell(
+                            onTap: widget.isCampaign ? null : () {
+                              if(!widget.isCampaign) {
+                                Get.toNamed(RouteHelper.getItemImagesRoute(widget.product));
+                              }
+                            },
+                            child: Stack(children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                                child: CustomImage(
+                                  image: '${widget.isCampaign ? Get.find<SplashController>().configModel.baseUrls.campaignImageUrl
+                                      : Get.find<SplashController>().configModel.baseUrls.productImageUrl}/${widget.product.image}',
+                                  width: ResponsiveHelper.isMobile(context) ? 100 : 140,
+                                  height: ResponsiveHelper.isMobile(context) ? 100 : 140,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              DiscountTag(discount: _discount, discountType: _discountType, fromTop: 20),
+                            ]),
+                          ),
+                        ) : SizedBox.shrink(),
 
                   Expanded(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -175,11 +190,18 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                             discountType: _discountType)}' : ''}',
                         style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
                       ),
-                      price > priceWithDiscount ? Text(
-                        '${PriceConverter.convertPrice(_startingPrice)}'
-                            '${_endingPrice != null ? ' - ${PriceConverter.convertPrice(_endingPrice)}' : ''}',
-                        style: robotoMedium.copyWith(color: Theme.of(context).disabledColor, decoration: TextDecoration.lineThrough),
-                      ) : SizedBox(),
+                      Row(children: [
+                        price > priceWithDiscount ? Text(
+                          '${PriceConverter.convertPrice(_startingPrice)}'
+                              '${_endingPrice != null ? ' - ${PriceConverter.convertPrice(_endingPrice)}' : ''}',
+                          style: robotoMedium.copyWith(color: Theme.of(context).disabledColor, decoration: TextDecoration.lineThrough),
+                        ) : SizedBox(),
+                        SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+
+                        (widget.product.image != null && widget.product.image.isNotEmpty)? SizedBox.shrink()
+                            : DiscountTagWithoutImage(discount: _discount, discountType: _discountType),
+                      ]),
+
                     ]),
                   ),
 
@@ -251,7 +273,10 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                         itemBuilder: (context, i) {
                           return InkWell(
                             onTap: () {
-                              productController.setCartVariationIndex(index, i);
+                              print('---check for update  ${widget.cart != null ?widget.cart.toJson() : null} and ${productController.cartIndex}-----');
+                              print('-----and ${productController.cartIndex}///-----');
+                              productController.setCartVariationIndex(index, i,widget.product);
+
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -332,7 +357,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                             border: productController.addOnActiveList[index] ? null : Border.all(color: Theme.of(context).disabledColor, width: 2),
                             boxShadow: productController.addOnActiveList[index]
-                            ? [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)] : null,
+                                ? [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)] : null,
                           ),
                           child: Column(children: [
                             Expanded(
@@ -409,11 +434,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                     borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                     color: Theme.of(context).primaryColor.withOpacity(0.1),
                   ),
-                  child: !_isRestAvailable ? Text(
-                    'restaurant_is_closed_now'.tr, style: robotoMedium.copyWith(
-                    color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge,
-                  ),
-                  ) : Column(children: [
+                  child: Column(children: [
                     Text('not_available_now'.tr, style: robotoMedium.copyWith(
                       color: Theme.of(context).primaryColor, fontSize: Dimensions.fontSizeLarge,
                     )),
@@ -447,7 +468,7 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                     width: ResponsiveHelper.isDesktop(context) ? MediaQuery.of(context).size.width / 2.0 : null,
                     /*buttonText: isCampaign ? 'order_now'.tr : isExistInCart ? 'already_added_in_cart'.tr : fromCart
                         ? 'update_in_cart'.tr : 'add_to_cart'.tr,*/
-                    buttonText: widget.isCampaign ? 'order_now'.tr : widget.cart != null ? 'update_in_cart'.tr : 'add_to_cart'.tr,
+                    buttonText: widget.isCampaign ? 'order_now'.tr : (widget.cart != null || productController.cartIndex != -1) ? 'update_in_cart'.tr : 'add_to_cart'.tr,
                     onPressed: () {
                       Get.back();
                       if(widget.isCampaign) {
@@ -463,42 +484,15 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
                             onYesPressed: () {
                               Get.back();
                               Get.find<CartController>().removeAllAndAddToCart(_cartModel);
-                              _showCartSnackBar(context);
+                              _showCartSnackBar();
                             },
                           ), barrierDismissible: false);
                         } else {
-                          Get.find<CartController>().addToCart(_cartModel, widget.cartIndex);
-                          _showCartSnackBar(context);
+                          Get.find<CartController>().addToCart(_cartModel, widget.cartIndex != null ? widget.cartIndex : productController.cartIndex);
+                          _showCartSnackBar();
                         }
                       }
                     },
-                    /*onPressed: (!isExistInCart) ? () {
-                      if (!isExistInCart) {
-                        Get.back();
-                        if(isCampaign) {
-                          Get.toNamed(RouteHelper.getCheckoutRoute('campaign'), arguments: CheckoutScreen(
-                            fromCart: false, cartList: [_cartModel],
-                          ));
-                        }else {
-                          if (Get.find<CartController>().existAnotherRestaurantProduct(_cartModel.product.restaurantId)) {
-                            Get.dialog(ConfirmationDialog(
-                              icon: Images.warning,
-                              title: 'are_you_sure_to_reset'.tr,
-                              description: 'if_you_continue'.tr,
-                              onYesPressed: () {
-                                Get.back();
-                                Get.find<CartController>().removeAllAndAddToCart(_cartModel);
-                                _showCartSnackBar(context);
-                              },
-                            ), barrierDismissible: false);
-                          } else {
-                            Get.find<CartController>().addToCart(_cartModel, cartIndex);
-                            _showCartSnackBar(context);
-                          }
-                        }
-                      }
-                    } : null,*/
-
                   )),
                 ]),
               ]),
@@ -509,23 +503,38 @@ class _ProductBottomSheetState extends State<ProductBottomSheet> {
     );
   }
 
-  void _showCartSnackBar(BuildContext context) {
-    Get.showSnackbar(GetSnackBar(
-      backgroundColor: Colors.green,
-      message: 'item_added_to_cart'.tr,
-      mainButton: TextButton(
-        onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
-        child: Text('view_cart'.tr, style: robotoMedium.copyWith(color: Theme.of(context).cardColor)),
-      ),
-      onTap: (_) => Get.toNamed(RouteHelper.getCartRoute()),
-      duration: Duration(seconds: 3),
-      maxWidth: Dimensions.WEB_MAX_WIDTH,
-      snackStyle: SnackStyle.FLOATING,
-      margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-      borderRadius: 10,
-      isDismissible: true,
+  void _showCartSnackBar() {
+    ScaffoldMessenger.of(Get.context).showSnackBar(SnackBar(
       dismissDirection: DismissDirection.horizontal,
+      margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.green,
+      action: SnackBarAction(label: 'view_cart'.tr, textColor: Colors.white, onPressed: () {
+        Get.toNamed(RouteHelper.getCartRoute());
+      }),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL)),
+      content: Text(
+        'item_added_to_cart'.tr,
+        style: robotoMedium.copyWith(color: Colors.white),
+      ),
     ));
+    // Get.showSnackbar(GetSnackBar(
+    //   backgroundColor: Colors.green,
+    //   message: 'item_added_to_cart'.tr,
+    //   mainButton: TextButton(
+    //     onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
+    //     child: Text('view_cart'.tr, style: robotoMedium.copyWith(color: Theme.of(context).cardColor)),
+    //   ),
+    //   onTap: (_) => Get.toNamed(RouteHelper.getCartRoute()),
+    //   duration: Duration(seconds: 3),
+    //   maxWidth: Dimensions.WEB_MAX_WIDTH,
+    //   snackStyle: SnackStyle.FLOATING,
+    //   margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+    //   borderRadius: 10,
+    //   isDismissible: true,
+    //   dismissDirection: DismissDirection.horizontal,
+    // ));
   }
 }
 

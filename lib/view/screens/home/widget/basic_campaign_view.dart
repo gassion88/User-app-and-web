@@ -30,8 +30,7 @@ class BasicCampaignView extends StatelessWidget {
             itemBuilder: (context, index) {
               return InkWell(
                   onTap: () => Get.toNamed(RouteHelper.getBasicCampaignRoute(
-                    campaignController.basicCampaignList[index].id, campaignController.basicCampaignList[index].title,
-                    campaignController.basicCampaignList[index].image,
+                    campaignController.basicCampaignList[index],
                   )),
                   child: Container(
                     margin: EdgeInsets.only(right: Dimensions.PADDING_SIZE_SMALL),

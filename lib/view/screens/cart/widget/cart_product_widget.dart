@@ -88,7 +88,7 @@ class CartProductWidget extends StatelessWidget {
                   children: [
 
                     Row(children: [
-                      Stack(
+                      (cart.product.image != null && cart.product.image.isNotEmpty) ? Stack(
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
@@ -108,7 +108,7 @@ class CartProductWidget extends StatelessWidget {
                             ),
                           ),
                         ],
-                      ),
+                      ) : SizedBox.shrink(),
                       SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
 
                       Expanded(
@@ -128,22 +128,36 @@ class CartProductWidget extends StatelessWidget {
                         ]),
                       ),
 
-                      Row(children: [
-                        QuantityButton(
-                          onTap: () {
-                            if (cart.quantity > 1) {
-                              Get.find<CartController>().setQuantity(false, cart);
-                            }else {
-                              Get.find<CartController>().removeFromCart(cartIndex);
-                            }
-                          },
-                          isIncrement: false,
-                        ),
-                        Text(cart.quantity.toString(), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
-                        QuantityButton(
-                          onTap: () => Get.find<CartController>().setQuantity(true, cart),
-                          isIncrement: true,
-                        ),
+                      Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        Get.find<SplashController>().configModel.toggleVegNonVeg ? Container(
+                          padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL, horizontal: Dimensions.PADDING_SIZE_SMALL),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          child: Text(
+                            cart.product.veg == 0 ? 'non_veg'.tr : 'veg'.tr,
+                            style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Colors.white),
+                          ),
+                        ) : SizedBox(),
+                        SizedBox(height: Get.find<SplashController>().configModel.toggleVegNonVeg ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0),
+                        Row(children: [
+                          QuantityButton(
+                            onTap: () {
+                              if (cart.quantity > 1) {
+                                Get.find<CartController>().setQuantity(false, cart);
+                              }else {
+                                Get.find<CartController>().removeFromCart(cartIndex);
+                              }
+                            },
+                            isIncrement: false,
+                          ),
+                          Text(cart.quantity.toString(), style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraLarge)),
+                          QuantityButton(
+                            onTap: () => Get.find<CartController>().setQuantity(true, cart),
+                            isIncrement: true,
+                          ),
+                        ]),
                       ]),
 
                       !ResponsiveHelper.isMobile(context) ? Padding(

@@ -1,3 +1,4 @@
+import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/category_controller.dart';
 import 'package:efood_multivendor/controller/localization_controller.dart';
 import 'package:efood_multivendor/controller/restaurant_controller.dart';
@@ -12,7 +13,7 @@ import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
-import 'package:efood_multivendor/view/base/cart_widget.dart';
+import 'package:efood_multivendor/view/base/bottom_cart_widget.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
@@ -128,14 +129,15 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                   ),
                 ),
                 actions: [IconButton(
-                  onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
+                  onPressed: () => Get.toNamed(RouteHelper.getSearchRestaurantProductRoute(_restaurant.id)),
                   icon: Container(
                     height: 50, width: 50,
                     decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
                     alignment: Alignment.center,
-                    child: CartWidget(color: Theme.of(context).cardColor, size: 15, fromRestaurant: true),
+                    child: Icon(Icons.search, size: 20, color: Theme.of(context).cardColor),
                   ),
                 )],
+
               ),
 
               SliverToBoxAdapter(child: Center(child: Container(
@@ -253,12 +255,17 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
                     padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                     child: CircularProgressIndicator(),
                   )) : SizedBox(),
+
                 ]),
               ))),
             ],
           ) : Center(child: CircularProgressIndicator());
         });
       }),
+
+      bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
+          return cartController.cartList.length > 0 && !ResponsiveHelper.isDesktop(context) ? BottomCartWidget() : SizedBox();
+        })
     );
   }
 }

@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:efood_multivendor/controller/order_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/view/base/cart_widget.dart';
 import 'package:efood_multivendor/view/screens/cart/cart_screen.dart';
 import 'package:efood_multivendor/view/screens/dashboard/widget/bottom_nav_item.dart';
+import 'package:efood_multivendor/view/screens/dashboard/widget/running_order_view_widget.dart';
 import 'package:efood_multivendor/view/screens/favourite/favourite_screen.dart';
 import 'package:efood_multivendor/view/screens/home/home_screen.dart';
 import 'package:efood_multivendor/view/screens/menu/menu_screen.dart';
@@ -81,32 +83,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Scaffold(
         key: _scaffoldKey,
 
-        floatingActionButton: ResponsiveHelper.isDesktop(context) ? null : FloatingActionButton(
-          elevation: 5,
-          backgroundColor: _pageIndex == 2 ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
-          onPressed: () => _setPage(2),
-          child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).disabledColor, size: 30),
+        floatingActionButton: GetBuilder<OrderController>(builder: (orderController) {
+            return ResponsiveHelper.isDesktop(context) ? SizedBox() : (orderController.isRunningOrderViewShow && (orderController.runningOrderList != null && orderController.runningOrderList.length > 0))
+            ? SizedBox.shrink() : FloatingActionButton(
+              elevation: 5,
+              backgroundColor: _pageIndex == 2 ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+              onPressed: () => _setPage(2),
+              child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).disabledColor, size: 30),
+            );
+          }
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-        bottomNavigationBar: ResponsiveHelper.isDesktop(context) ? SizedBox() : BottomAppBar(
-          elevation: 5,
-          notchMargin: 5,
-          clipBehavior: Clip.antiAlias,
-          shape: CircularNotchedRectangle(),
+        bottomNavigationBar: ResponsiveHelper.isDesktop(context) ? SizedBox() : GetBuilder<OrderController>(builder: (orderController) {
 
-          child: Padding(
-            padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-            child: Row(children: [
-              BottomNavItem(iconData: Icons.home, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
-              BottomNavItem(iconData: Icons.favorite, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),
-              Expanded(child: SizedBox()),
-              BottomNavItem(iconData: Icons.shopping_bag, isSelected: _pageIndex == 3, onTap: () => _setPage(3)),
-              BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
-                Get.bottomSheet(MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
-              }),
-            ]),
-          ),
+            return (orderController.isRunningOrderViewShow && (orderController.runningOrderList != null && orderController.runningOrderList.length > 0))
+            ? RunningOrderViewWidget() : BottomAppBar(
+              elevation: 5,
+              notchMargin: 5,
+              clipBehavior: Clip.antiAlias,
+              shape: CircularNotchedRectangle(),
+
+              child: Padding(
+                padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                child: Row(children: [
+                  BottomNavItem(iconData: Icons.home, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
+                  BottomNavItem(iconData: Icons.favorite, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),
+                  Expanded(child: SizedBox()),
+                  BottomNavItem(iconData: Icons.shopping_bag, isSelected: _pageIndex == 3, onTap: () => _setPage(3)),
+                  BottomNavItem(iconData: Icons.menu, isSelected: _pageIndex == 4, onTap: () {
+                    Get.bottomSheet(MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
+                  }),
+                ]),
+              ),
+            );
+          }
         ),
         body: PageView.builder(
           controller: _pageController,

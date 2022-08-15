@@ -1,4 +1,5 @@
 import 'package:efood_multivendor/controller/order_controller.dart';
+import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
@@ -45,12 +46,12 @@ class PaymentFailedDialog extends StatelessWidget {
 
           GetBuilder<OrderController>(builder: (orderController) {
             return !orderController.isLoading ? Column(children: [
-              CustomButton(
+              Get.find<SplashController>().configModel.cashOnDelivery ? CustomButton(
                 buttonText: 'switch_to_cash_on_delivery'.tr,
                 onPressed: () => orderController.switchToCOD(orderID),
                 radius: Dimensions.RADIUS_SMALL, height: 40,
-              ),
-              SizedBox(width: Dimensions.PADDING_SIZE_LARGE),
+              ) : SizedBox(),
+              SizedBox(width: Get.find<SplashController>().configModel.cashOnDelivery ? Dimensions.PADDING_SIZE_LARGE : 0),
               TextButton(
                 onPressed: () {
                   Get.offAllNamed(RouteHelper.getInitialRoute());

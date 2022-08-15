@@ -1,4 +1,5 @@
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/data/api/api_checker.dart';
 import 'package:efood_multivendor/data/model/body/signup_body.dart';
 import 'package:efood_multivendor/data/model/body/social_log_in_body.dart';
 import 'package:efood_multivendor/data/model/response/response_model.dart';
@@ -191,7 +192,6 @@ class AuthController extends GetxController implements GetxService {
   Future<ResponseModel> verifyPhone(String phone, String token) async {
     _isLoading = true;
     update();
-    print('---------$phone');
     Response response = await authRepo.verifyPhone(phone, _verificationCode);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
@@ -204,6 +204,15 @@ class AuthController extends GetxController implements GetxService {
     _isLoading = false;
     update();
     return responseModel;
+  }
+
+  Future<void> updateZone() async {
+    Response response = await authRepo.updateZone();
+    if (response.statusCode == 200) {
+      // Nothing to do
+    } else {
+      ApiChecker.checkApi(response);
+    }
   }
 
   String _verificationCode = '';
@@ -267,6 +276,10 @@ class AuthController extends GetxController implements GetxService {
     authRepo.setNotificationActive(isActive);
     update();
     return _notification;
+  }
+
+  bool clearSharedAddress() {
+    return authRepo.clearSharedAddress();
   }
 
 }

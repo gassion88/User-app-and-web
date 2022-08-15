@@ -8,7 +8,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:get/get.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:universal_ui/universal_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HtmlViewerScreen extends StatelessWidget {
   final HtmlType htmlType;
@@ -67,8 +67,7 @@ class HtmlViewerScreen extends StatelessWidget {
               _data ?? '',
               key: Key(htmlType.toString()),
               onTapUrl: (String url) {
-                // ignore: deprecated_member_use
-                return launch(url);
+                return launchUrlString(url, mode: LaunchMode.externalApplication);
               },
             ),
           ),

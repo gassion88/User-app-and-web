@@ -1,5 +1,4 @@
 import 'package:efood_multivendor/controller/auth_controller.dart';
-import 'package:efood_multivendor/controller/restaurant_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/controller/wishlist_controller.dart';
 import 'package:efood_multivendor/data/model/response/config_model.dart';
@@ -14,6 +13,7 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/discount_tag.dart';
+import 'package:efood_multivendor/view/base/discount_tag_without_image.dart';
 import 'package:efood_multivendor/view/base/not_available_widget.dart';
 import 'package:efood_multivendor/view/base/product_bottom_sheet.dart';
 import 'package:efood_multivendor/view/base/rating_bar.dart';
@@ -39,22 +39,27 @@ class ProductWidget extends StatelessWidget {
     double _discount;
     String _discountType;
     bool _isAvailable;
+    String _image ;
     if(isRestaurant) {
-      bool _isClosedToday = Get.find<RestaurantController>().isRestaurantClosed(true, restaurant.active, restaurant.offDay);
+      _image = restaurant.logo;
       _discount = restaurant.discount != null ? restaurant.discount.discount : 0;
       _discountType = restaurant.discount != null ? restaurant.discount.discountType : 'percent';
-      _isAvailable = DateConverter.isAvailable(restaurant.openingTime, restaurant.closeingTime) && restaurant.active && !_isClosedToday;
+      // bool _isClosedToday = Get.find<RestaurantController>().isRestaurantClosed(true, restaurant.active, restaurant.offDay);
+      // _isAvailable = DateConverter.isAvailable(restaurant.openingTime, restaurant.closeingTime) && restaurant.active && !_isClosedToday;
+      _isAvailable = restaurant.open == 1 && restaurant.active ;
     }else {
+      _image = product.image;
       _discount = (product.restaurantDiscount == 0 || isCampaign) ? product.discount : product.restaurantDiscount;
       _discountType = (product.restaurantDiscount == 0 || isCampaign) ? product.discountType : 'percent';
-      _isAvailable = DateConverter.isAvailable(product.availableTimeStarts, product.availableTimeEnds)
-          && DateConverter.isAvailable(product.restaurantOpeningTime, product.restaurantClosingTime);
+      _isAvailable = DateConverter.isAvailable(product.availableTimeStarts, product.availableTimeEnds);
     }
 
     return InkWell(
       onTap: () {
         if(isRestaurant) {
-          Get.toNamed(RouteHelper.getRestaurantRoute(restaurant.id), arguments: RestaurantScreen(restaurant: restaurant));
+          if(restaurant != null){
+            Get.toNamed(RouteHelper.getRestaurantRoute(restaurant.id), arguments: RestaurantScreen(restaurant: restaurant));
+          }
         }else {
           ResponsiveHelper.isMobile(context) ? Get.bottomSheet(
             ProductBottomSheet(product: product, inRestaurantPage: inRestaurant, isCampaign: isCampaign),
@@ -79,7 +84,7 @@ class ProductWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: _desktop ? 0 : Dimensions.PADDING_SIZE_EXTRA_SMALL),
             child: Row(children: [
 
-              Stack(children: [
+              (_image != null && _image.isNotEmpty) ? Stack(children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                   child: CustomImage(
@@ -94,7 +99,7 @@ class ProductWidget extends StatelessWidget {
                   freeDelivery: isRestaurant ? restaurant.freeDelivery : false,
                 ),
                 _isAvailable ? SizedBox() : NotAvailableWidget(isRestaurant: isRestaurant),
-              ]),
+              ]) : SizedBox.shrink(),
               SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
 
               Expanded(
@@ -142,6 +147,10 @@ class ProductWidget extends StatelessWidget {
                         decoration: TextDecoration.lineThrough,
                       ),
                     ) : SizedBox(),
+                    SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+
+                    (_image != null && _image.isNotEmpty) ? SizedBox.shrink() : DiscountTagWithoutImage(discount: _discount, discountType: _discountType,
+                        freeDelivery: isRestaurant ? restaurant.freeDelivery : false),
 
                   ]),
 

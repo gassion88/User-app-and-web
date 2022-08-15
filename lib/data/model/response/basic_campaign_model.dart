@@ -5,8 +5,8 @@ class BasicCampaignModel {
   String title;
   String image;
   String description;
-  String startDate;
-  String endDate;
+  String availableDateStarts;
+  String availableDateEnds;
   String startTime;
   String endTime;
   List<Restaurant> restaurants;
@@ -16,8 +16,8 @@ class BasicCampaignModel {
         this.title,
         this.image,
         this.description,
-        this.startDate,
-        this.endDate,
+        this.availableDateStarts,
+        this.availableDateEnds,
         this.startTime,
         this.endTime,
         this.restaurants});
@@ -27,8 +27,8 @@ class BasicCampaignModel {
     title = json['title'];
     image = json['image'];
     description = json['description'];
-    startDate = json['start_date'];
-    endDate = json['end_date'];
+    availableDateStarts = json['available_date_starts'];
+    availableDateEnds = json['available_date_ends'];
     startTime = json['start_time'];
     endTime = json['end_time'];
     if (json['restaurants'] != null) {
@@ -45,8 +45,8 @@ class BasicCampaignModel {
     data['title'] = this.title;
     data['image'] = this.image;
     data['description'] = this.description;
-    data['start_date'] = this.startDate;
-    data['end_date'] = this.endDate;
+    data['available_date_starts'] = this.availableDateStarts;
+    data['available_date_ends'] = this.availableDateEnds;
     data['start_time'] = this.startTime;
     data['end_time'] = this.endTime;
     if (this.restaurants != null) {

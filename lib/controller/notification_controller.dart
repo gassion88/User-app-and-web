@@ -10,7 +10,9 @@ class NotificationController extends GetxController implements GetxService {
   NotificationController({@required this.notificationRepo});
 
   List<NotificationModel> _notificationList;
+  bool _hasNotification = false;
   List<NotificationModel> get notificationList => _notificationList;
+  bool get hasNotification => _hasNotification;
 
   Future<int> getNotificationList(bool reload) async {
     if(_notificationList == null || reload) {
@@ -23,7 +25,7 @@ class NotificationController extends GetxController implements GetxService {
         });
         Iterable iterable = _notificationList.reversed;
         _notificationList = iterable.toList();
-
+        _hasNotification = _notificationList.length != getSeenNotificationCount();
       } else {
         ApiChecker.checkApi(response);
       }

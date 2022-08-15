@@ -6,23 +6,35 @@ import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AllRestaurantScreen extends StatelessWidget {
+class AllRestaurantScreen extends StatefulWidget {
   final bool isPopular;
   AllRestaurantScreen({@required this.isPopular});
 
   @override
-  Widget build(BuildContext context) {
-    if(isPopular) {
+  State<AllRestaurantScreen> createState() => _AllRestaurantScreenState();
+}
+
+class _AllRestaurantScreenState extends State<AllRestaurantScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(widget.isPopular) {
       Get.find<RestaurantController>().getPopularRestaurantList(false, 'all', false);
     }else {
       Get.find<RestaurantController>().getLatestRestaurantList(false, 'all', false);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: CustomAppBar(title: isPopular ? 'popular_restaurants'.tr : '${'new_on'.tr} ${AppConstants.APP_NAME}'),
+      appBar: CustomAppBar(title: widget.isPopular ? 'popular_restaurants'.tr : '${'new_on'.tr} ${AppConstants.APP_NAME}'),
       body: RefreshIndicator(
         onRefresh: () async {
-          if(isPopular) {
+          if(widget.isPopular) {
             await Get.find<RestaurantController>().getPopularRestaurantList(
               true, Get.find<RestaurantController>().type, false,
             );
@@ -37,9 +49,9 @@ class AllRestaurantScreen extends StatelessWidget {
           child: GetBuilder<RestaurantController>(builder: (restController) {
             return ProductView(
               isRestaurant: true, products: null, noDataText: 'no_restaurant_available'.tr,
-              restaurants: isPopular ? restController.popularRestaurantList : restController.latestRestaurantList,
+              restaurants: widget.isPopular ? restController.popularRestaurantList : restController.latestRestaurantList,
               type: restController.type, onVegFilterTap: (String type) {
-                if(isPopular) {
+                if(widget.isPopular) {
                   Get.find<RestaurantController>().getPopularRestaurantList(true, type, true);
                 }else {
                   Get.find<RestaurantController>().getLatestRestaurantList(true, type, true);

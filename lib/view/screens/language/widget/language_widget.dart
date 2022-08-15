@@ -41,7 +41,11 @@ class LanguageWidget extends StatelessWidget {
                   border: Border.all(color: Theme.of(context).textTheme.bodyText1.color, width: 1),
                 ),
                 alignment: Alignment.center,
-                child: Image.asset(languageModel.imageUrl, width: 36, height: 36),
+                child: Image.asset(
+                  languageModel.imageUrl, width: 36, height: 36,
+                  color: languageModel.languageCode == 'en' || languageModel.languageCode == 'ar'
+                      ? Theme.of(context).textTheme.bodyText1.color : null,
+                ),
               ),
               SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
               Text(languageModel.languageName, style: robotoRegular),

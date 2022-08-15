@@ -1,3 +1,4 @@
+import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/data/api/api_checker.dart';
 import 'package:efood_multivendor/data/model/body/review_body.dart';
 import 'package:efood_multivendor/data/model/response/cart_model.dart';
@@ -5,6 +6,7 @@ import 'package:efood_multivendor/data/model/response/order_details_model.dart';
 import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/data/model/response/response_model.dart';
 import 'package:efood_multivendor/data/repository/product_repo.dart';
+import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,6 +26,9 @@ class ProductController extends GetxController implements GetxService {
   String _reviewedType = 'all';
   static List<String> _productTypeList = ['all', 'veg', 'non_veg'];
 
+  int _cartIndex = -1;
+  int _imageIndex = 0;
+
   List<Product> get popularProductList => _popularProductList;
   List<Product> get reviewedProductList => _reviewedProductList;
   bool get isLoading => _isLoading;
@@ -34,6 +39,8 @@ class ProductController extends GetxController implements GetxService {
   String get popularType => _popularType;
   String get reviewType => _reviewedType;
   List<String> get productTypeList => _productTypeList;
+  int get cartIndex => _cartIndex;
+  int get imageIndex => _imageIndex;
 
   Future<void> getPopularProductList(bool reload, String type, bool notify) async {
     _popularType = type;
@@ -82,6 +89,13 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
+  void setImageIndex(int index, bool notify) {
+    _imageIndex = index;
+    if(notify) {
+      update();
+    }
+  }
+
   void initData(Product product, CartModel cart) {
     _variationIndex = [];
     _addOnQtyList = [];
@@ -120,7 +134,42 @@ class ProductController extends GetxController implements GetxService {
         _addOnActiveList.add(false);
         _addOnQtyList.add(1);
       });
+      setExistInCart(product, notify: false);
     }
+  }
+  int setExistInCart(Product product, {bool notify = true}) {
+    List<String> _variationList = [];
+    for (int index = 0; index < product.choiceOptions.length; index++) {
+      _variationList.add(product.choiceOptions[index].options[_variationIndex[index]].replaceAll(' ', ''));
+    }
+    String variationType = '';
+    bool isFirst = true;
+    _variationList.forEach((variation) {
+      if (isFirst) {
+        variationType = '$variationType$variation';
+        isFirst = false;
+      } else {
+        variationType = '$variationType-$variation';
+      }
+    });
+    _cartIndex = Get.find<CartController>().isExistInCart(product.id, variationType, false, null);
+    if(_cartIndex != -1) {
+      _quantity = Get.find<CartController>().cartList[_cartIndex].quantity;
+      _addOnActiveList = [];
+      _addOnQtyList = [];
+      List<int> _addOnIdList = [];
+      Get.find<CartController>().cartList[_cartIndex].addOnIds.forEach((addOnId) => _addOnIdList.add(addOnId.id));
+      product.addOns.forEach((addOn) {
+        if(_addOnIdList.contains(addOn.id)) {
+          _addOnActiveList.add(true);
+          _addOnQtyList.add(Get.find<CartController>().cartList[_cartIndex].addOnIds[_addOnIdList.indexOf(addOn.id)].quantity);
+        }else {
+          _addOnActiveList.add(false);
+          _addOnQtyList.add(1);
+        }
+      });
+    }
+    return _cartIndex;
   }
 
   void setAddOnQuantity(bool isIncrement, int index) {
@@ -141,8 +190,10 @@ class ProductController extends GetxController implements GetxService {
     update();
   }
 
-  void setCartVariationIndex(int index, int i) {
+  void setCartVariationIndex(int index, int i,Product product) {
     _variationIndex[index] = i;
+    _quantity = 1;
+    setExistInCart(product);
     update();
   }
 
@@ -225,5 +276,26 @@ class ProductController extends GetxController implements GetxService {
     update();
     return responseModel;
   }
+
+  double getStartingPrice(Product product) {
+    double _startingPrice = 0;
+    if (product.choiceOptions.length != 0) {
+      List<double> _priceList = [];
+      product.variations.forEach((variation) => _priceList.add(variation.price));
+      _priceList.sort((a, b) => a.compareTo(b));
+      _startingPrice = _priceList[0];
+    } else {
+      _startingPrice = product.price;
+    }
+    return _startingPrice;
+  }
+
+  bool isAvailable(Product product) {
+    return DateConverter.isAvailable(product.availableTimeStarts, product.availableTimeEnds);
+  }
+
+  double getDiscount(Product product) => product.restaurantDiscount == 0 ? product.discount : product.restaurantDiscount;
+
+  String getDiscountType(Product product) => product.restaurantDiscount == 0 ? product.discountType : 'percent';
 
 }

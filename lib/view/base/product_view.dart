@@ -6,6 +6,7 @@ import 'package:efood_multivendor/view/base/no_data_screen.dart';
 import 'package:efood_multivendor/view/base/product_shimmer.dart';
 import 'package:efood_multivendor/view/base/product_widget.dart';
 import 'package:efood_multivendor/view/base/veg_filter_widget.dart';
+import 'package:efood_multivendor/view/screens/home/theme1/restaurant_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,9 +22,10 @@ class ProductView extends StatelessWidget {
   final bool inRestaurantPage;
   final String type;
   final Function(String type) onVegFilterTap;
+  final bool showTheme1Restaurant;
   ProductView({@required this.restaurants, @required this.products, @required this.isRestaurant, this.isScrollable = false,
     this.shimmerLength = 20, this.padding = const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL), this.noDataText,
-    this.isCampaign = false, this.inRestaurantPage = false, this.type, this.onVegFilterTap});
+    this.isCampaign = false, this.inRestaurantPage = false, this.type, this.onVegFilterTap, this.showTheme1Restaurant = false});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class ProductView extends StatelessWidget {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
           mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_LARGE : 0.01,
-          childAspectRatio: ResponsiveHelper.isDesktop(context) ? 4 : 4,
+          childAspectRatio: ResponsiveHelper.isDesktop(context) ? 4 : showTheme1Restaurant ? 1.9 : 4,
           crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
         ),
         physics: isScrollable ? BouncingScrollPhysics() : NeverScrollableScrollPhysics(),
@@ -58,7 +60,7 @@ class ProductView extends StatelessWidget {
         itemCount: _length,
         padding: padding,
         itemBuilder: (context, index) {
-          return ProductWidget(
+          return showTheme1Restaurant ? RestaurantWidget(restaurant: restaurants[index], index: index, inStore: inRestaurantPage) :  ProductWidget(
             isRestaurant: isRestaurant, product: isRestaurant ? null : products[index],
             restaurant: isRestaurant ? restaurants[index] : null, index: index, length: _length, isCampaign: isCampaign,
             inRestaurant: inRestaurantPage,
@@ -71,7 +73,7 @@ class ProductView extends StatelessWidget {
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
           mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_LARGE : 0.01,
-          childAspectRatio: ResponsiveHelper.isDesktop(context) ? 4 : 4,
+          childAspectRatio: ResponsiveHelper.isDesktop(context) ? 4 : showTheme1Restaurant ? 1.9 : 4,
           crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 2,
         ),
         physics: isScrollable ? BouncingScrollPhysics() : NeverScrollableScrollPhysics(),
@@ -79,7 +81,7 @@ class ProductView extends StatelessWidget {
         itemCount: shimmerLength,
         padding: padding,
         itemBuilder: (context, index) {
-          return ProductShimmer(isEnabled: _isNull, isRestaurant: isRestaurant, hasDivider: index != shimmerLength-1);
+          return showTheme1Restaurant ? RestaurantShimmer(isEnable: _isNull) : ProductShimmer(isEnabled: _isNull, isRestaurant: isRestaurant, hasDivider: index != shimmerLength-1);
         },
       ),
 

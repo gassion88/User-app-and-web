@@ -1,7 +1,7 @@
 class RestaurantModel {
   int totalSize;
   String limit;
-  String offset;
+  int offset;
   List<Restaurant> restaurants;
 
   RestaurantModel({this.totalSize, this.limit, this.offset, this.restaurants});
@@ -9,7 +9,7 @@ class RestaurantModel {
   RestaurantModel.fromJson(Map<String, dynamic> json) {
     totalSize = json['total_size'];
     limit = json['limit'].toString();
-    offset = json['offset'].toString();
+    offset = (json['offset'] != null && json['offset'].toString().trim().isNotEmpty) ? int.parse(json['offset'].toString()) : null;
     if (json['restaurants'] != null) {
       restaurants = [];
       json['restaurants'].forEach((v) {
@@ -39,10 +39,9 @@ class Restaurant {
   String latitude;
   String longitude;
   String address;
+  int zoneId;
   double minimumOrder;
   String currency;
-  String openingTime;
-  String closeingTime;
   bool freeDelivery;
   String coverPhoto;
   bool delivery;
@@ -51,10 +50,8 @@ class Restaurant {
   double avgRating;
   double tax;
   int ratingCount;
-  String offDay;
   int selfDeliverySystem;
   bool posSystem;
-  double deliveryCharge;
   int open;
   bool active;
   String deliveryTime;
@@ -62,6 +59,9 @@ class Restaurant {
   int veg;
   int nonVeg;
   Discount discount;
+  List<Schedules> schedules;
+  double minimumShippingCharge;
+  double perKmShippingCharge;
 
   Restaurant(
       {this.id,
@@ -72,10 +72,9 @@ class Restaurant {
         this.latitude,
         this.longitude,
         this.address,
+        this.zoneId,
         this.minimumOrder,
         this.currency,
-        this.openingTime,
-        this.closeingTime,
         this.freeDelivery,
         this.coverPhoto,
         this.delivery,
@@ -84,17 +83,19 @@ class Restaurant {
         this.avgRating,
         this.tax,
         this.ratingCount,
-        this.offDay,
         this.selfDeliverySystem,
         this.posSystem,
-        this.deliveryCharge,
         this.open,
         this.active,
         this.deliveryTime,
         this.categoryIds,
         this.veg,
         this.nonVeg,
-        this.discount});
+        this.discount,
+        this.schedules,
+        this.minimumShippingCharge,
+        this.perKmShippingCharge,
+      });
 
   Restaurant.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -105,10 +106,9 @@ class Restaurant {
     latitude = json['latitude'];
     longitude = json['longitude'];
     address = json['address'];
+    zoneId = json['zone_id'];
     minimumOrder = json['minimum_order'].toDouble();
     currency = json['currency'];
-    openingTime = json['available_time_starts'];
-    closeingTime = json['available_time_ends'];
     freeDelivery = json['free_delivery'];
     coverPhoto = json['cover_photo'] != null ? json['cover_photo'] : '';
     delivery = json['delivery'];
@@ -117,10 +117,8 @@ class Restaurant {
     avgRating = json['avg_rating'].toDouble();
     tax = json['tax'] != null ? json['tax'].toDouble() : null;
     ratingCount = json['rating_count '];
-    offDay = json['off_day'];
     selfDeliverySystem = json['self_delivery_system'];
     posSystem = json['pos_system'];
-    deliveryCharge = json['delivery_charge'].toDouble();
     open = json['open'];
     active = json['active'];
     deliveryTime = json['delivery_time'];
@@ -128,6 +126,15 @@ class Restaurant {
     nonVeg = json['non_veg'];
     categoryIds = json['category_ids'] != null ? json['category_ids'].cast<int>() : [];
     discount = json['discount'] != null ? new Discount.fromJson(json['discount']) : null;
+    if (json['schedules'] != null) {
+      schedules = <Schedules>[];
+      json['schedules'].forEach((v) {
+        schedules.add(new Schedules.fromJson(v));
+      });
+    }
+    minimumShippingCharge = json['minimum_shipping_charge'] != null ? json['minimum_shipping_charge'].toDouble() : 0.0;
+    perKmShippingCharge = json['per_km_shipping_charge'] != null ? json['per_km_shipping_charge'].toDouble() : 0.0;
+
   }
 
   Map<String, dynamic> toJson() {
@@ -142,8 +149,7 @@ class Restaurant {
     data['address'] = this.address;
     data['minimum_order'] = this.minimumOrder;
     data['currency'] = this.currency;
-    data['available_time_starts'] = this.openingTime;
-    data['available_time_ends'] = this.closeingTime;
+    data['zone_id'] = this.zoneId;
     data['free_delivery'] = this.freeDelivery;
     data['cover_photo'] = this.coverPhoto;
     data['delivery'] = this.delivery;
@@ -152,10 +158,8 @@ class Restaurant {
     data['avg_rating'] = this.avgRating;
     data['tax'] = this.tax;
     data['rating_count '] = this.ratingCount;
-    data['off_day'] = this.offDay;
     data['self_delivery_system'] = this.selfDeliverySystem;
     data['pos_system'] = this.posSystem;
-    data['delivery_charge'] = this.deliveryCharge;
     data['open'] = this.open;
     data['active'] = this.active;
     data['veg'] = this.veg;
@@ -165,6 +169,12 @@ class Restaurant {
     if (this.discount != null) {
       data['discount'] = this.discount.toJson();
     }
+    if (this.schedules != null) {
+      data['schedules'] = this.schedules.map((v) => v.toJson()).toList();
+    }
+    data['minimum_shipping_charge'] = this.minimumShippingCharge;
+    data['per_km_shipping_charge'] = this.perKmShippingCharge;
+
     return data;
   }
 }
@@ -226,6 +236,39 @@ class Discount {
     data['restaurant_id'] = this.restaurantId;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    return data;
+  }
+}
+
+class Schedules {
+  int id;
+  int restaurantId;
+  int day;
+  String openingTime;
+  String closingTime;
+
+  Schedules(
+      {this.id,
+        this.restaurantId,
+        this.day,
+        this.openingTime,
+        this.closingTime});
+
+  Schedules.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    restaurantId = json['restaurant_id'];
+    day = json['day'];
+    openingTime = json['opening_time'].substring(0, 5);
+    closingTime = json['closing_time'].substring(0, 5);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['restaurant_id'] = this.restaurantId;
+    data['day'] = this.day;
+    data['opening_time'] = this.openingTime;
+    data['closing_time'] = this.closingTime;
     return data;
   }
 }

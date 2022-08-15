@@ -10,10 +10,22 @@ import 'package:efood_multivendor/view/base/no_data_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Get.find<CategoryController>().getCategoryList(false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    Get.find<CategoryController>().getCategoryList(false);
 
     return Scaffold(
       appBar: CustomAppBar(title: 'categories'.tr),
@@ -55,7 +67,7 @@ class CategoryScreen extends StatelessWidget {
                     SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                     Text(
-                      catController.categoryList[index].name,
+                      catController.categoryList[index].name, textAlign: TextAlign.center,
                       style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                       maxLines: 2, overflow: TextOverflow.ellipsis,
                     ),

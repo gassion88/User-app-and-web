@@ -1,7 +1,12 @@
+import 'package:efood_multivendor/controller/auth_controller.dart';
+import 'package:efood_multivendor/controller/cart_controller.dart';
+import 'package:efood_multivendor/controller/wishlist_controller.dart';
 import 'package:efood_multivendor/data/api/api_checker.dart';
 import 'package:efood_multivendor/data/model/response/response_model.dart';
 import 'package:efood_multivendor/data/repository/user_repo.dart';
 import 'package:efood_multivendor/data/model/response/userinfo_model.dart';
+import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -95,6 +100,24 @@ class UserController extends GetxController implements GetxService {
 
   void initData() {
     _pickedFile = null;
+  }
+
+  Future removeUser() async {
+    _isLoading = true;
+    update();
+    Response response = await userRepo.deleteUser();
+    _isLoading = false;
+    if (response.statusCode == 200) {
+      showCustomSnackBar('your_account_remove_successfully'.tr);
+      Get.find<AuthController>().clearSharedData();
+      Get.find<CartController>().clearCartList();
+      Get.find<WishListController>().removeWishes();
+      Get.offAllNamed(RouteHelper.getSignInRoute(RouteHelper.splash));
+
+    }else{
+      Get.back();
+      ApiChecker.checkApi(response);
+    }
   }
 
 }

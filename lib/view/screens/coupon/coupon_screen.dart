@@ -14,13 +14,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class CouponScreen extends StatelessWidget {
+class CouponScreen extends StatefulWidget {
+  final bool fromCheckout;
+
+  const CouponScreen({Key key, @required this.fromCheckout}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final bool _isLoggedIn = Get.find<AuthController>().isLoggedIn();
+  State<CouponScreen> createState() => _CouponScreenState();
+}
+
+class _CouponScreenState extends State<CouponScreen> {
+
+  final bool _isLoggedIn = Get.find<AuthController>().isLoggedIn();
+
+  @override
+  void initState() {
+    super.initState();
+
     if(_isLoggedIn) {
       Get.find<CouponController>().getCouponList();
     }
+  }
+  @override
+  Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: CustomAppBar(title: 'coupon'.tr),
@@ -44,8 +59,13 @@ class CouponScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Clipboard.setData(ClipboardData(text: couponController.couponList[index].code));
-                    showCustomSnackBar('coupon_code_copied'.tr, isError: false);
+                    if(widget.fromCheckout){
+                      couponController.setCoupon(couponController.couponList[index].code);
+                      Get.back();
+                    }else{
+                      Clipboard.setData(ClipboardData(text: couponController.couponList[index].code));
+                      showCustomSnackBar('coupon_code_copied'.tr, isError: false);
+                    }
                   },
                   child: Stack(children: [
 

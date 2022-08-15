@@ -13,7 +13,7 @@ import 'package:efood_multivendor/view/base/confirmation_dialog.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MenuButton extends StatelessWidget {
   final MenuModel menu;
@@ -42,8 +42,8 @@ class MenuButton extends StatelessWidget {
             Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
           }
         }else if(menu.route.startsWith('http')) {
-          if(await canLaunch(menu.route)) {
-            launch(menu.route);
+          if(await canLaunchUrlString(menu.route)) {
+            launchUrlString(menu.route, mode: LaunchMode.externalApplication);
           }
         }else {
           Get.offNamed(menu.route);

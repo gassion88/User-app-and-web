@@ -25,8 +25,8 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
     _isLoggedIn = Get.find<AuthController>().isLoggedIn();
     if(_isLoggedIn) {
       _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
-      Get.find<OrderController>().getRunningOrders(1);
-      Get.find<OrderController>().getHistoryOrders(1);
+      Get.find<OrderController>().getRunningOrders(1, notify: false);
+      Get.find<OrderController>().getHistoryOrders(1, notify: false);
     }
   }
 

@@ -1,9 +1,8 @@
 import 'package:efood_multivendor/controller/splash_controller.dart';
-import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:get/get.dart';
 
 class PriceConverter {
-  static String convertPrice(double price, {double discount, String discountType, int asFixed = AppConstants.DIGITS_AFTER_POINT}) {
+  static String convertPrice(double price, {double discount, String discountType}) {
     if(discount != null && discountType != null){
       if(discountType == 'amount') {
         price = price - discount;
@@ -13,9 +12,11 @@ class PriceConverter {
     }
     bool _isRightSide = Get.find<SplashController>().configModel.currencySymbolDirection == 'right';
     return '${_isRightSide ? '' : Get.find<SplashController>().configModel.currencySymbol+' '}'
-        '${(price).toStringAsFixed(asFixed).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}'
+        '${(price).toStringAsFixed(Get.find<SplashController>().configModel.digitAfterDecimalPoint)
+        .replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}'
         '${_isRightSide ? ' '+Get.find<SplashController>().configModel.currencySymbol : ''}';
   }
+
 
   static double convertWithDiscount(double price, double discount, String discountType) {
     if(discountType == 'amount') {

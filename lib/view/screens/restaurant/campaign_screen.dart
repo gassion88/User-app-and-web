@@ -12,13 +12,25 @@ import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CampaignScreen extends StatelessWidget {
+class CampaignScreen extends StatefulWidget {
   final BasicCampaignModel campaign;
   CampaignScreen({@required this.campaign});
 
   @override
+  State<CampaignScreen> createState() => _CampaignScreenState();
+}
+
+class _CampaignScreenState extends State<CampaignScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Get.find<CampaignController>().getBasicCampaignDetails(widget.campaign.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Get.find<CampaignController>().getBasicCampaignDetails(campaign.id);
 
     return Scaffold(
       appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
@@ -36,7 +48,7 @@ class CampaignScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                   child: CustomImage(
                     fit: BoxFit.cover, height: 220, width: 1150, placeholder: Images.restaurant_cover,
-                    image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaign.image}',
+                    image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${widget.campaign.image}',
                   ),
                 ),
               ),
@@ -49,12 +61,12 @@ class CampaignScreen extends StatelessWidget {
               leading: IconButton(icon: Icon(Icons.chevron_left, color: Colors.white), onPressed: () => Get.back()),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
-                  campaign.title,
+                  widget.campaign.title,
                   style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.white),
                 ),
                 background: CustomImage(
                   fit: BoxFit.cover, placeholder: Images.restaurant_cover,
-                  image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${campaign.image}',
+                  image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}/${widget.campaign.image}',
                 ),
               ),
             ),
@@ -99,8 +111,8 @@ class CampaignScreen extends StatelessWidget {
                       )),
                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                       Text(
-                        '${DateConverter.isoStringToLocalDateOnly(campaignController.campaign.startDate)}'
-                            ' - ${DateConverter.isoStringToLocalDateOnly(campaignController.campaign.endDate)}',
+                        '${DateConverter.stringToLocalDateOnly(campaignController.campaign.availableDateStarts)}'
+                            ' - ${DateConverter.stringToLocalDateOnly(campaignController.campaign.availableDateEnds)}',
                         style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
                       ),
                     ]) : SizedBox(),

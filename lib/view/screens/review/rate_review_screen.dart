@@ -30,7 +30,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> with TickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(title: 'rate_review'.tr),
 
       body: Column(children: [

@@ -8,6 +8,8 @@ import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/data/model/response/restaurant_model.dart';
 import 'package:efood_multivendor/data/model/response/review_model.dart';
 import 'package:efood_multivendor/data/repository/restaurant_repo.dart';
+import 'package:efood_multivendor/helper/date_converter.dart';
+import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,17 +18,17 @@ class RestaurantController extends GetxController implements GetxService {
   final RestaurantRepo restaurantRepo;
   RestaurantController({@required this.restaurantRepo});
 
+  RestaurantModel _restaurantModel;
   List<Restaurant> _restaurantList;
   List<Restaurant> _popularRestaurantList;
   List<Restaurant> _latestRestaurantList;
   Restaurant _restaurant;
   List<Product> _restaurantProducts;
+  ProductModel _restaurantProductModel;
+  ProductModel _restaurantSearchProductModel;
   int _categoryIndex = 0;
   List<CategoryModel> _categoryList;
   bool _isLoading = false;
-  int _pageSize;
-  List<String> _offsetList = [];
-  int _offset = 1;
   String _restaurantType = 'all';
   List<ReviewModel> _restaurantReviewList;
   bool _foodPaginate = false;
@@ -34,62 +36,52 @@ class RestaurantController extends GetxController implements GetxService {
   List<int> _foodOffsetList = [];
   int _foodOffset = 1;
   String _type = 'all';
+  String _searchType = 'all';
+  String _searchText = '';
 
+  RestaurantModel get restaurantModel => _restaurantModel;
   List<Restaurant> get restaurantList => _restaurantList;
   List<Restaurant> get popularRestaurantList => _popularRestaurantList;
   List<Restaurant> get latestRestaurantList => _latestRestaurantList;
   Restaurant get restaurant => _restaurant;
+  ProductModel get restaurantProductModel => _restaurantProductModel;
+  ProductModel get restaurantSearchProductModel => _restaurantSearchProductModel;
   List<Product> get restaurantProducts => _restaurantProducts;
   int get categoryIndex => _categoryIndex;
   List<CategoryModel> get categoryList => _categoryList;
   bool get isLoading => _isLoading;
-  int get popularPageSize => _pageSize;
-  int get offset => _offset;
   String get restaurantType => _restaurantType;
   List<ReviewModel> get restaurantReviewList => _restaurantReviewList;
   bool get foodPaginate => _foodPaginate;
   int get foodPageSize => _foodPageSize;
   int get foodOffset => _foodOffset;
   String get type => _type;
+  String get searchType => _searchType;
+  String get searchText => _searchText;
 
-  void setOffset(int offset) {
-    _offset = offset;
-  }
-
-  Future<void> getRestaurantList(String offset, bool reload) async {
-    if(offset == '1' || reload) {
-      _offsetList = [];
-      _offset = 1;
-      if(reload) {
-        _restaurantList = null;
-      }
+  Future<void> getRestaurantList(int offset, bool reload) async {
+    if(reload) {
+      _restaurantModel = null;
       update();
     }
-    if (!_offsetList.contains(offset)) {
-      _offsetList.add(offset);
-      Response response = await restaurantRepo.getRestaurantList(offset, _restaurantType);
-      if (response.statusCode == 200) {
-        if (offset == '1') {
-          _restaurantList = [];
-        }
-        _restaurantList.addAll(RestaurantModel.fromJson(response.body).restaurants);
-        _pageSize = RestaurantModel.fromJson(response.body).totalSize;
-        _isLoading = false;
-        update();
-      } else {
-        ApiChecker.checkApi(response);
+    Response response = await restaurantRepo.getRestaurantList(offset, _restaurantType);
+    if (response.statusCode == 200) {
+      if (offset == 1) {
+        _restaurantModel = RestaurantModel.fromJson(response.body);
+      }else {
+        _restaurantModel.totalSize = RestaurantModel.fromJson(response.body).totalSize;
+        _restaurantModel.offset = RestaurantModel.fromJson(response.body).offset;
+        _restaurantModel.restaurants.addAll(RestaurantModel.fromJson(response.body).restaurants);
       }
+      update();
     } else {
-      if(isLoading) {
-        _isLoading = false;
-        update();
-      }
+      ApiChecker.checkApi(response);
     }
   }
 
   void setRestaurantType(String type) {
     _restaurantType = type;
-    getRestaurantList('1', true);
+    update();
   }
 
   Future<void> getPopularRestaurantList(bool reload, String type, bool notify) async {
@@ -236,6 +228,37 @@ class RestaurantController extends GetxController implements GetxService {
     update();
   }
 
+  Future<void> getStoreSearchItemList(String searchText, String storeID, int offset, String type) async {
+    if(searchText.isEmpty) {
+      showCustomSnackBar('write_item_name'.tr);
+    }else {
+      _searchText = searchText;
+      if(offset == 1 || _restaurantSearchProductModel == null) {
+        _searchType = type;
+        _restaurantSearchProductModel = null;
+        update();
+      }
+      Response response = await restaurantRepo.getRestaurantSearchProductList(searchText, storeID, offset, type);
+      if (response.statusCode == 200) {
+        if (offset == 1) {
+          _restaurantSearchProductModel = ProductModel.fromJson(response.body);
+        }else {
+          _restaurantSearchProductModel.products.addAll(ProductModel.fromJson(response.body).products);
+          _restaurantSearchProductModel.totalSize = ProductModel.fromJson(response.body).totalSize;
+          _restaurantSearchProductModel.offset = ProductModel.fromJson(response.body).offset;
+        }
+      } else {
+        ApiChecker.checkApi(response);
+      }
+      update();
+    }
+  }
+
+  void initSearchData() {
+    _restaurantSearchProductModel = ProductModel(products: []);
+    _searchText = '';
+  }
+
   void setCategoryIndex(int index) {
     _categoryIndex = index;
     _restaurantProducts = null;
@@ -255,18 +278,47 @@ class RestaurantController extends GetxController implements GetxService {
     update();
   }
 
-  bool isRestaurantClosed(bool today, bool active, String offDay) {
-    offDay = offDay.trim();
+  bool isRestaurantClosed(bool today, bool active, List<Schedules> schedules) {
+    if(!active) {
+      return true;
+    }
     DateTime _date = DateTime.now();
     if(!today) {
       _date = _date.add(Duration(days: 1));
     }
-    for(int index=0; index<offDay.length; index++) {
-      if(_date.weekday == int.parse(offDay[index])) {
+    int _weekday = _date.weekday;
+    if(_weekday == 7) {
+      _weekday = 0;
+    }
+    for(int index=0; index<schedules.length; index++) {
+      if(_weekday == schedules[index].day) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool isRestaurantOpenNow(bool active, List<Schedules> schedules) {
+    if(isRestaurantClosed(true, active, schedules)) {
+      return false;
+    }
+    int _weekday = DateTime.now().weekday;
+    if(_weekday == 7) {
+      _weekday = 0;
+    }
+    for(int index=0; index<schedules.length; index++) {
+      if(_weekday == schedules[index].day
+          && DateConverter.isAvailable(schedules[index].openingTime, schedules[index].closingTime)) {
         return true;
       }
     }
-    return !active;
+    return false;
   }
+
+  bool isOpenNow(Restaurant restaurant) => restaurant.open == 1 && restaurant.active;
+
+  double getDiscount(Restaurant restaurant) => restaurant.discount != null ? restaurant.discount.discount : 0;
+
+  String getDiscountType(Restaurant restaurant) => restaurant.discount != null ? restaurant.discount.discountType : 'percent';
 
 }

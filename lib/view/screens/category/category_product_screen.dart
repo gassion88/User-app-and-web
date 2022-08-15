@@ -39,13 +39,12 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> with Tick
           && Get.find<CategoryController>().categoryProductList != null
           && !Get.find<CategoryController>().isLoading) {
         int pageSize = (Get.find<CategoryController>().pageSize / 10).ceil();
-        print('---------$pageSize/${Get.find<CategoryController>().offset}');
         if (Get.find<CategoryController>().offset < pageSize) {
           print('end of the page');
           Get.find<CategoryController>().showBottomLoader();
           Get.find<CategoryController>().getCategoryProductList(
             Get.find<CategoryController>().subCategoryIndex == 0 ? widget.categoryID
-                : Get.find<CategoryController>().subCategoryList[Get.find<CategoryController>().subCategoryIndex].id,
+                : Get.find<CategoryController>().subCategoryList[Get.find<CategoryController>().subCategoryIndex].id.toString(),
             Get.find<CategoryController>().offset+1, Get.find<CategoryController>().type, false,
           );
         }
@@ -61,7 +60,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> with Tick
           Get.find<CategoryController>().showBottomLoader();
           Get.find<CategoryController>().getCategoryRestaurantList(
             Get.find<CategoryController>().subCategoryIndex == 0 ? widget.categoryID
-                : Get.find<CategoryController>().subCategoryList[Get.find<CategoryController>().subCategoryIndex].id,
+                : Get.find<CategoryController>().subCategoryList[Get.find<CategoryController>().subCategoryIndex].id.toString(),
             Get.find<CategoryController>().offset+1, Get.find<CategoryController>().type, false,
           );
         }
@@ -106,13 +105,13 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> with Tick
               autofocus: true,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
-                hintText: 'Поиск...',
+                hintText: 'Search...',
                 border: InputBorder.none,
               ),
               style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
               onSubmitted: (String query) => catController.searchData(
                 query, catController.subCategoryIndex == 0 ? widget.categoryID
-                  : catController.subCategoryList[catController.subCategoryIndex].id,
+                  : catController.subCategoryList[catController.subCategoryIndex].id.toString(),
                 catController.type,
               ),
             ) : Text(widget.categoryName, style: robotoRegular.copyWith(
@@ -246,19 +245,19 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> with Tick
                       if(catController.isSearching) {
                         catController.searchData(
                           catController.searchText, catController.subCategoryIndex == 0 ? widget.categoryID
-                            : catController.subCategoryList[catController.subCategoryIndex].id, catController.type,
+                            : catController.subCategoryList[catController.subCategoryIndex].id.toString(), catController.type,
                         );
                       }else {
                         if(_tabController.index == 1) {
                           catController.getCategoryRestaurantList(
                             catController.subCategoryIndex == 0 ? widget.categoryID
-                                : catController.subCategoryList[catController.subCategoryIndex].id,
+                                : catController.subCategoryList[catController.subCategoryIndex].id.toString(),
                             1, catController.type, false,
                           );
                         }else {
                           catController.getCategoryProductList(
                             catController.subCategoryIndex == 0 ? widget.categoryID
-                                : catController.subCategoryList[catController.subCategoryIndex].id,
+                                : catController.subCategoryList[catController.subCategoryIndex].id.toString(),
                             1, catController.type, false,
                           );
                         }
