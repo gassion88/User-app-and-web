@@ -27,6 +27,7 @@ import 'package:efood_multivendor/view/screens/home/widget/banner_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/category_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:efood_multivendor/controller/theme_controller.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -139,7 +140,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         }),*/
                       ),
-                    )),
+                    )),IconButton(
+                            icon: new Icon(
+                                Get.isDarkMode
+                                    ? Icons.light_mode_outlined
+                                    : Icons.dark_mode_outlined,
+                                color: Get.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black),
+                            onPressed: () {
+                              Get.find<ThemeController>().toggleTheme();
+                            },
+                          ),
                     InkWell(
                       child: GetBuilder<NotificationController>(builder: (notificationController) {
                         return Stack(children: [
