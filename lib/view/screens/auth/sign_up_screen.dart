@@ -127,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                           initialSelection: CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code,
                           favorite: [CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code],
-                          showDropDownButton: true,
+                          enabled: false,
                           padding: EdgeInsets.zero,
                           showFlagMain: true,
                           dialogBackgroundColor: Theme.of(context).cardColor,

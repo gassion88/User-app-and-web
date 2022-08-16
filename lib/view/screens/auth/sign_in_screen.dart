@@ -132,7 +132,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   : CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code : Get.find<LocalizationController>().locale.countryCode,
                               favorite: [Get.find<AuthController>().getUserCountryCode().isNotEmpty ? Get.find<AuthController>().getUserCountryCode()
                                   : CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code],
-                              showDropDownButton: true,
+                              enabled: false,
                               padding: EdgeInsets.zero,
                               showFlagMain: true,
                               flagWidth: 30,
