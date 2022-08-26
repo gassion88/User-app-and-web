@@ -20,12 +20,15 @@ class RunningOrderViewWidget extends StatelessWidget {
 
       if(_orderStatus == AppConstants.PENDING){
         _status = 1;
-      }else if(_orderStatus == AppConstants.ACCEPTED || _orderStatus == AppConstants.PROCESSING || _orderStatus == AppConstants.CONFIRMED){
+      }else if( _orderStatus == AppConstants.PROCESSING ){
         _status = 2;
-      }else if(_orderStatus == AppConstants.HANDOVER || _orderStatus == AppConstants.PICKED_UP){
+      }else if(_orderStatus == AppConstants.HANDOVER ){
         _status = 3;
+      }else if(_orderStatus == AppConstants.PICKED_UP){
+        _status = 4;
+
       }
-        return (_status == 1 || _status == 2 || _status == 3) ? InkWell(
+        return (_status == 1 || _status == 2 || _status == 3 || _status == 4) ? InkWell(
           onTap: (){
             Get.toNamed(
               RouteHelper.getOrderDetailsRoute(orderController.runningOrderList[orderController.runningOrderIndex].id),
@@ -48,7 +51,7 @@ class RunningOrderViewWidget extends StatelessWidget {
                   Center(
                     child: Image.asset( _status == 2 ? _orderStatus == AppConstants.CONFIRMED || _orderStatus == AppConstants.ACCEPTED ? Images.processing_gif
                         : Images.cooking_gif : _status == 3
-                        ? _orderStatus == AppConstants.HANDOVER ? Images.handover_gif : Images.on_the_way_gif : Images.pending_gif,
+                        ?  Images.handover_gif : _status == 4 ? Images.on_the_way_gif : Images.pending_gif,
                         height: _status == 1 ? 40 : 70, width: _status == 1 ? 40 : 70, fit: BoxFit.fill),
                   ),
 
@@ -61,8 +64,7 @@ class RunningOrderViewWidget extends StatelessWidget {
                       SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                       Text(
-                        _status == 1 ? 'the_restaurant_will_soon_accept_your_order'.tr : _status == 2 ? _orderStatus == AppConstants.ACCEPTED
-                          ? 'deliveryman_accept_your_order'.tr : 'deliveryman_will_soon_pick_your_order'.tr : 'deliveryman_just_picked_your_order'.tr,
+                        _status == 1 ? 'the_restaurant_will_soon_accept_your_order'.tr : _status == 2 ? 'cooking'.tr : _status == 3 ? 'deliveryman_will_soon_pick_your_order'.tr : _status == 4 ? 'food_is_on_the_way'.tr : 'null',
                           style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), maxLines: 1, overflow: TextOverflow.ellipsis,
                       ),
 
