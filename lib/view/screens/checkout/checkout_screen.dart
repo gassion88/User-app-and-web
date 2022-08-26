@@ -350,7 +350,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 
                         // Coupon
-                        GetBuilder<CouponController>(builder: (couponController) {
+                      /*  GetBuilder<CouponController>(builder: (couponController) {
                             return Container(
                               color: Theme.of(context).cardColor,
                               padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
@@ -450,7 +450,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ]),
                             );
                           },
-                        ),
+                        ),*/
                         SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                         (orderController.orderType != 'take_away' && Get.find<SplashController>().configModel.dmTipsStatus == 1) ?
