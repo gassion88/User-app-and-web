@@ -141,7 +141,7 @@
     "login_to_continue": "Войти",
     "campaigns": "Campaigns",
     "all": "Всё",
-    "off": "OFF",
+    "off": "",
     "enjoy": "Enjoy",
     "off_on_all_categories": "off on all categories",
     "set_location": "Set Location",
@@ -372,7 +372,7 @@
   
     "v5.3": "Version 5.3",
     "no_payment_method_is_enabled": "No payment method is enabled",
-    "ratings": "ratings",
+    "ratings": "рейтинг",
   
     "v5.4": "Version 5.4",
     "wallet": "Wallet",
