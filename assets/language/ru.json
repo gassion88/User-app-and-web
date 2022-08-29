@@ -249,7 +249,7 @@
     "returned": "Returned",
     "failed": "Payment Failed",
     "canceled": "Отменено",
-    "delivered_at": "Delivered at",
+    "delivered_at": "Доставлено",
     "payment_info": "Payment Info",
     "status": "Status",
     "method": "Method",
