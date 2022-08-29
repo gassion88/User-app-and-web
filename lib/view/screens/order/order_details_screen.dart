@@ -102,7 +102,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
             }
             _couponDiscount = _order.couponDiscountAmount;
             _discount = _order.restaurantDiscountAmount;
-            _tax = _order.totalTaxAmount;
+           // _tax = _order.totalTaxAmount;
             for(OrderDetailsModel orderDetails in orderController.orderDetails) {
               for(AddOn addOn in orderDetails.addOns) {
                 _addOns = _addOns + (addOn.price * addOn.quantity);
@@ -321,11 +321,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                 ]) : SizedBox(),
                 SizedBox(height: _couponDiscount > 0 ? 10 : 0),
 
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('vat_tax'.tr, style: robotoRegular),
-                  Text('(+) ${PriceConverter.convertPrice(_tax)}', style: robotoRegular),
-                ]),
-                SizedBox(height: 10),
+
 
                 (_order.orderType != 'take_away' && Get.find<SplashController>().configModel.dmTipsStatus == 1) ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
