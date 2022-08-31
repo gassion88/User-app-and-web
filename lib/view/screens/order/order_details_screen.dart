@@ -7,6 +7,7 @@ import 'package:efood_multivendor/data/model/response/order_model.dart';
 import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
+import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -128,21 +129,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
 
                   Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-
+                  
+                  _order.orderStatus == AppConstants.PROCESSING ?
                   Center(
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
-
+                     
+                     
                       Text(
-                        DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
-                            : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
-                            '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
+                        int.parse(DateConverter.differenceInMinuteOrder(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime)[1]) < 5 ? '1 - 5'
+                            : '${DateConverter.differenceInMinuteOrder(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime)[0]} '
+                            '- ${DateConverter.differenceInMinuteOrder(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime)[1]}',
                         style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
                       ),
                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                       Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)),
                     ]),
-                  ),
+                  ) :
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
 
                 ]) : SizedBox() : SizedBox(),

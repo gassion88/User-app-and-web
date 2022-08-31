@@ -97,6 +97,20 @@ class DateConverter {
     return _deliveryTime.difference(DateTime.now()).inMinutes;
   }
 
+   static List differenceInMinuteOrder(String deliveryTime, String orderTime, int processingTime) {
+
+    List<String> _timeList1 = deliveryTime.split('-');
+
+    DateTime _deliveryTime = dateTimeStringToDate(orderTime).add(Duration(minutes: processingTime));
+    String _deliveryTime1 = (_deliveryTime.difference(DateTime.now()).inMinutes + int.parse(_timeList1[0])).toString() + '.' + (_deliveryTime.difference(DateTime.now()).inMinutes + int.parse(_timeList1[1])).toString();
+    List<String> _timeList2;
+    _timeList2 = _deliveryTime1.split('.');
+
+    return _timeList2;
+    
+
+  }
+
   static bool isBeforeTime(String dateTime) {
     if(dateTime == null) {
       return false;
