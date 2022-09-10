@@ -127,7 +127,7 @@ class ConfigModel {
     appMinimumVersionIos = json['app_minimum_version_ios'];
     perKmShippingCharge = json['per_km_shipping_charge'].toDouble();
     minimumShippingCharge = json['minimum_shipping_charge'].toDouble();
-    freeDeliveryOver = json['free_delivery_over'] != null ? json['free_delivery_over'].toDouble() : null;
+    freeDeliveryOver = json['free_delivery_over'] != null ? double.parse(json['free_delivery_over'].toString()) : null;
     demo = json['demo'];
     maintenanceMode = json['maintenance_mode'];
     popularFood = json['popular_food'];

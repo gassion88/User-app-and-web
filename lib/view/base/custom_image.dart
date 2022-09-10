@@ -16,7 +16,7 @@ class CustomImage extends StatelessWidget {
       color: Theme.of(context).cardColor,
       child: CachedNetworkImage(
         imageUrl: image, height: height, width: width, fit: fit,
-        placeholder: (context, url) => Image.asset(Images.placeholder, height: height, width: width, fit: fit),
+        placeholder: (context, url) => Image.asset(placeholder, height: height, width: width, fit: fit),
         errorWidget: (context, url, error) => Image.asset(placeholder, height: height, width: width, fit: fit),
       ),
     );

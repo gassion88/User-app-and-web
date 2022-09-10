@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/cart_controller.dart';
@@ -70,13 +71,16 @@ class LocationController extends GetxController implements GetxService {
     }
     AddressModel _addressModel;
     Position _myPosition;
-   
+    try {
+      Position newLocalData = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      _myPosition = newLocalData;
+    }catch(e) {
       _myPosition = Position(
         latitude: defaultLatLng != null ? defaultLatLng.latitude : double.parse(Get.find<SplashController>().configModel.defaultLocation.lat ?? '0'),
         longitude: defaultLatLng != null ? defaultLatLng.longitude : double.parse(Get.find<SplashController>().configModel.defaultLocation.lng ?? '0'),
         timestamp: DateTime.now(), accuracy: 1, altitude: 1, heading: 1, speed: 1, speedAccuracy: 1,
       );
-    
+    }
     if(fromAddress) {
       _position = _myPosition;
     }else {
@@ -275,9 +279,21 @@ class LocationController extends GetxController implements GetxService {
   }
 
   void saveAddressAndNavigate(AddressModel address, bool fromSignUp, String route, bool canRoute) {
-
+    if(Get.find<CartController>().cartList.length > 0) {
+      Get.dialog(ConfirmationDialog(
+        icon: Images.warning, title: 'are_you_sure_to_reset'.tr, description: 'if_you_change_location'.tr,
+        onYesPressed: () {
+          Get.back();
+          _setZoneData(address, fromSignUp, route, canRoute);
+        },
+        onNoPressed: () {
+          Get.back();
+          Get.back();
+        },
+      ));
+    }else {
       _setZoneData(address, fromSignUp, route, canRoute);
-    
+    }
   }
 
   void _setZoneData(AddressModel address, bool fromSignUp, String route, bool canRoute) {
@@ -324,7 +340,7 @@ class LocationController extends GetxController implements GetxService {
     }
   }
 
-  void setLocation(String placeID, String address, GoogleMapController mapController) async {
+  Future<Position> setLocation(String placeID, String address, GoogleMapController mapController) async {
     _loading = true;
     update();
 
@@ -350,6 +366,7 @@ class LocationController extends GetxController implements GetxService {
     }
     _loading = false;
     update();
+    return _pickPosition;
   }
 
   void disableButton() {
@@ -389,7 +406,7 @@ class LocationController extends GetxController implements GetxService {
     if(response.statusCode == 200 && response.body['status'] == 'OK') {
       _address = response.body['results'][0]['formatted_address'].toString();
     }else {
-      //showCustomSnackBar(response.body['error_message'] ?? response.bodyString);
+      showCustomSnackBar(response.body['error_message'] ?? response.bodyString);
     }
     return _address;
   }
@@ -409,6 +426,70 @@ class LocationController extends GetxController implements GetxService {
 
   void setPlaceMark(String address) {
     _address = address;
+  }
+
+  Future<void> zoomToFit(GoogleMapController controller, List<LatLng> list, {double padding = 0.5}) async {
+    LatLngBounds _bounds = _computeBounds(list);
+    LatLng _centerBounds = LatLng(
+      (_bounds.northeast.latitude + _bounds.southwest.latitude)/2,
+      (_bounds.northeast.longitude + _bounds.southwest.longitude)/2,
+    );
+
+    if(controller != null) {
+      controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(target: _centerBounds, zoom: GetPlatform.isWeb ? 10 : 16)));
+    }
+
+    bool keepZoomingOut = true;
+
+    int _count = 0;
+    while(keepZoomingOut) {
+      _count++;
+      final LatLngBounds screenBounds = await controller.getVisibleRegion();
+      if(_fits(_bounds, screenBounds) || _count == 200) {
+        keepZoomingOut = false;
+        final double zoomLevel = await controller.getZoomLevel() - padding;
+        controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: _centerBounds,
+          zoom: zoomLevel,
+        )));
+        break;
+      }
+      else {
+        // Zooming out by 0.1 zoom level per iteration
+        final double zoomLevel = await controller.getZoomLevel() - 0.1;
+        controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: _centerBounds,
+          zoom: zoomLevel,
+        )));
+      }
+    }
+  }
+
+  bool _fits(LatLngBounds fitBounds, LatLngBounds screenBounds) {
+    final bool northEastLatitudeCheck = screenBounds.northeast.latitude >= fitBounds.northeast.latitude;
+    final bool northEastLongitudeCheck = screenBounds.northeast.longitude >= fitBounds.northeast.longitude;
+
+    final bool southWestLatitudeCheck = screenBounds.southwest.latitude <= fitBounds.southwest.latitude;
+    final bool southWestLongitudeCheck = screenBounds.southwest.longitude <= fitBounds.southwest.longitude;
+
+    return northEastLatitudeCheck && northEastLongitudeCheck && southWestLatitudeCheck && southWestLongitudeCheck;
+  }
+
+  LatLngBounds _computeBounds(List<LatLng> list) {
+    assert(list.isNotEmpty);
+    var firstLatLng = list.first;
+    var s = firstLatLng.latitude,
+        n = firstLatLng.latitude,
+        w = firstLatLng.longitude,
+        e = firstLatLng.longitude;
+    for (var i = 1; i < list.length; i++) {
+      var latlng = list[i];
+      s = min(s, latlng.latitude);
+      n = max(n, latlng.latitude);
+      w = min(w, latlng.longitude);
+      e = max(e, latlng.longitude);
+    }
+    return LatLngBounds(southwest: LatLng(s, w), northeast: LatLng(n, e));
   }
 
 }

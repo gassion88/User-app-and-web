@@ -2,6 +2,7 @@ import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/wishlist_controller.dart';
 import 'package:efood_multivendor/data/api/api_checker.dart';
+import 'package:efood_multivendor/data/model/response/conversation_model.dart';
 import 'package:efood_multivendor/data/model/response/response_model.dart';
 import 'package:efood_multivendor/data/repository/user_repo.dart';
 import 'package:efood_multivendor/data/model/response/userinfo_model.dart';
@@ -75,6 +76,10 @@ class UserController extends GetxController implements GetxService {
     }
     update();
     return _responseModel;
+  }
+
+  void updateUserWithNewData(User user) {
+    _userInfoModel.userInfo = user;
   }
 
   Future<ResponseModel> changePassword(UserInfoModel updatedUserModel) async {

@@ -45,7 +45,7 @@ class _ReferAndEarnScreenState extends State<ReferAndEarnScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'refer_and_earn'.tr),
+      appBar: CustomAppBar(title: 'refer'.tr),
       body: Center(
         child: SizedBox(
           width: Dimensions.WEB_MAX_WIDTH,

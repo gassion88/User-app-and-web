@@ -10,7 +10,6 @@ import 'package:efood_multivendor/controller/restaurant_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/controller/user_controller.dart';
 import 'package:efood_multivendor/data/model/response/config_model.dart';
-import 'package:efood_multivendor/data/model/response/order_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
@@ -21,15 +20,14 @@ import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/home/theme1/theme1_home_screen.dart';
 import 'package:efood_multivendor/view/screens/home/web_home_screen.dart';
 import 'package:efood_multivendor/view/screens/home/widget/filter_view.dart';
+import 'package:efood_multivendor/view/screens/home/widget/near_by_button_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/popular_food_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/item_campaign_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/popular_restaurant_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/banner_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/category_view.dart';
-import 'package:efood_multivendor/view/screens/order/order_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:efood_multivendor/controller/theme_controller.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -113,13 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: Dimensions.WEB_MAX_WIDTH, height: 50, color: Theme.of(context).backgroundColor,
                   child: Row(children: [
                     Expanded(child: InkWell(
-                     // onTap: () => Get.toNamed(RouteHelper.getAccessLocationRoute('home')),
+                      onTap: () => Get.toNamed(RouteHelper.getAccessLocationRoute('home')),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: Dimensions.PADDING_SIZE_SMALL,
                           horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_SMALL : 0,
                         ),
-                        /*child: GetBuilder<LocationController>(builder: (locationController) {
+                        child: GetBuilder<LocationController>(builder: (locationController) {
                           return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Icon(
@@ -140,20 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Icon(Icons.arrow_drop_down, color: Theme.of(context).textTheme.bodyText1.color),
                             ],
                           );
-                        }),*/
+                        }),
                       ),
-                    )),IconButton(
-                            icon: new Icon(
-                                Get.isDarkMode
-                                    ? Icons.light_mode_outlined
-                                    : Icons.dark_mode_outlined,
-                                color: Get.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black),
-                            onPressed: () {
-                              Get.find<ThemeController>().toggleTheme();
-                            },
-                          ),
+                    )),
                     InkWell(
                       child: GetBuilder<NotificationController>(builder: (notificationController) {
                         return Stack(children: [
@@ -208,6 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     BannerView(),
                     CategoryView(),
                     _configModel.popularRestaurant == 1 ? PopularRestaurantView(isPopular: true) : SizedBox(),
+                    NearByButtonView(),
                     ItemCampaignView(),
                     _configModel.popularFood == 1 ? PopularFoodView(isPopular: true) : SizedBox(),
                     _configModel.newRestaurant == 1 ? PopularRestaurantView(isPopular: false) : SizedBox(),

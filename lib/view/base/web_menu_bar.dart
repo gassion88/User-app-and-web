@@ -4,14 +4,12 @@ import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
-import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/screens/menu/menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -20,18 +18,10 @@ class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
         || Get.find<SplashController>().configModel.toggleRestaurantRegistration) && ResponsiveHelper.isDesktop(context);
     List<PopupMenuEntry> _entryList = [];
     if(Get.find<SplashController>().configModel.toggleDmRegistration) {
-      _entryList.add(PopupMenuItem(child: Text('join_as_a_delivery_man'.tr), onTap: () async {
-        if(await canLaunchUrlString('${AppConstants.BASE_URL}/deliveryman/apply')) {
-          launchUrlString('${AppConstants.BASE_URL}/deliveryman/apply', mode: LaunchMode.externalApplication);
-        }
-      }));
+      _entryList.add(PopupMenuItem<int>(child: Text('join_as_a_delivery_man'.tr), value: 0));
     }
     if(Get.find<SplashController>().configModel.toggleRestaurantRegistration) {
-      _entryList.add(PopupMenuItem(child: Text('join_as_a_restaurant'.tr), onTap: () async {
-        if(await canLaunchUrlString('${AppConstants.BASE_URL}/restaurant/apply')) {
-          launchUrlString('${AppConstants.BASE_URL}/restaurant/apply', mode: LaunchMode.externalApplication);
-        }
-      }));
+      _entryList.add(PopupMenuItem<int>(child: Text('join_as_a_restaurant'.tr), value: 1));
     }
 
     return Center(child: Container(
@@ -99,6 +89,13 @@ class WebMenuBar extends StatelessWidget implements PreferredSizeWidget {
 
         _showJoin ? PopupMenuButton<int>(
           itemBuilder: (BuildContext context) => _entryList,
+          onSelected: (int value) {
+            if(value == 0) {
+              Get.toNamed(RouteHelper.getDeliverymanRegistrationRoute());
+            }else {
+              Get.toNamed(RouteHelper.getRestaurantRegistrationRoute());
+            }
+          },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             decoration: BoxDecoration(

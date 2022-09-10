@@ -32,9 +32,8 @@ class _WalletScreenState extends State<WalletScreen> {
   void initState() {
     super.initState();
     if(_isLoggedIn){
-      if(Get.find<UserController>().userInfoModel == null) {
-        Get.find<UserController>().getUserInfo();
-      }
+      Get.find<UserController>().getUserInfo();
+
       Get.find<WalletController>().getWalletTransactionList('1', false, widget.fromWallet);
 
       Get.find<WalletController>().setOffset(1);

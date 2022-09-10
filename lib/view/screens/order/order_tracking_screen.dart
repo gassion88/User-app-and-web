@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:collection';
-import 'dart:typed_data';
+//import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/order_controller.dart';
+import 'package:efood_multivendor/data/model/body/notification_body.dart';
 import 'package:efood_multivendor/data/model/response/address_model.dart';
+import 'package:efood_multivendor/data/model/response/conversation_model.dart';
 import 'package:efood_multivendor/data/model/response/order_model.dart';
 import 'package:efood_multivendor/data/model/response/restaurant_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
+import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/view/base/custom_app_bar.dart';
@@ -46,8 +49,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> with WidgetsB
     WidgetsBinding.instance.addObserver(this);
 
     _loadData();
-
-    Get.find<OrderController>().callTrackOrderApi(orderModel: Get.find<OrderController>().trackModel, orderId: widget.orderID.toString());
+    // Get.find<OrderController>().callTrackOrderApi(orderModel: Get.find<OrderController>().trackModel, orderId: widget.orderID.toString());
   }
 
   @override
@@ -91,14 +93,46 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> with WidgetsB
 
         return _track != null ? Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Stack(children: [
 
-          
+          GoogleMap(
+            initialCameraPosition: CameraPosition(target: LatLng(
+              double.parse(_track.deliveryAddress.latitude), double.parse(_track.deliveryAddress.longitude),
+            ), zoom: 16),
+            minMaxZoomPreference: MinMaxZoomPreference(0, 16),
+            zoomControlsEnabled: true,
+            markers: _markers,
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+              _isLoading = false;
+              setMarker(
+                _track.restaurant, _track.deliveryMan ?? DeliveryMan(location: ''),
+                _track.orderType == 'take_away' ? Get.find<LocationController>().position.latitude == 0 ? _track.deliveryAddress : AddressModel(
+                  latitude: Get.find<LocationController>().position.latitude.toString(),
+                  longitude: Get.find<LocationController>().position.longitude.toString(),
+                  address: Get.find<LocationController>().address,
+                ) : _track.deliveryAddress,
+                _track.orderType == 'take_away',
+              );
+            },
+          ),
+
+          _isLoading ? Center(child: CircularProgressIndicator()) : SizedBox(),
 
           Positioned(
             top: Dimensions.PADDING_SIZE_SMALL, left: Dimensions.PADDING_SIZE_SMALL, right: Dimensions.PADDING_SIZE_SMALL,
             child: TrackingStepperWidget(status: _track.orderStatus, takeAway: _track.orderType == 'take_away'),
           ),
 
-
+          Positioned(
+            bottom: Dimensions.PADDING_SIZE_SMALL, left: Dimensions.PADDING_SIZE_SMALL, right: Dimensions.PADDING_SIZE_SMALL,
+            child: TrackDetailsView(track: _track, callback: () async {
+              orderController.cancelTimer();
+              await Get.toNamed(RouteHelper.getChatRoute(
+                notificationBody: NotificationBody(deliverymanId: _track.deliveryMan.id, orderId: int.parse(widget.orderID)),
+                user: User(id: _track.deliveryMan.id, fName: _track.deliveryMan.fName, lName: _track.deliveryMan.lName, image: _track.deliveryMan.image),
+              ));
+              orderController.callTrackOrderApi(orderModel: _track, orderId: _track.id.toString());
+            }),
+          ),
 
         ]))) : Center(child: CircularProgressIndicator());
       }),

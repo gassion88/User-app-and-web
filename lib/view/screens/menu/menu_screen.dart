@@ -3,7 +3,6 @@ import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/data/model/response/menu_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
-import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/view/screens/menu/widget/menu_button.dart';
@@ -20,16 +19,17 @@ class MenuScreen extends StatelessWidget {
     final List<MenuModel> _menuList = [
       MenuModel(icon: '', title: 'profile'.tr, route: RouteHelper.getProfileRoute()),
       MenuModel(icon: Images.location, title: 'my_address'.tr, route: RouteHelper.getAddressRoute()),
-      //MenuModel(icon: Images.language, title: 'language'.tr, route: RouteHelper.getLanguageRoute('menu')),
-      //MenuModel(icon: Images.coupon, title: 'coupon'.tr, route: RouteHelper.getCouponRoute(fromCheckout: false)),
+      MenuModel(icon: Images.language, title: 'language'.tr, route: RouteHelper.getLanguageRoute('menu')),
+      MenuModel(icon: Images.coupon, title: 'coupon'.tr, route: RouteHelper.getCouponRoute(fromCheckout: false)),
       MenuModel(icon: Images.support, title: 'help_support'.tr, route: RouteHelper.getSupportRoute()),
       MenuModel(icon: Images.policy, title: 'privacy_policy'.tr, route: RouteHelper.getHtmlRoute('privacy-policy')),
       MenuModel(icon: Images.about_us, title: 'about_us'.tr, route: RouteHelper.getHtmlRoute('about-us')),
-      //MenuModel(icon: Images.terms, title: 'terms_conditions'.tr, route: RouteHelper.getHtmlRoute('terms-and-condition')),
+      MenuModel(icon: Images.terms, title: 'terms_conditions'.tr, route: RouteHelper.getHtmlRoute('terms-and-condition')),
+      MenuModel(icon: Images.chat, title: 'live_chat'.tr, route: RouteHelper.getConversationRoute()),
     ];
 
     if(Get.find<SplashController>().configModel.refEarningStatus == 1 ){
-      _menuList.add(MenuModel(icon: Images.refer_code, title: 'refer_and_earn'.tr, route: RouteHelper.getReferAndEarnRoute()));
+      _menuList.add(MenuModel(icon: Images.refer_code, title: 'refer'.tr, route: RouteHelper.getReferAndEarnRoute()));
     }
     if(Get.find<SplashController>().configModel.customerWalletStatus == 1 ){
       _menuList.add(MenuModel(icon: Images.wallet, title: 'wallet'.tr, route: RouteHelper.getWalletRoute(true)));
@@ -40,13 +40,13 @@ class MenuScreen extends StatelessWidget {
     if(Get.find<SplashController>().configModel.toggleDmRegistration && !ResponsiveHelper.isDesktop(context)) {
       _menuList.add(MenuModel(
         icon: Images.delivery_man_join, title: 'join_as_a_delivery_man'.tr,
-        route: '${AppConstants.BASE_URL}/deliveryman/apply',
+        route: RouteHelper.getDeliverymanRegistrationRoute(),
       ));
     }
     if(Get.find<SplashController>().configModel.toggleRestaurantRegistration && !ResponsiveHelper.isDesktop(context)) {
       _menuList.add(MenuModel(
         icon: Images.restaurant_join, title: 'join_as_a_restaurant'.tr,
-        route: '${AppConstants.BASE_URL}/restaurant/apply',
+        route: RouteHelper.getRestaurantRegistrationRoute(),
       ));
     }
     _menuList.add(MenuModel(icon: Images.log_out, title: _isLoggedIn ? 'logout'.tr : 'sign_in'.tr, route: ''));

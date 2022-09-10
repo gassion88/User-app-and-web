@@ -108,7 +108,7 @@ class OrderModel {
         this.detailsCount,
         this.deliveryMan,
         this.deliveryAddress,
-        this.restaurant
+        this.restaurant,
       });
 
   OrderModel.fromJson(Map<String, dynamic> json) {

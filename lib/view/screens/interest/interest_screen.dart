@@ -11,11 +11,22 @@ import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class InterestScreen extends StatelessWidget {
+class InterestScreen extends StatefulWidget {
+  @override
+  State<InterestScreen> createState() => _InterestScreenState();
+}
+
+class _InterestScreenState extends State<InterestScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Get.find<CategoryController>().getCategoryList(true);
+  }
+
   @override
   Widget build(BuildContext context) {
-    Get.find<CategoryController>().getCategoryList(true);
-
     return Scaffold(
       appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
       body: SafeArea(

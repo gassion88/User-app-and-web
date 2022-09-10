@@ -3,9 +3,9 @@ import 'package:efood_multivendor/util/images.dart';
 
 class AppConstants {
   static const String APP_NAME = 'Hvarna';
-  static const double APP_VERSION = 5.7;
+  static const double APP_VERSION = 5.8;
 
-  static const String BASE_URL = 'https://hvarna.ru';
+  static const String BASE_URL = 'https://admin.hvarna.ru';
   static const String CATEGORY_URI = '/api/v1/categories';
   static const String BANNER_URI = '/api/v1/banners';
   static const String RESTAURANT_PRODUCT_URI = '/api/v1/products/latest';
@@ -18,7 +18,6 @@ class AppConstants {
   static const String CONFIG_URI = '/api/v1/config';
   static const String TRACK_URI = '/api/v1/customer/order/track?order_id=';
   static const String MESSAGE_URI = '/api/v1/customer/message/get';
-  static const String SEND_MESSAGE_URI = '/api/v1/customer/message/send';
   static const String FORGET_PASSWORD_URI = '/api/v1/auth/forgot-password';
   static const String VERIFY_TOKEN_URI = '/api/v1/auth/verify-token';
   static const String RESET_PASSWORD_URI = '/api/v1/auth/reset-password';
@@ -74,6 +73,13 @@ class AppConstants {
   static const String LOYALTY_TRANSACTION_URL = '/api/v1/customer/loyalty-point/transactions';
   static const String LOYALTY_POINT_TRANSFER_URL = '/api/v1/customer/loyalty-point/point-transfer';
   static const String CUSTOMER_REMOVE = '/api/v1/customer/remove-account';
+  static const String CONVERSATION_LIST_URI = '/api/v1/customer/message/list';
+  static const String SEARCH_CONVERSATION_LIST_URI = '/api/v1/customer/message/search-list';
+  static const String MESSAGE_LIST_URI = '/api/v1/customer/message/details';
+  static const String SEND_MESSAGE_URI = '/api/v1/customer/message/send';
+  static const String ZONE_LIST_URI = '/api/v1/zone/list';
+  static const String RESTAURANT_REGISTER_URI = '/api/v1/auth/vendor/register';
+  static const String DM_REGISTER_URI = '/api/v1/auth/delivery-man/store';
 
   // Shared Key
   static const String THEME = 'theme';
@@ -113,7 +119,7 @@ class AppConstants {
 
 
   static List<LanguageModel> languages = [
-    //LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
-    LanguageModel(imageUrl: Images.english, languageName: 'Русский', countryCode: 'RU', languageCode: 'ru'),
+    LanguageModel(imageUrl: Images.english, languageName: 'English', countryCode: 'US', languageCode: 'en'),
+    LanguageModel(imageUrl: Images.arabic, languageName: 'عربى', countryCode: 'SA', languageCode: 'ar'),
   ];
 }

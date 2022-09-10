@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/data/model/body/notification_body.dart';
 import 'package:efood_multivendor/data/model/body/social_log_in_body.dart';
 import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/data/model/response/basic_campaign_model.dart';
+import 'package:efood_multivendor/data/model/response/conversation_model.dart';
 import 'package:efood_multivendor/data/model/response/order_model.dart';
 import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/data/model/response/restaurant_model.dart';
@@ -14,11 +16,15 @@ import 'package:efood_multivendor/view/base/image_viewer_screen.dart';
 import 'package:efood_multivendor/view/base/not_found.dart';
 import 'package:efood_multivendor/view/screens/address/add_address_screen.dart';
 import 'package:efood_multivendor/view/screens/address/address_screen.dart';
+import 'package:efood_multivendor/view/screens/auth/delivery_man_registration_screen.dart';
+import 'package:efood_multivendor/view/screens/auth/restaurant_registration_screen.dart';
 import 'package:efood_multivendor/view/screens/auth/sign_in_screen.dart';
 import 'package:efood_multivendor/view/screens/auth/sign_up_screen.dart';
 import 'package:efood_multivendor/view/screens/cart/cart_screen.dart';
 import 'package:efood_multivendor/view/screens/category/category_product_screen.dart';
 import 'package:efood_multivendor/view/screens/category/category_screen.dart';
+import 'package:efood_multivendor/view/screens/chat/chat_screen.dart';
+import 'package:efood_multivendor/view/screens/chat/conversation_screen.dart';
 import 'package:efood_multivendor/view/screens/checkout/checkout_screen.dart';
 import 'package:efood_multivendor/view/screens/checkout/order_successful_screen.dart';
 import 'package:efood_multivendor/view/screens/checkout/payment_screen.dart';
@@ -29,6 +35,7 @@ import 'package:efood_multivendor/view/screens/food/popular_food_screen.dart';
 import 'package:efood_multivendor/view/screens/forget/forget_pass_screen.dart';
 import 'package:efood_multivendor/view/screens/forget/new_pass_screen.dart';
 import 'package:efood_multivendor/view/screens/forget/verification_screen.dart';
+import 'package:efood_multivendor/view/screens/home/map_view_screen.dart';
 import 'package:efood_multivendor/view/screens/html/html_viewer_screen.dart';
 import 'package:efood_multivendor/view/screens/interest/interest_screen.dart';
 import 'package:efood_multivendor/view/screens/language/language_screen.dart';
@@ -100,9 +107,21 @@ class RouteHelper {
   static const String searchRestaurantItem = '/search-Restaurant-item';
   static const String productImages = '/product-images';
   static const String referAndEarn = '/refer-and-earn';
+  static const String messages = '/messages';
+  static const String conversation = '/conversation';
+  static const String mapView = '/map-view';
+  static const String restaurantRegistration = '/restaurant-registration';
+  static const String deliveryManRegistration = '/delivery-man-registration';
 
   static String getInitialRoute() => '$initial';
-  static String getSplashRoute(int orderID) => '$splash?id=$orderID';
+  static String getSplashRoute(NotificationBody body) {
+    String _data = 'null';
+    if(body != null) {
+      List<int> _encoded = utf8.encode(jsonEncode(body.toJson()));
+      _data = base64Encode(_encoded);
+    }
+    return '$splash?data=$_data';
+  }
   static String getLanguageRoute(String page) => '$language?page=$page';
   static String getOnBoardingRoute() => '$onBoarding';
   static String getSignInRoute(String page) => '$signIn?page=$page';
@@ -172,10 +191,32 @@ class RouteHelper {
     return '$productImages?item=$_data';
   }
   static String getReferAndEarnRoute() => '$referAndEarn';
+  static String getChatRoute({@required NotificationBody notificationBody, User user, int conversationID, int index}) {
+    String _notificationBody = 'null';
+    if(notificationBody != null) {
+      _notificationBody = base64Encode(utf8.encode(jsonEncode(notificationBody.toJson())));
+    }
+    String _user = 'null';
+    if(user != null) {
+      _user = base64Encode(utf8.encode(jsonEncode(user.toJson())));
+    }
+    return '$messages?notification=$_notificationBody&user=$_user&conversation_id=$conversationID&index=$index';
+  }
+  static String getConversationRoute() => '$conversation';
+  static String getMapViewRoute() => '$mapView';
+  static String getRestaurantRegistrationRoute() => '$restaurantRegistration';
+  static String getDeliverymanRegistrationRoute() => '$deliveryManRegistration';
 
   static List<GetPage> routes = [
     GetPage(name: initial, page: () => getRoute(DashboardScreen(pageIndex: 0))),
-    GetPage(name: splash, page: () => SplashScreen(orderID: Get.parameters['id'] == 'null' ? null : Get.parameters['id'])),
+    GetPage(name: splash, page: () {
+      NotificationBody _data;
+      if(Get.parameters['data'] != 'null') {
+        List<int> _decode = base64Decode(Get.parameters['data'].replaceAll(' ', '+'));
+        _data = NotificationBody.fromJson(jsonDecode(utf8.decode(_decode)));
+      }
+      return SplashScreen(body: _data);
+    }),
     GetPage(name: language, page: () => ChooseLanguageScreen(fromMenu: Get.parameters['page'] == 'menu')),
     GetPage(name: onBoarding, page: () => OnBoardingScreen()),
     GetPage(name: signIn, page: () => SignInScreen(
@@ -282,6 +323,24 @@ class RouteHelper {
       product: Product.fromJson(jsonDecode(utf8.decode(base64Url.decode(Get.parameters['item'].replaceAll(' ', '+'))))),
     ))),
     GetPage(name: referAndEarn, page: () => getRoute(ReferAndEarnScreen())),
+    GetPage(name: messages, page: () {
+      NotificationBody _notificationBody;
+      if(Get.parameters['notification'] != 'null') {
+        _notificationBody = NotificationBody.fromJson(jsonDecode(utf8.decode(base64Url.decode(Get.parameters['notification'].replaceAll(' ', '+')))));
+      }
+      User _user;
+      if(Get.parameters['user'] != 'null') {
+        _user = User.fromJson(jsonDecode(utf8.decode(base64Url.decode(Get.parameters['user'].replaceAll(' ', '+')))));
+      }
+      return getRoute(ChatScreen(
+        notificationBody: _notificationBody, user: _user, index: Get.parameters['index'] != 'null' ? int.parse(Get.parameters['index']) : null,
+        conversationID: (Get.parameters['conversation_id'] != null && Get.parameters['conversation_id'] != 'null') ? int.parse(Get.parameters['conversation_id']) : null,
+      ));
+    }),
+    GetPage(name: conversation, page: () => ConversationScreen()),
+    GetPage(name: mapView, page: () => getRoute(MapViewScreen())),
+    GetPage(name: restaurantRegistration, page: () => RestaurantRegistrationScreen()),
+    GetPage(name: deliveryManRegistration, page: () => DeliveryManRegistrationScreen()),
   ];
 
   static getRoute(Widget navigateTo) {

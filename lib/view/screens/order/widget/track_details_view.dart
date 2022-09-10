@@ -16,8 +16,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class TrackDetailsView extends StatelessWidget {
   final OrderModel track;
-  final String orderId;
-  TrackDetailsView({@required this.track, @required this.orderId});
+  final Function callback;
+  TrackDetailsView({@required this.track, @required this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class TrackDetailsView extends StatelessWidget {
             if (await canLaunchUrlString(url)) {
               Get.find<OrderController>().cancelTimer();
               await launchUrlString(url, mode: LaunchMode.externalApplication);
-              Get.find<OrderController>().callTrackOrderApi(orderModel: Get.find<OrderController>().trackModel, orderId: orderId);
+              Get.find<OrderController>().callTrackOrderApi(orderModel: Get.find<OrderController>().trackModel, orderId: track.id.toString());
             }else {
               showCustomSnackBar('unable_to_launch_google_map'.tr);
             }
@@ -146,6 +146,20 @@ class TrackDetailsView extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+
+          InkWell(
+            onTap: callback,
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: Get.context.width >= 1300 ? 7 : Dimensions.PADDING_SIZE_EXTRA_SMALL, horizontal: Dimensions.PADDING_SIZE_SMALL),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                color: Colors.green,
+              ),
+              child: Icon(Icons.chat, size: 12, color: Theme.of(context).cardColor),
+            ),
+          ),
+
         ]),
 
       ]),

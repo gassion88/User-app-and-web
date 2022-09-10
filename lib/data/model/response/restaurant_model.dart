@@ -62,6 +62,7 @@ class Restaurant {
   List<Schedules> schedules;
   double minimumShippingCharge;
   double perKmShippingCharge;
+  int vendorId;
 
   Restaurant(
       {this.id,
@@ -95,6 +96,7 @@ class Restaurant {
         this.schedules,
         this.minimumShippingCharge,
         this.perKmShippingCharge,
+        this.vendorId,
       });
 
   Restaurant.fromJson(Map<String, dynamic> json) {
@@ -134,6 +136,7 @@ class Restaurant {
     }
     minimumShippingCharge = json['minimum_shipping_charge'] != null ? json['minimum_shipping_charge'].toDouble() : 0.0;
     perKmShippingCharge = json['per_km_shipping_charge'] != null ? json['per_km_shipping_charge'].toDouble() : 0.0;
+    vendorId = json['vendor_id'];
 
   }
 
@@ -174,7 +177,7 @@ class Restaurant {
     }
     data['minimum_shipping_charge'] = this.minimumShippingCharge;
     data['per_km_shipping_charge'] = this.perKmShippingCharge;
-
+    data['vendor_id'] = this.vendorId;
     return data;
   }
 }

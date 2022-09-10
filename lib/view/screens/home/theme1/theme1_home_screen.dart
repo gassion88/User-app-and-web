@@ -1,4 +1,7 @@
+import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/data/model/response/config_model.dart';
 import 'package:efood_multivendor/view/screens/home/widget/filter_view.dart';
+import 'package:efood_multivendor/view/screens/home/widget/near_by_button_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:efood_multivendor/controller/location_controller.dart';
@@ -24,6 +27,8 @@ class Theme1HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ConfigModel _configModel = Get.find<SplashController>().configModel;
+
     return CustomScrollView(
       controller: scrollController,
       physics: AlwaysScrollableScrollPhysics(),
@@ -129,10 +134,11 @@ class Theme1HomeScreen extends StatelessWidget {
               BannerView1(),
               CategoryView1(),
               ItemCampaignView1(),
-              BestReviewedItemView(),
-              PopularStoreView1(isPopular: true),
-              PopularItemView1(isPopular: true),
-              PopularStoreView1(isPopular: false),
+              _configModel.mostReviewedFoods == 1 ? BestReviewedItemView() : SizedBox(),
+              _configModel.popularRestaurant == 1 ? PopularStoreView1(isPopular: true) : SizedBox(),
+              NearByButtonView(),
+              _configModel.popularFood == 1 ? PopularItemView1(isPopular: true) : SizedBox(),
+              _configModel.newRestaurant == 1 ? PopularStoreView1(isPopular: false) : SizedBox(),
 
               Padding(
                 padding: EdgeInsets.fromLTRB(10, 15, 0, 5),

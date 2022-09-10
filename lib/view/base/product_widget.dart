@@ -84,7 +84,7 @@ class ProductWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: _desktop ? 0 : Dimensions.PADDING_SIZE_EXTRA_SMALL),
             child: Row(children: [
 
-              (_image != null && _image.isNotEmpty) ? Stack(children: [
+              ((_image != null && _image.isNotEmpty) || isRestaurant) ? Stack(children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                   child: CustomImage(
@@ -113,7 +113,7 @@ class ProductWidget extends StatelessWidget {
                   SizedBox(height: isRestaurant ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0),
 
                   Text(
-                    isRestaurant ? restaurant.address : product.restaurantName ?? '',
+                    isRestaurant ? restaurant.address ?? 'no_address_found'.tr : product.restaurantName ?? '',
                     style: robotoRegular.copyWith(
                       fontSize: Dimensions.fontSizeExtraSmall,
                       color: Theme.of(context).disabledColor,

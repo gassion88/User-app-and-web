@@ -19,8 +19,8 @@ class DateConverter {
     return DateFormat('yyyy-MM-dd ${_timeFormatter()}').format(dateTime);
   }
 
-  static String dateTimeStringToDateTime(String dateTime, String locale) {
-    return DateFormat('dd MMM yyyy  ${_timeFormatter()}', locale).format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
+  static String dateTimeStringToDateTime(String dateTime) {
+    return DateFormat('dd MMM yyyy  ${_timeFormatter()}').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
   }
 
   static String dateTimeStringToDateOnly(String dateTime) {
@@ -33,6 +33,10 @@ class DateConverter {
 
   static DateTime isoStringToLocalDate(String dateTime) {
     return DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').parse(dateTime);
+  }
+
+  static String isoStringToLocalString(String dateTime) {
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(dateTime).toLocal());
   }
 
   static String isoStringToDateTimeString(String dateTime) {
@@ -48,7 +52,7 @@ class DateConverter {
   }
 
   static String localDateToIsoString(DateTime dateTime) {
-    return DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(dateTime);
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
   }
 
   static String convertTimeToTime(String time) {
@@ -57,6 +61,10 @@ class DateConverter {
 
   static DateTime convertStringTimeToDate(String time) {
     return DateFormat('HH:mm').parse(time);
+  }
+
+  static String localDateToIsoStringAMPM(DateTime dateTime) {
+    return DateFormat('${_timeFormatter()} | d-MMM-yyyy ').format(dateTime.toLocal());
   }
 
   static bool isAvailable(String start, String end, {DateTime time, bool isoTime = false}) {
@@ -95,20 +103,6 @@ class DateConverter {
     }
     DateTime _deliveryTime = dateTimeStringToDate(scheduleAt != null ? scheduleAt : orderTime).add(Duration(minutes: _minTime));
     return _deliveryTime.difference(DateTime.now()).inMinutes;
-  }
-
-   static List differenceInMinuteOrder(String deliveryTime, String orderTime, int processingTime) {
-
-    List<String> _timeList1 = deliveryTime.split('-');
-
-    DateTime _deliveryTime = dateTimeStringToDate(orderTime).add(Duration(minutes: processingTime));
-    String _deliveryTime1 = (_deliveryTime.difference(DateTime.now()).inMinutes + int.parse(_timeList1[0])).toString() + '.' + (_deliveryTime.difference(DateTime.now()).inMinutes + int.parse(_timeList1[1])).toString();
-    List<String> _timeList2;
-    _timeList2 = _deliveryTime1.split('.');
-
-    return _timeList2;
-    
-
   }
 
   static bool isBeforeTime(String dateTime) {

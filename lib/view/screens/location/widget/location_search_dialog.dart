@@ -4,6 +4,7 @@ import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -59,9 +60,9 @@ class LocationSearchDialog extends StatelessWidget {
               ]),
             );
           },
-          onSuggestionSelected: (PredictionModel suggestion) {
-            Get.find<LocationController>().setLocation(suggestion.placeId, suggestion.description, mapController);
-            Get.back();
+          onSuggestionSelected: (PredictionModel suggestion) async {
+            Position _position = await Get.find<LocationController>().setLocation(suggestion.placeId, suggestion.description, mapController);
+            Get.back(result: _position);
           },
         )),
       ),

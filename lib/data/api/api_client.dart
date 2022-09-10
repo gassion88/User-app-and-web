@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get_connect/http/src/request/request.dart';
-import 'package:http_parser/http_parser.dart';
 
 import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/data/model/response/error_response.dart';
@@ -11,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path/path.dart';
-import 'package:flutter/foundation.dart' as Foundation;
 import 'package:http/http.dart' as Http;
 
 class ApiClient extends GetxService {
@@ -30,7 +26,6 @@ class ApiClient extends GetxService {
     AddressModel _addressModel;
     try {
       _addressModel = AddressModel.fromJson(jsonDecode(sharedPreferences.getString(AppConstants.USER_ADDRESS)));
-      print('-------------');
       print( _addressModel.toJson());
     }catch(e) {}
     updateHeader(
@@ -79,24 +74,16 @@ class ApiClient extends GetxService {
   Future<Response> postMultipartData(String uri, Map<String, String> body, List<MultipartBody> multipartBody, {Map<String, String> headers}) async {
     try {
       debugPrint('====> API Call: $uri\nHeader: $_mainHeaders');
-      debugPrint('====> API Body: $body');
+      debugPrint('====> API Body: $body with ${multipartBody.length} files');
       Http.MultipartRequest _request = Http.MultipartRequest('POST', Uri.parse(appBaseUrl+uri));
       _request.headers.addAll(headers ?? _mainHeaders);
       for(MultipartBody multipart in multipartBody) {
         if(multipart.file != null) {
-          if(Foundation.kIsWeb) {
-            Uint8List _list = await multipart.file.readAsBytes();
-            Http.MultipartFile _part = Http.MultipartFile(
-              multipart.key, multipart.file.readAsBytes().asStream(), _list.length,
-              filename: basename(multipart.file.path), contentType: MediaType('image', 'jpg'),
-            );
-            _request.files.add(_part);
-          }else {
-            File _file = File(multipart.file.path);
-            _request.files.add(Http.MultipartFile(
-              multipart.key, _file.readAsBytes().asStream(), _file.lengthSync(), filename: _file.path.split('/').last,
-            ));
-          }
+          Uint8List _list = await multipart.file.readAsBytes();
+          _request.files.add(Http.MultipartFile(
+            multipart.key, multipart.file.readAsBytes().asStream(), _list.length,
+            filename: '${DateTime.now().toString()}.png',
+          ));
         }
       }
       _request.fields.addAll(body);

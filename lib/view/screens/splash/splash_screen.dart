@@ -6,6 +6,7 @@ import 'package:efood_multivendor/controller/cart_controller.dart';
 import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/controller/wishlist_controller.dart';
+import 'package:efood_multivendor/data/model/body/notification_body.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
@@ -15,8 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
-  final String orderID;
-  SplashScreen({@required this.orderID});
+  final NotificationBody body;
+  SplashScreen({@required this.body});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -80,8 +81,14 @@ class _SplashScreenState extends State<SplashScreen> {
           if(AppConstants.APP_VERSION < _minimumVersion || Get.find<SplashController>().configModel.maintenanceMode) {
             Get.offNamed(RouteHelper.getUpdateRoute(AppConstants.APP_VERSION < _minimumVersion));
           }else {
-            if(widget.orderID != null) {
-              Get.offNamed(RouteHelper.getOrderDetailsRoute(int.parse(widget.orderID)));
+            if(widget.body != null) {
+              if (widget.body.notificationType == NotificationType.order) {
+                Get.offNamed(RouteHelper.getOrderDetailsRoute(widget.body.orderId));
+              }else if(widget.body.notificationType == NotificationType.general){
+                Get.offNamed(RouteHelper.getNotificationRoute());
+              }else {
+                Get.offNamed(RouteHelper.getChatRoute(notificationBody: widget.body, conversationID: widget.body.conversationId));
+              }
             }else {
               if (Get.find<AuthController>().isLoggedIn()) {
                 Get.find<AuthController>().updateToken();
@@ -124,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen> {
               /*SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
             Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),*/
             ],
-          ) : NoInternetScreen(child: SplashScreen(orderID: widget.orderID)),
+          ) : NoInternetScreen(child: SplashScreen(body: widget.body)),
         );
       }),
     );

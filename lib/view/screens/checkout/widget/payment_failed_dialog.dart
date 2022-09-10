@@ -51,7 +51,7 @@ class PaymentFailedDialog extends StatelessWidget {
                 onPressed: () => orderController.switchToCOD(orderID),
                 radius: Dimensions.RADIUS_SMALL, height: 40,
               ) : SizedBox(),
-              SizedBox(width: Get.find<SplashController>().configModel.cashOnDelivery ? Dimensions.PADDING_SIZE_LARGE : 0),
+              SizedBox(height: Get.find<SplashController>().configModel.cashOnDelivery ? Dimensions.PADDING_SIZE_LARGE : 0),
               TextButton(
                 onPressed: () {
                   Get.offAllNamed(RouteHelper.getInitialRoute());

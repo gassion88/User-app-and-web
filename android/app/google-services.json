@@ -29,6 +29,13 @@
             {
               "client_id": "1076605778497-teuib3966rlhscb0dnqtldovfk9miunj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1076605778497-55g9fp2e8bkbhk6qfb8saub7ke1oc23h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hvarna.app"
+              }
             }
           ]
         }

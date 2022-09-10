@@ -7,6 +7,7 @@ import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/controller/theme_controller.dart';
 import 'package:efood_multivendor/controller/wishlist_controller.dart';
+import 'package:efood_multivendor/data/model/body/notification_body.dart';
 import 'package:efood_multivendor/helper/notification_helper.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
@@ -19,7 +20,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'helper/get_di.dart' as di;
@@ -37,7 +37,7 @@ Future<void> main() async {
       apiKey: 'AIzaSyCeaw_gVN0iQwFHyuF8pQ6PbVDmSVQw8AY',
       appId: '1:1049699819506:web:a4b5e3bedc729aab89956b',
       messagingSenderId: '1049699819506',
-      projectId: 'stackfood-bd3ee',
+      projectId: 'hvarna-bd3ee',
     ));
   }else {
     await Firebase.initializeApp();
@@ -45,12 +45,12 @@ Future<void> main() async {
 
   Map<String, Map<String, String>> _languages = await di.init();
 
-  int _orderID;
+  NotificationBody _body;
   try {
     if (GetPlatform.isMobile) {
       final RemoteMessage remoteMessage = await FirebaseMessaging.instance.getInitialMessage();
       if (remoteMessage != null) {
-        _orderID = remoteMessage.notification.titleLocKey != null ? int.parse(remoteMessage.notification.titleLocKey) : null;
+        _body = NotificationHelper.convertNotification(remoteMessage.data);
       }
       await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
       FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
@@ -65,13 +65,13 @@ Future<void> main() async {
   //     version: "v9.0",
   //   );
   // }
-  runApp(MyApp(languages: _languages, orderID: _orderID));
+  runApp(MyApp(languages: _languages, body: _body));
 }
 
 class MyApp extends StatelessWidget {
   final Map<String, Map<String, String>> languages;
-  final int orderID;
-  MyApp({@required this.languages, @required this.orderID});
+  final NotificationBody body;
+  MyApp({@required this.languages, @required this.body});
 
   void _route() {
     Get.find<SplashController>().getConfigData().then((bool isSuccess) async {
@@ -106,16 +106,11 @@ class MyApp extends StatelessWidget {
             scrollBehavior: MaterialScrollBehavior().copyWith(
               dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
             ),
-            supportedLocales: const <Locale>[Locale('ru', 'RU')],
-                  localizationsDelegates: [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                  ],
             theme: themeController.darkTheme ? dark : light,
             locale: localizeController.locale,
             translations: Messages(languages: languages),
             fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
-            initialRoute: GetPlatform.isWeb ? RouteHelper.getInitialRoute() : RouteHelper.getSplashRoute(orderID),
+            initialRoute: GetPlatform.isWeb ? RouteHelper.getInitialRoute() : RouteHelper.getSplashRoute(body),
             getPages: RouteHelper.routes,
             defaultTransition: Transition.topLevel,
             transitionDuration: Duration(milliseconds: 500),

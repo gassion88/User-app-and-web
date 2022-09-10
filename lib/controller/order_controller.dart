@@ -84,6 +84,8 @@ class OrderController extends GetxController implements GetxService {
 
   void callTrackOrderApi({@required OrderModel orderModel, @required String orderId}){
     if(orderModel.orderStatus != 'delivered' && orderModel.orderStatus != 'failed' && orderModel.orderStatus != 'canceled') {
+      print('start api call------------');
+
       _timer?.cancel();
       _timer = Timer.periodic(Duration(seconds: 10), (timer) {
         Get.find<OrderController>().timerTrackOrder(orderId.toString());
@@ -91,7 +93,8 @@ class OrderController extends GetxController implements GetxService {
     }
   }
 
-  void cancelTimer(){
+  void cancelTimer() {
+    print('timer cancle------------');
     _timer?.cancel();
   }
 
@@ -108,9 +111,11 @@ class OrderController extends GetxController implements GetxService {
     }
   }
 
-  void addTips(double tips){
+  void addTips(double tips, {bool notify = true}) {
     _tips = tips;
-    update();
+    if(notify) {
+      update();
+    }
   }
 
   Future<void> getRunningOrders(int offset, {bool notify = true, bool fromHome = false}) async {
@@ -239,6 +244,8 @@ class OrderController extends GetxController implements GetxService {
   }
 
   Future<ResponseModel> trackOrder(String orderID, OrderModel orderModel, bool fromTracking) async {
+    print('come to track order');
+    print(orderModel == null);
     _trackModel = null;
     _responseModel = null;
     if(!fromTracking) {
@@ -250,7 +257,9 @@ class OrderController extends GetxController implements GetxService {
       Response response = await orderRepo.trackOrder(orderID);
       if (response.statusCode == 200) {
         _trackModel = OrderModel.fromJson(response.body);
+        print('Track model added--------------------------------');
         _responseModel = ResponseModel(true, response.body.toString());
+        // callTrackOrderApi(orderModel: _trackModel, orderId: orderID);
       } else {
         _responseModel = ResponseModel(false, response.statusText);
         ApiChecker.checkApi(response);
@@ -260,6 +269,7 @@ class OrderController extends GetxController implements GetxService {
     }else {
       _trackModel = orderModel;
       _responseModel = ResponseModel(true, 'Successful');
+      // callTrackOrderApi(orderModel: _trackModel, orderId: orderID);
     }
     return _responseModel;
   }

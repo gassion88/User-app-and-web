@@ -5,16 +5,13 @@ import 'dart:io';
 import 'package:country_code_picker/country_code.dart';
 import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/localization_controller.dart';
-import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
-import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
-import 'package:efood_multivendor/view/base/custom_loader.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/custom_text_field.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
@@ -24,7 +21,6 @@ import 'package:efood_multivendor/view/screens/auth/widget/guest_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phone_number/phone_number.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -132,7 +128,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   : CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code : Get.find<LocalizationController>().locale.countryCode,
                               favorite: [Get.find<AuthController>().getUserCountryCode().isNotEmpty ? Get.find<AuthController>().getUserCountryCode()
                                   : CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code],
-                              enabled: false,
+                              showDropDownButton: true,
                               padding: EdgeInsets.zero,
                               showFlagMain: true,
                               flagWidth: 30,
@@ -255,13 +251,7 @@ class _SignInScreenState extends State<SignInScreen> {
             String _data = base64Encode(_encoded);
             Get.toNamed(RouteHelper.getVerificationRoute(_numberWithCountryCode, _token, RouteHelper.signUp, _data));
           }else {
-            Get.dialog(CustomLoader(), barrierDismissible: false);
-            AddressModel _address = await Get.find<LocationController>()
-                .getCurrentLocation(true,
-                    defaultLatLng: LatLng(42.2128383, 43.9553117));
-            Get.find<LocationController>()
-                .saveAddressAndNavigate(_address, false, '/', '/' != null);
-            //Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
+            Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
           }
         }else {
           showCustomSnackBar(status.message);

@@ -65,4 +65,9 @@ class Images {
   static const String pending_gif = 'assets/image/pending.gif';
   static const String processing_gif = 'assets/image/processing.gif';
   static const String handover_gif = 'assets/image/handover.gif';
+  static const String image = 'assets/image/image.png';
+  static const String send = 'assets/image/send.png';
+  static const String chat = 'assets/image/chat.png';
+  static const String near_restaurant = 'assets/image/near_restaurant.png';
+  static const String restaurant_placeholder = 'assets/image/l_restaurant.png';
 }

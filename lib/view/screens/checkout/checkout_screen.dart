@@ -75,6 +75,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
       Get.find<OrderController>().updateTimeSlot(0, notify: false);
       Get.find<OrderController>().updateTips(-1, notify: false);
+      Get.find<OrderController>().addTips(0, notify: false);
 
       if(Get.find<UserController>().userInfoModel == null) {
         Get.find<UserController>().getUserInfo();
@@ -90,6 +91,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       Get.find<RestaurantController>().initCheckoutData(_cartList[0].product.restaurantId);
     }
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -107,7 +109,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           bool _todayClosed = false;
           bool _tomorrowClosed = false;
           List<AddressModel> _addressList = [];
-         // _addressList.add(Get.find<LocationController>().getUserAddress());
+          _addressList.add(Get.find<LocationController>().getUserAddress());
           if(restController.restaurant != null) {
             if(locationController.addressList != null) {
               for(int index=0; index<locationController.addressList.length; index++) {
@@ -188,7 +190,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 }
               }
 
-              //_tax = PriceConverter.calculation(_orderAmount, _taxPercent, 'percent', 1);
+              _tax = PriceConverter.calculation(_orderAmount, _taxPercent, 'percent', 1);
               double _total = _subTotal + _deliveryCharge - _discount - _couponDiscount + _tax + orderController.tips;
 
               return (orderController.distance != null && locationController.addressList != null) ? Column(
@@ -267,7 +269,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ]),
 
-                            _addressList.length == 0 ? Text('Адрес не обнаружен,добавьте его чтобы продолжить') :
+
                             InkWell(
                               onTap: (){
                                 Get.dialog(
@@ -282,6 +284,57 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ],
                               ),
                             ),
+
+                            SizedBox(height: Dimensions.PADDING_SIZE_DEFAULT),
+
+                            Text(
+                              'street_number'.tr,
+                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                            ),
+                            SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                            MyTextField(
+                              hintText: 'ex_24th_street'.tr,
+                              inputType: TextInputType.streetAddress,
+                              focusNode: _streetNode,
+                              nextFocus: _houseNode,
+                              controller: _streetNumberController,
+                              showBorder: true,
+                            ),
+                            SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+
+                            Text(
+                              'house'.tr + ' / ' + 'floor'.tr + ' ' + 'number'.tr,
+                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
+                            ),
+                            SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: MyTextField(
+                                    hintText: 'ex_34'.tr,
+                                    inputType: TextInputType.text,
+                                    focusNode: _houseNode,
+                                    nextFocus: _floorNode,
+                                    controller: _houseController,
+                                    showBorder: true,
+                                  ),
+                                ),
+                                SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+
+                                Expanded(
+                                  child: MyTextField(
+                                    hintText: 'ex_3a'.tr,
+                                    inputType: TextInputType.text,
+                                    focusNode: _floorNode,
+                                    inputAction: TextInputAction.done,
+                                    controller: _floorController,
+                                    showBorder: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+
                           ]),
                         ) : SizedBox(),
                         SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
@@ -350,7 +403,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 
                         // Coupon
-                      /*  GetBuilder<CouponController>(builder: (couponController) {
+                        GetBuilder<CouponController>(builder: (couponController) {
                             return Container(
                               color: Theme.of(context).cardColor,
                               padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
@@ -450,7 +503,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ]),
                             );
                           },
-                        ),*/
+                        ),
                         SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                         (orderController.orderType != 'take_away' && Get.find<SplashController>().configModel.dmTipsStatus == 1) ?
@@ -472,9 +525,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               child: TextField(
                                 controller: _tipController,
                                 onChanged: (String value) {
-                                  if(value.isNotEmpty){
+                                  if(value.isNotEmpty) {
                                     orderController.addTips(double.parse(value));
-                                  }else{
+                                  }else {
                                     orderController.addTips(0.0);
                                   }
                                 },
@@ -598,7 +651,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ]),
                               SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                             ]) : SizedBox(),
-
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                              Text('vat_tax'.tr, style: robotoRegular),
+                              Text('(+) ${PriceConverter.convertPrice(_tax)}', style: robotoRegular),
+                            ]),
+                            SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
                             (orderController.orderType != 'take_away' && Get.find<SplashController>().configModel.dmTipsStatus == 1) ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

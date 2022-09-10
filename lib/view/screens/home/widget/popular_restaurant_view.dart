@@ -123,7 +123,7 @@ class PopularRestaurantView extends StatelessWidget {
                               ),
 
                               Text(
-                                _restaurantList[index].address,
+                                _restaurantList[index].address ?? '',
                                 style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
                                 maxLines: 1, overflow: TextOverflow.ellipsis,
                               ),

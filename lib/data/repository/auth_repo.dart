@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/data/api/api_client.dart';
+import 'package:efood_multivendor/data/model/body/delivery_man_body.dart';
+import 'package:efood_multivendor/data/model/body/restaurant_body.dart';
 import 'package:efood_multivendor/data/model/body/signup_body.dart';
 import 'package:efood_multivendor/data/model/body/social_log_in_body.dart';
 import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepo {
@@ -173,6 +176,20 @@ class AuthRepo {
   bool clearSharedAddress(){
     sharedPreferences.remove(AppConstants.USER_ADDRESS);
     return true;
+  }
+
+  Future<Response> getZoneList() async {
+    return await apiClient.getData(AppConstants.ZONE_LIST_URI);
+  }
+
+  Future<Response> registerRestaurant(RestaurantBody restaurant, XFile logo, XFile cover) async {
+    return apiClient.postMultipartData(
+      AppConstants.RESTAURANT_REGISTER_URI, restaurant.toJson(), [MultipartBody('logo', logo), MultipartBody('cover_photo', cover)],
+    );
+  }
+
+  Future<Response> registerDeliveryMan(DeliveryManBody deliveryManBody, List<MultipartBody> multiParts) async {
+    return apiClient.postMultipartData(AppConstants.DM_REGISTER_URI, deliveryManBody.toJson(), multiParts);
   }
 
 }

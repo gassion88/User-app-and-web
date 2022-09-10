@@ -1,11 +1,11 @@
 {
-    "name": "StackFood",
-    "short_name": "StackFood",
+    "name": "hvarna",
+    "short_name": "hvarna",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#EF7822",
     "theme_color": "#EF7822",
-    "description": "A multi-restaurant e-commerce web app.",
+    "description": "Веб приложение для заказа еды",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

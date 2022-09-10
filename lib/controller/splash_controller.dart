@@ -12,11 +12,13 @@ class SplashController extends GetxController implements GetxService {
   ConfigModel _configModel;
   bool _firstTimeConnectionCheck = true;
   bool _hasConnection = true;
+  int _nearestRestaurantIndex = -1;
 
   ConfigModel get configModel => _configModel;
   DateTime get currentTime => DateTime.now();
   bool get firstTimeConnectionCheck => _firstTimeConnectionCheck;
   bool get hasConnection => _hasConnection;
+  int get nearestRestaurantIndex => _nearestRestaurantIndex;
 
   Future<bool> getConfigData() async {
     _hasConnection = true;
@@ -51,4 +53,12 @@ class SplashController extends GetxController implements GetxService {
   void setFirstTimeConnectionCheck(bool isChecked) {
     _firstTimeConnectionCheck = isChecked;
   }
+
+  void setNearestRestaurantIndex(int index, {bool notify = true}) {
+    _nearestRestaurantIndex = index;
+    if(notify) {
+      update();
+    }
+  }
+
 }

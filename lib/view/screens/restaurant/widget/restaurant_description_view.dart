@@ -61,6 +61,16 @@ class RestaurantDescriptionView extends StatelessWidget {
             style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
           ),
           SizedBox(height: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0),
+          Row(children: [
+            Text('minimum_order'.tr, style: robotoRegular.copyWith(
+              fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor,
+            )),
+            SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+            Text(
+              PriceConverter.convertPrice(restaurant.minimumOrder),
+              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
+            ),
+          ]),
         ])),
         SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
 
@@ -120,7 +130,7 @@ class RestaurantDescriptionView extends StatelessWidget {
           ]),
         ),
         Expanded(child: SizedBox()),
-        /*InkWell(
+        InkWell(
           onTap: () => Get.toNamed(RouteHelper.getMapRoute(
             AddressModel(
               id: restaurant.id, address: restaurant.address, latitude: restaurant.latitude,
@@ -132,7 +142,7 @@ class RestaurantDescriptionView extends StatelessWidget {
             SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text('location'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: _textColor)),
           ]),
-        ),*/
+        ),
         Expanded(child: SizedBox()),
         Column(children: [
           Row(children: [

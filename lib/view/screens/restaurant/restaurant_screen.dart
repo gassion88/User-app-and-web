@@ -263,6 +263,9 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
         });
       }),
 
+      bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
+          return cartController.cartList.length > 0 && !ResponsiveHelper.isDesktop(context) ? BottomCartWidget() : SizedBox();
+        })
     );
   }
 }

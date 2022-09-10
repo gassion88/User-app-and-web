@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
-import 'dart:typed_data';
+//import 'dart:typed_data';
 import 'dart:ui';
 
 class MapScreen extends StatefulWidget {

@@ -1,13 +1,12 @@
-import 'dart:async';
-
 import 'package:efood_multivendor/controller/order_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/data/model/body/notification_body.dart';
+import 'package:efood_multivendor/data/model/response/conversation_model.dart';
 import 'package:efood_multivendor/data/model/response/order_details_model.dart';
 import 'package:efood_multivendor/data/model/response/order_model.dart';
 import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
-import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
@@ -32,14 +31,16 @@ class OrderDetailsScreen extends StatefulWidget {
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBindingObserver {
-  StreamSubscription _stream;
 
-  void _loadData(BuildContext context, bool reload) async {
-    await Get.find<OrderController>().trackOrder(widget.orderId.toString(), reload ? null : widget.orderModel, false);
+  void _loadData() async {
+    await Get.find<OrderController>().trackOrder(widget.orderId.toString(), widget.orderModel != null ? widget.orderModel : null, false);
     if(widget.orderModel == null) {
       await Get.find<SplashController>().getConfigData();
     }
     Get.find<OrderController>().getOrderDetails(widget.orderId.toString());
+    if(Get.find<OrderController>().trackModel != null){
+      Get.find<OrderController>().callTrackOrderApi(orderModel: Get.find<OrderController>().trackModel, orderId: widget.orderId.toString());
+    }
   }
 
   @override
@@ -47,8 +48,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    _loadData(context, false);
-    Get.find<OrderController>().callTrackOrderApi(orderModel: Get.find<OrderController>().trackModel, orderId: widget.orderId.toString());
+    _loadData();
   }
 
   @override
@@ -65,7 +65,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
 
-    _stream?.cancel();
     Get.find<OrderController>().cancelTimer();
   }
 
@@ -103,7 +102,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
             }
             _couponDiscount = _order.couponDiscountAmount;
             _discount = _order.restaurantDiscountAmount;
-           // _tax = _order.totalTaxAmount;
+            _tax = _order.totalTaxAmount;
             for(OrderDetailsModel orderDetails in orderController.orderDetails) {
               for(AddOn addOn in orderDetails.addOns) {
                 _addOns = _addOns + (addOn.price * addOn.quantity);
@@ -113,10 +112,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
           }
           double _subTotal = _itemsPrice + _addOns;
           double _total = _itemsPrice + _addOns - _discount + _tax + _deliveryCharge - _couponDiscount + _dmTips;
-          String locale = Localizations.localeOf(context).languageCode;
 
           return orderController.orderDetails != null ? Column(children: [
-            
 
             Expanded(child: Scrollbar(child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -129,23 +126,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
 
                   Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  
-                  _order.orderStatus == AppConstants.PROCESSING ?
+
                   Center(
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
-                     
-                     
+
                       Text(
-                        int.parse(DateConverter.differenceInMinuteOrder(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime)[1]) < 5 ? '1 - 5'
-                            : '${DateConverter.differenceInMinuteOrder(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime)[0]} '
-                            '- ${DateConverter.differenceInMinuteOrder(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime)[1]}',
+                        DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
+                            : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
+                            '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
                         style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
                       ),
                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                       Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)),
                     ]),
-                  ) :
+                  ),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
 
                 ]) : SizedBox() : SizedBox(),
@@ -159,7 +154,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                   Icon(Icons.watch_later, size: 17),
                   SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                   Text(
-                    DateConverter.dateTimeStringToDateTime(_order.createdAt, locale),
+                    DateConverter.dateTimeStringToDateTime(_order.createdAt),
                     style: robotoRegular,
                   ),
                 ]),
@@ -168,7 +163,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                 _order.scheduled == 1 ? Row(children: [
                   Text('${'scheduled_at'.tr}:', style: robotoRegular),
                   SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  Text(DateConverter.dateTimeStringToDateTime(_order.scheduleAt, locale), style: robotoMedium),
+                  Text(DateConverter.dateTimeStringToDateTime(_order.scheduleAt), style: robotoMedium),
                 ]) : SizedBox(),
                 SizedBox(height: _order.scheduled == 1 ? Dimensions.PADDING_SIZE_SMALL : 0),
 
@@ -212,7 +207,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     )),
                     SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     Text(
-                      _order.orderStatus == 'delivered' ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered, locale)}'
+                      _order.orderStatus == 'delivered' ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered)}'
                           : _order.orderStatus.tr,
                       style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                     ),
@@ -280,6 +275,21 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     },
                     icon: Icon(Icons.directions), label: Text('direction'.tr),
                   ) : SizedBox(),
+                  (_order.orderStatus != 'delivered' && _order.orderStatus != 'failed' && _order.orderStatus != 'canceled' && _order.orderStatus != 'refunded') ? TextButton.icon(
+                    onPressed: () async {
+                      orderController.cancelTimer();
+                      await Get.toNamed(RouteHelper.getChatRoute(
+                        notificationBody: NotificationBody(orderId: _order.id, restaurantId: _order.restaurant.vendorId),
+                        user: User(id: _order.restaurant.vendorId, fName: _order.restaurant.name, lName: '', image: _order.restaurant.logo),
+                      ));
+                      orderController.callTrackOrderApi(orderModel: _order, orderId: _order.id.toString());
+                    },
+                    icon: Icon(Icons.chat_bubble_outline, color: Theme.of(context).primaryColor, size: 20),
+                    label: Text(
+                      'chat'.tr,
+                      style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
+                    ),
+                  ) : SizedBox(),
                 ]) : Center(child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
                   child: Text(
@@ -324,7 +334,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                 ]) : SizedBox(),
                 SizedBox(height: _couponDiscount > 0 ? 10 : 0),
 
-
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text('vat_tax'.tr, style: robotoRegular),
+                  Text('(+) ${PriceConverter.convertPrice(_tax)}', style: robotoRegular),
+                ]),
+                SizedBox(height: 10),
 
                 (_order.orderType != 'take_away' && Get.find<SplashController>().configModel.dmTipsStatus == 1) ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -177,9 +177,9 @@ class MyInAppBrowser extends InAppBrowser {
 
   void _redirect(String url) {
     if(_canRedirect) {
-      bool _isSuccess = url.contains('success') && url.contains(AppConstants.BASE_URL);
-      bool _isFailed = url.contains('fail') && url.contains(AppConstants.BASE_URL);
-      bool _isCancel = url.contains('cancel') && url.contains(AppConstants.BASE_URL);
+      bool _isSuccess = url.contains(AppConstants.BASE_URL + '/payment-success');
+      bool _isFailed = url.contains(AppConstants.BASE_URL + '/payment-fail');
+      bool _isCancel = url.contains(AppConstants.BASE_URL + '/payment-cancel');
       if (_isSuccess || _isFailed || _isCancel) {
         _canRedirect = false;
         close();
