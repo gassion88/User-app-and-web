@@ -190,7 +190,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 }
               }
 
-              _tax = PriceConverter.calculation(_orderAmount, _taxPercent, 'percent', 1);
+              //_tax = PriceConverter.calculation(_orderAmount, _taxPercent, 'percent', 1);
               double _total = _subTotal + _deliveryCharge - _discount - _couponDiscount + _tax + orderController.tips;
 
               return (orderController.distance != null && locationController.addressList != null) ? Column(
@@ -590,23 +590,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               Text('discount'.tr, style: robotoRegular),
                               Text('(-) ${PriceConverter.convertPrice(_discount)}', style: robotoRegular),
                             ]),
-                            SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                            (couponController.discount > 0 || couponController.freeDelivery) ? Column(children: [
-                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                Text('coupon_discount'.tr, style: robotoRegular),
-                                (couponController.coupon != null && couponController.coupon.couponType == 'free_delivery') ? Text(
-                                  'free_delivery'.tr, style: robotoRegular.copyWith(color: Theme.of(context).primaryColor),
-                                ) : Text(
-                                  '(-) ${PriceConverter.convertPrice(couponController.discount)}',
-                                  style: robotoRegular,
-                                ),
-                              ]),
-                              SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                            ]) : SizedBox(),
-                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                              Text('vat_tax'.tr, style: robotoRegular),
-                              Text('(+) ${PriceConverter.convertPrice(_tax)}', style: robotoRegular),
-                            ]),
+
                             SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
                             (orderController.orderType != 'take_away' && Get.find<SplashController>().configModel.dmTipsStatus == 1) ? Row(

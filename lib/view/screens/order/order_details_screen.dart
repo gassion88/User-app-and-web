@@ -102,7 +102,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
             }
             _couponDiscount = _order.couponDiscountAmount;
             _discount = _order.restaurantDiscountAmount;
-            _tax = _order.totalTaxAmount;
+           // _tax = _order.totalTaxAmount;
             for(OrderDetailsModel orderDetails in orderController.orderDetails) {
               for(AddOn addOn in orderDetails.addOns) {
                 _addOns = _addOns + (addOn.price * addOn.quantity);
@@ -316,12 +316,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('subtotal'.tr, style: robotoMedium),
                   Text(PriceConverter.convertPrice(_subTotal), style: robotoMedium),
-                ]),
-                SizedBox(height: 10),
-
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('discount'.tr, style: robotoRegular),
-                  Text('(-) ${PriceConverter.convertPrice(_discount)}', style: robotoRegular),
                 ]),
                 SizedBox(height: 10),
 
