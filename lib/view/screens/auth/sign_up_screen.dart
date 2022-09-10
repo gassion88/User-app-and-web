@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'package:country_code_picker/country_code.dart';
 import 'package:efood_multivendor/controller/auth_controller.dart';
+import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/data/model/body/signup_body.dart';
+import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
+import 'package:efood_multivendor/view/base/custom_loader.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/custom_text_field.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
@@ -17,6 +20,7 @@ import 'package:efood_multivendor/view/screens/auth/widget/condition_check_box.d
 import 'package:efood_multivendor/view/screens/auth/widget/guest_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phone_number/phone_number.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -262,6 +266,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             String _data = base64Encode(_encoded);
             Get.toNamed(RouteHelper.getVerificationRoute(_numberWithCountryCode, status.message, RouteHelper.signUp, _data));
           }else {
+
+            Get.dialog(CustomLoader(), barrierDismissible: false);
+            AddressModel _address = await Get.find<LocationController>()
+                .getCurrentLocation(true,
+                    defaultLatLng: LatLng(42.2128383, 43.9553117));
+            Get.find<LocationController>()
+                .saveAddressAndNavigate(_address, false, '/', '/' != null);
             Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
           }
         }else {
