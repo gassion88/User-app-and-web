@@ -276,21 +276,9 @@ class LocationController extends GetxController implements GetxService {
   }
 
   void saveAddressAndNavigate(AddressModel address, bool fromSignUp, String route, bool canRoute) {
-    if(Get.find<CartController>().cartList.length > 0) {
-      Get.dialog(ConfirmationDialog(
-        icon: Images.warning, title: 'are_you_sure_to_reset'.tr, description: 'if_you_change_location'.tr,
-        onYesPressed: () {
-          Get.back();
-          _setZoneData(address, fromSignUp, route, canRoute);
-        },
-        onNoPressed: () {
-          Get.back();
-          Get.back();
-        },
-      ));
-    }else {
+
       _setZoneData(address, fromSignUp, route, canRoute);
-    }
+    
   }
 
   void _setZoneData(AddressModel address, bool fromSignUp, String route, bool canRoute) {
