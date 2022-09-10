@@ -112,7 +112,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
           }
           double _subTotal = _itemsPrice + _addOns;
           double _total = _itemsPrice + _addOns - _discount + _tax + _deliveryCharge - _couponDiscount + _dmTips;
-
+           String locale = Localizations.localeOf(context).languageCode;
           return orderController.orderDetails != null ? Column(children: [
 
             Expanded(child: Scrollbar(child: SingleChildScrollView(
@@ -154,7 +154,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                   Icon(Icons.watch_later, size: 17),
                   SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                   Text(
-                    DateConverter.dateTimeStringToDateTime(_order.createdAt),
+                    DateConverter.dateTimeStringToDateTime(_order.createdAt, locale),
                     style: robotoRegular,
                   ),
                 ]),
@@ -163,7 +163,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                 _order.scheduled == 1 ? Row(children: [
                   Text('${'scheduled_at'.tr}:', style: robotoRegular),
                   SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  Text(DateConverter.dateTimeStringToDateTime(_order.scheduleAt), style: robotoMedium),
+                  Text(DateConverter.dateTimeStringToDateTime(_order.scheduleAt, locale), style: robotoMedium),
                 ]) : SizedBox(),
                 SizedBox(height: _order.scheduled == 1 ? Dimensions.PADDING_SIZE_SMALL : 0),
 
@@ -207,7 +207,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     )),
                     SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     Text(
-                      _order.orderStatus == 'delivered' ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered)}'
+                      _order.orderStatus == 'delivered' ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered, locale)}'
                           : _order.orderStatus.tr,
                       style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                     ),
