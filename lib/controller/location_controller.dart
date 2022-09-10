@@ -71,16 +71,13 @@ class LocationController extends GetxController implements GetxService {
     }
     AddressModel _addressModel;
     Position _myPosition;
-    try {
-      Position newLocalData = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      _myPosition = newLocalData;
-    }catch(e) {
+
       _myPosition = Position(
         latitude: defaultLatLng != null ? defaultLatLng.latitude : double.parse(Get.find<SplashController>().configModel.defaultLocation.lat ?? '0'),
         longitude: defaultLatLng != null ? defaultLatLng.longitude : double.parse(Get.find<SplashController>().configModel.defaultLocation.lng ?? '0'),
         timestamp: DateTime.now(), accuracy: 1, altitude: 1, heading: 1, speed: 1, speedAccuracy: 1,
       );
-    }
+
     if(fromAddress) {
       _position = _myPosition;
     }else {

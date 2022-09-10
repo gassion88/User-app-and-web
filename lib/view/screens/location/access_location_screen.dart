@@ -16,6 +16,7 @@ import 'package:efood_multivendor/view/screens/location/widget/permission_dialog
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AccessLocationScreen extends StatelessWidget {
   final bool fromSignUp;
@@ -107,7 +108,8 @@ class BottomButton extends StatelessWidget {
         onPressed: () async {
           _checkPermission(() async {
             Get.dialog(CustomLoader(), barrierDismissible: false);
-            AddressModel _address = await Get.find<LocationController>().getCurrentLocation(true);
+             AddressModel _address = await Get.find<LocationController>().getCurrentLocation(true,
+                            defaultLatLng: LatLng(42.2128383, 43.9553117));
             ZoneResponseModel _response = await locationController.getZone(_address.latitude, _address.longitude, false);
             if(_response.isSuccess) {
               locationController.saveAddressAndNavigate(_address, fromSignUp, route, route != null);
