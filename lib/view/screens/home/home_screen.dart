@@ -8,6 +8,7 @@ import 'package:efood_multivendor/controller/order_controller.dart';
 import 'package:efood_multivendor/controller/product_controller.dart';
 import 'package:efood_multivendor/controller/restaurant_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/controller/theme_controller.dart';
 import 'package:efood_multivendor/controller/user_controller.dart';
 import 'package:efood_multivendor/data/model/response/config_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
@@ -141,6 +142,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         }),*/
                       ),
                     )),
+                    IconButton(
+                            icon: new Icon(
+                                Get.isDarkMode
+                                    ? Icons.light_mode_outlined
+                                    : Icons.dark_mode_outlined,
+                                color: Get.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black),
+                            onPressed: () {
+                              Get.find<ThemeController>().toggleTheme();
+                            },
+                          ),
                     InkWell(
                       child: GetBuilder<NotificationController>(builder: (notificationController) {
                         return Stack(children: [
