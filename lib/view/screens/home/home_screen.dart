@@ -111,13 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: Dimensions.WEB_MAX_WIDTH, height: 50, color: Theme.of(context).backgroundColor,
                   child: Row(children: [
                     Expanded(child: InkWell(
-                      onTap: () => Get.toNamed(RouteHelper.getAccessLocationRoute('home')),
+                      //onTap: () => Get.toNamed(RouteHelper.getAccessLocationRoute('home')),
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: Dimensions.PADDING_SIZE_SMALL,
                           horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_SMALL : 0,
                         ),
-                        child: GetBuilder<LocationController>(builder: (locationController) {
+                        /*child: GetBuilder<LocationController>(builder: (locationController) {
                           return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Icon(
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Icon(Icons.arrow_drop_down, color: Theme.of(context).textTheme.bodyText1.color),
                             ],
                           );
-                        }),
+                        }),*/
                       ),
                     )),
                     InkWell(
