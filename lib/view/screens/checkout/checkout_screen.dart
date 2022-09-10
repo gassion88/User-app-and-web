@@ -109,7 +109,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           bool _todayClosed = false;
           bool _tomorrowClosed = false;
           List<AddressModel> _addressList = [];
-          _addressList.add(Get.find<LocationController>().getUserAddress());
+         // _addressList.add(Get.find<LocationController>().getUserAddress());
           if(restController.restaurant != null) {
             if(locationController.addressList != null) {
               for(int index=0; index<locationController.addressList.length; index++) {
@@ -269,7 +269,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ]),
 
-
+                             _addressList.length == 0 ? Text('Адрес не обнаружен,добавьте его чтобы продолжить') :
                             InkWell(
                               onTap: (){
                                 Get.dialog(
@@ -285,55 +285,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ),
 
-                            SizedBox(height: Dimensions.PADDING_SIZE_DEFAULT),
-
-                            Text(
-                              'street_number'.tr,
-                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                            ),
-                            SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                            MyTextField(
-                              hintText: 'ex_24th_street'.tr,
-                              inputType: TextInputType.streetAddress,
-                              focusNode: _streetNode,
-                              nextFocus: _houseNode,
-                              controller: _streetNumberController,
-                              showBorder: true,
-                            ),
-                            SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-                            Text(
-                              'house'.tr + ' / ' + 'floor'.tr + ' ' + 'number'.tr,
-                              style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-                            ),
-                            SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: MyTextField(
-                                    hintText: 'ex_34'.tr,
-                                    inputType: TextInputType.text,
-                                    focusNode: _houseNode,
-                                    nextFocus: _floorNode,
-                                    controller: _houseController,
-                                    showBorder: true,
-                                  ),
-                                ),
-                                SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-
-                                Expanded(
-                                  child: MyTextField(
-                                    hintText: 'ex_3a'.tr,
-                                    inputType: TextInputType.text,
-                                    focusNode: _floorNode,
-                                    inputAction: TextInputAction.done,
-                                    controller: _floorController,
-                                    showBorder: true,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+  
 
                           ]),
                         ) : SizedBox(),
