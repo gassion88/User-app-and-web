@@ -20,7 +20,7 @@ class RunningOrderViewWidget extends StatelessWidget {
 
       if(_orderStatus == AppConstants.PENDING){
         _status = 1;
-      }else if(_orderStatus == AppConstants.PROCESSING ){
+      }else if(_orderStatus == AppConstants.PROCESSING || _orderStatus == AppConstants.CONFIRMED){
         _status = 2;
       }else if(_orderStatus == AppConstants.HANDOVER ){
         _status = 3;
