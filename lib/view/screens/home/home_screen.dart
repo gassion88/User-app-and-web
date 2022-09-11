@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     BannerView(),
                     CategoryView(),
                     _configModel.popularRestaurant == 1 ? PopularRestaurantView(isPopular: true) : SizedBox(),
-                    NearByButtonView(),
+                    //NearByButtonView(),
                     ItemCampaignView(),
                     _configModel.popularFood == 1 ? PopularFoodView(isPopular: true) : SizedBox(),
                     _configModel.newRestaurant == 1 ? PopularRestaurantView(isPopular: false) : SizedBox(),
