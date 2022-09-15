@@ -128,7 +128,7 @@ class OrderView extends StatelessWidget {
                                   )),
                                 ),
                                 SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                                isRunning ? InkWell(
+                                /*isRunning ? InkWell(
                                   onTap: () => Get.toNamed(RouteHelper.getOrderTrackingRoute(orderList[index].id)),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
@@ -144,7 +144,7 @@ class OrderView extends StatelessWidget {
                                       )),
                                     ]),
                                   ),
-                                ) : Text(
+                                ) : */Text(
                                   '${orderList[index].detailsCount} ${orderList[index].detailsCount > 1 ? 'items'.tr : 'item'.tr}',
                                   style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
                                 ),

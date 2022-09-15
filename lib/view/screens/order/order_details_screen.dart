@@ -372,7 +372,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
               child: SizedBox(
                 width: Dimensions.WEB_MAX_WIDTH + 20,
                 child: Row(children: [
-                  (_order.orderStatus == 'pending' || _order.orderStatus == 'accepted' || _order.orderStatus == 'confirmed'
+                  /*(_order.orderStatus == 'pending' || _order.orderStatus == 'accepted' || _order.orderStatus == 'confirmed'
                   || _order.orderStatus == 'processing' || _order.orderStatus == 'handover'|| _order.orderStatus == 'picked_up') ? Expanded(
                     child: CustomButton(
                       buttonText: 'track_order'.tr,
@@ -383,7 +383,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                         orderController.callTrackOrderApi(orderModel: _order, orderId: widget.orderId.toString());
                       },
                     ),
-                  ) : SizedBox(),
+                  ) : */SizedBox(),
                   _order.orderStatus == 'pending' ? Expanded(child: Padding(
                     padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                     child: TextButton(
