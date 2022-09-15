@@ -269,7 +269,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             ]),
 
-                             _addressList.length == 0 ? Text('Адрес не обнаружен,добавьте его чтобы продолжить') :
+                             _addressList.length == 0 ? Text('Адрес не обнаружен,добавьте его чтобы продолжить', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)) :
                             InkWell(
                               onTap: (){
                                 Get.dialog(
