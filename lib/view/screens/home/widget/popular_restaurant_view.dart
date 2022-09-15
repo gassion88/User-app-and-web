@@ -33,7 +33,7 @@ class PopularRestaurantView extends StatelessWidget {
           Padding(
             padding: EdgeInsets.fromLTRB(10, isPopular ? 2 : 15, 10, 10),
             child: TitleWidget(
-              title: isPopular ? 'popular_restaurants'.tr : '${'new_on'.tr} ${AppConstants.APP_NAME}',
+              title: isPopular ? 'popular_restaurants'.tr : '${'new_on'.tr}',
               onTap: () => Get.toNamed(RouteHelper.getAllRestaurantRoute(isPopular ? 'popular' : 'latest')),
             ),
           ),
