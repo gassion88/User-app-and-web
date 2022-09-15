@@ -57,6 +57,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
+                String locale = Localizations.localeOf(context).languageCode;
                 DateTime _originalDateTime = DateConverter.dateTimeStringToDate(notificationController.notificationList[index].createdAt);
                 DateTime _convertedDate = DateTime(_originalDateTime.year, _originalDateTime.month, _originalDateTime.day);
                 bool _addTitle = false;
@@ -68,7 +69,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                   _addTitle ? Padding(
                     padding: EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                    child: Text(DateConverter.dateTimeStringToDateOnly(notificationController.notificationList[index].createdAt)),
+                    child: Text(DateConverter.dateTimeStringToDateOnly(notificationController.notificationList[index].createdAt,locale)),
                   ) : SizedBox(),
 
                   InkWell(

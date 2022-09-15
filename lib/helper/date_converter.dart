@@ -23,8 +23,8 @@ class DateConverter {
     return DateFormat('dd MMM yyyy  ${_timeFormatter()}', locale).format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
   }
 
-  static String dateTimeStringToDateOnly(String dateTime) {
-    return DateFormat('dd MMM yyyy').format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
+  static String dateTimeStringToDateOnly(String dateTime, String locale) {
+    return DateFormat('dd MMM yyyy', locale).format(DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateTime));
   }
 
   static DateTime dateTimeStringToDate(String dateTime) {
