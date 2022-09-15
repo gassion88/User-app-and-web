@@ -189,7 +189,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                               right: 5,bottom: 5,
                               child: Text(
                                 DateConverter.localDateToIsoStringAMPM(DateConverter.dateTimeStringToDate(
-                                    _conversation.conversations[index].lastMessageTime)),
+                                    _conversation.conversations[index].lastMessageTime,)),
                                 style: robotoRegular.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeExtraSmall),
                               ),
                             ),

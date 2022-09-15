@@ -64,7 +64,7 @@ class DateConverter {
   }
 
   static String localDateToIsoStringAMPM(DateTime dateTime) {
-    return DateFormat('${_timeFormatter()} | d-MMM-yyyy ').format(dateTime.toLocal());
+    return DateFormat('${_timeFormatter()} | d-MMM-yyyy ','ru').format(dateTime.toLocal());
   }
 
   static bool isAvailable(String start, String end, {DateTime time, bool isoTime = false}) {
