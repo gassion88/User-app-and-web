@@ -185,9 +185,9 @@ class _SearchScreenState extends State<SearchScreen> {
           }),
         )),
 
-        bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
+        /*bottomNavigationBar: GetBuilder<CartController>(builder: (cartController) {
           return cartController.cartList.length > 0 && !ResponsiveHelper.isDesktop(context) ? BottomCartWidget() : SizedBox();
-        }),
+        }),*/
       ),
     );
   }
