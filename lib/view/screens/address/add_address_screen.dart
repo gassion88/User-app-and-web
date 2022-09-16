@@ -254,6 +254,9 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                     floor: _floorController.text.trim(),
                   );
                   if(widget.address == null) {
+                    if(_addressController.text == ''){
+                      showCustomSnackBar('Адрес доставки не может быть пустым');
+                    }else{
                     locationController.addAddress(_addressModel, widget.fromCheckout, widget.zoneId).then((response) {
                       if(response.isSuccess) {
                         Get.back(result: _addressModel);
@@ -261,8 +264,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       }else {
                         showCustomSnackBar(response.message);
                       }
-                    });
+                    });}
                   }else {
+                    if(_addressController.text == ''){
+                      showCustomSnackBar('Адрес доставки не может быть пустым');
+                    }else{
                     locationController.updateAddress(_addressModel, widget.address.id).then((response) {
                       if(response.isSuccess) {
                         Get.back();
@@ -270,7 +276,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       }else {
                         showCustomSnackBar(response.message);
                       }
-                    });
+                    });}
                   }
                 },
               ) : Center(child: CircularProgressIndicator()),
