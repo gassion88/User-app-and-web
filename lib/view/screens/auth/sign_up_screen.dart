@@ -273,7 +273,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     defaultLatLng: LatLng(42.2128383, 43.9553117));
             Get.find<LocationController>()
                 .saveAddressAndNavigate(_address, false, '/', '/' != null);
-            Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
+            //Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
           }
         }else {
           showCustomSnackBar(status.message);
