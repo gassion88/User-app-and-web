@@ -14,7 +14,7 @@ import 'package:http/http.dart' as Http;
 class ApiClient extends GetxService {
   final String appBaseUrl;
   final SharedPreferences sharedPreferences;
-  static final String noInternetMessage = 'Connection to API server failed due to internet connection';
+  static final String noInternetMessage = 'Проблемы с интернет соединением';
   final int timeoutInSeconds = 30;
 
   String token;
