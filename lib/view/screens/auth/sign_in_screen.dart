@@ -134,7 +134,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   : CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code],
                               enabled: false,
                               padding: EdgeInsets.zero,
-                              showFlagMain: true,
+                              showFlagMain: false,
                               flagWidth: 30,
                               dialogBackgroundColor: Theme.of(context).cardColor,
                               textStyle: robotoRegular.copyWith(

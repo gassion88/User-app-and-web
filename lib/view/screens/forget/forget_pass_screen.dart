@@ -65,7 +65,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                   favorite: [CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).code],
                   enabled: false,
                   padding: EdgeInsets.zero,
-                  showFlagMain: true,
+                  showFlagMain: false,
                   dialogBackgroundColor: Theme.of(context).cardColor,
                   textStyle: robotoRegular.copyWith(
                     fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
