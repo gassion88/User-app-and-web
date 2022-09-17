@@ -250,7 +250,7 @@ class ProductController extends GetxController implements GetxService {
     ResponseModel responseModel;
     if (response.statusCode == 200) {
       _submitList[index] = true;
-      responseModel = ResponseModel(true, 'Review submitted successfully');
+      responseModel = ResponseModel(true, 'Отзыв успешно отправлен');
       update();
     } else {
       responseModel = ResponseModel(false, response.statusText);

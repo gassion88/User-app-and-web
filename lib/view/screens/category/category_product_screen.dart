@@ -105,7 +105,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> with Tick
               autofocus: true,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
-                hintText: 'Search...',
+                hintText: 'Поиск...',
                 border: InputBorder.none,
               ),
               style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
