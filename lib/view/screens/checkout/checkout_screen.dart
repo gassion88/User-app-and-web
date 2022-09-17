@@ -109,7 +109,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           bool _todayClosed = false;
           bool _tomorrowClosed = false;
           List<AddressModel> _addressList = [];
-         // _addressList.add(Get.find<LocationController>().getUserAddress());
+          //_addressList.add(Get.find<LocationController>().getUserAddress());
           if(restController.restaurant != null) {
             if(locationController.addressList != null) {
               for(int index=0; index<locationController.addressList.length; index++) {
@@ -717,7 +717,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             cart.quantity, _addOnIdList, cart.addOns, _addOnQtyList,
                           ));
                         }
-                        AddressModel _address =  _addressList[orderController.addressIndex];
+                        AddressModel _address =  orderController.orderType == 'take_away' ?  AddressModel(address:"Самовывоз",addressType:"others", contactPersonName: null,contactPersonNumber: null ) : _addressList[orderController.addressIndex];
                         orderController.placeOrder(PlaceOrderBody(
                           cart: carts, couponDiscountAmount: Get.find<CouponController>().discount, distance: orderController.distance,
                           couponDiscountTitle: Get.find<CouponController>().discount > 0 ? Get.find<CouponController>().coupon.title : null,
