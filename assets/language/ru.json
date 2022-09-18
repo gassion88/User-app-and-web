@@ -6,7 +6,7 @@
   "on_boarding_2_title": "Легкая оплата",
   "on_boarding_3_title": "Быстрая доставка",
   "on_boarding_1_description": "Широкий выбор ресторанов для заказа желаемой еды.",
-  "on_boarding_2_description": "Закажите еду и оплатите её картой.",
+  "on_boarding_2_description": "Закажите еду и оплатите её онлайн.",
   "on_boarding_3_description": "Заказы доставляет наша курьерская служба,что позволяет снять нагрузку с ресторана ,а вам быстрее получить ваш заказ!",
   "skip": "Пропустить",
   "next": "Дальше",
@@ -454,7 +454,7 @@
   
   "version_5.8": "Version 5.8",
   "write_something": "Напиши что-нибудь...",
-  "live_chat": "Live Chat",
+  "live_chat": "Чат",
   "chat": "Чат",
   "whatsapp": "Whatsapp",
   "restaurant_name": "Название ресторана",
