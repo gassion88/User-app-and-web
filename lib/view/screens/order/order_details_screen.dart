@@ -261,7 +261,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
                     ),
                   ])),
-                  (_order.orderType == 'take_away' && (_order.orderStatus == 'pending' || _order.orderStatus == 'accepted'
+                  /*(_order.orderType == 'take_away' && (_order.orderStatus == 'pending' || _order.orderStatus == 'accepted'
                   || _order.orderStatus == 'confirmed' || _order.orderStatus == 'processing' || _order.orderStatus == 'handover'
                   || _order.orderStatus == 'picked_up')) ? TextButton.icon(
                     onPressed: () async {
@@ -274,7 +274,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                       }
                     },
                     icon: Icon(Icons.directions), label: Text('direction'.tr),
-                  ) : SizedBox(),
+                  ) :*/ SizedBox(),
                   (_order.orderStatus != 'delivered' && _order.orderStatus != 'failed' && _order.orderStatus != 'canceled' && _order.orderStatus != 'refunded') ? TextButton.icon(
                     onPressed: () async {
                       orderController.cancelTimer();
