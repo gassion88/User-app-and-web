@@ -87,7 +87,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         }
 
         return GetBuilder<LocationController>(builder: (locationController) {
-          _addressController.text = locationController.address;
+          _addressController.text = 'Домашний адрес';
 
           return Column(children: [
 
@@ -103,7 +103,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeExtraSmall),
                 )),
                 SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
+                Text(
+                  'Если адрес будет указан некоректно, ресторан может непринять заказ.Улица и дом должны быть указаны объязательно!',
+                  style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.redAccent),
+                ),
+                SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                 Text(
                   'label_as'.tr,
                   style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
@@ -149,7 +153,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                 SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                 MyTextField(
                   hintText: 'delivery_address'.tr,
-                  inputType: TextInputType.streetAddress,
+                  inputType: TextInputType.text,
                   focusNode: _addressNode,
                   nextFocus: _nameNode,
                   controller: _addressController,
@@ -256,6 +260,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   if(widget.address == null) {
                     if(_addressController.text == ''){
                       showCustomSnackBar('Адрес доставки не может быть пустым');
+                    }else if(_streetNumberController.text == '' || _streetNumberController.text == null){
+                      showCustomSnackBar('Укажите название улицы');
+                    }else if(_houseController.text == '' || _houseController.text == null){
+                      showCustomSnackBar('Укажите номер дома');
                     }else{
                     locationController.addAddress(_addressModel, widget.fromCheckout, widget.zoneId).then((response) {
                       if(response.isSuccess) {
@@ -268,6 +276,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   }else {
                     if(_addressController.text == ''){
                       showCustomSnackBar('Адрес доставки не может быть пустым');
+                    }else if(_streetNumberController.text == '' || _streetNumberController.text == null){
+                      showCustomSnackBar('Укажите название улицы');
+                    }else if(_houseController.text == '' || _houseController.text == null){
+                      showCustomSnackBar('Укажите номер дома');
                     }else{
                     locationController.updateAddress(_addressModel, widget.address.id).then((response) {
                       if(response.isSuccess) {
