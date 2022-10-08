@@ -720,6 +720,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             cart.quantity, _addOnIdList, cart.addOns, _addOnQtyList,
                           ));
                         }
+                        orderController.selectDelivery(0);
                         AddressModel _address =  orderController.orderType == 'take_away' ?  AddressModel(address:"Самовывоз",addressType:"others", contactPersonName: null,contactPersonNumber: null ) : _addressList[orderController.addressIndex];
                         orderController.placeOrder(PlaceOrderBody(
                           cart: carts, couponDiscountAmount: Get.find<CouponController>().discount, distance: orderController.distance,
