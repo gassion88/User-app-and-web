@@ -661,8 +661,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       bool _isAvailable = true;
                       DateTime _scheduleStartDate = DateTime.now();
                       DateTime _scheduleEndDate = DateTime.now();
-                      if(orderController.selectedDateSlot == 0){
+                      if(_addressList.length == 0){
                         showCustomSnackBar('Добавьте адрес');
+                        return;
                       }
                       if(orderController.timeSlots == null || orderController.timeSlots.length == 0) {
                         _isAvailable = false;
