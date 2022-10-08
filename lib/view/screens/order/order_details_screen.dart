@@ -124,14 +124,20 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                   ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.asset(Images.animate_delivery_man, fit: BoxFit.contain)),
                   SizedBox(height: Dimensions.PADDING_SIZE_DEFAULT),
 
-                  Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)),
+                  _order.orderType == 'delivery' ? Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor))
+                   : Text('Вы сможете забрать свой заказ через '.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                   Center(
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
 
-                      Text(
+                      _order.orderType == 'delivery' ? Text(
                         DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
+                            : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
+                            '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
+                        style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
+                      ) : Text(
+                        DateConverter.differenceInMinute('0', _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
                             : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
                             '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
                         style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
