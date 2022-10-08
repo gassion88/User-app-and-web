@@ -120,12 +120,27 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
               padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
               child: Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                DateConverter.isBeforeTime(_order.scheduleAt) ? (_order.orderStatus != 'delivered' && _order.orderStatus != 'failed'&& _order.orderStatus != 'canceled') ? Column(children: [
-                  ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.asset(Images.animate_delivery_man, fit: BoxFit.contain)),
+                DateConverter.isBeforeTime(_order.scheduleAt) ? (_order.orderStatus != 'delivered' && _order.orderStatus != 'failed' ) ? Column(children: [
+                  _order.orderStatus == 'picked_up' ? ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.asset(Images.animate_delivery_man, fit: BoxFit.contain)) : SizedBox(height: Dimensions.PADDING_SIZE_DEFAULT),
                   SizedBox(height: Dimensions.PADDING_SIZE_DEFAULT),
 
-                  _order.orderType == 'delivery' ? Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor))
-                   : Text('Вы сможете забрать свой заказ через '.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)),
+                   
+                   _order.orderStatus == 'pending' ? 
+                   Text('Ресторан скоро примет ваш заказ'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor))
+                   : _order.orderStatus == 'confirmed' ? 
+                   Text('Ресторан принял ваш заказ и скоро начнёт его готовить'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor))  
+                   : _order.orderStatus == 'proccesing' &&  _order.orderType == 'delivery' ? 
+                   Text('Ресторан готовит ваш заказ,мы доставим его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                    _order.orderStatus == 'handover' &&  _order.orderType == 'delivery' ? 
+                   Text('Передаём ваш заказ курьеру, доставим его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                   _order.orderStatus == 'processing' &&  _order.orderType == 'take_away' ? 
+                   Text('Ресторан готовит ваш заказ,вы сможете забрать его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                   _order.orderStatus == 'handover' &&  _order.orderType == 'take_away' ? 
+                   Text('Ваш заказ готов,можете его забрать!'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                   _order.orderStatus == 'picked_up' ? 
+                   Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) :
+                   _order.orderStatus == 'canceled' ? 
+                   Text('Ресторан отменил ваш заказ'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)):
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                   Center(
@@ -136,20 +151,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                             : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
                             '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
                         style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                      ) : Text(
+                      ) : _order.orderStatus != 'handover' &&  _order.orderType == 'take_away' ? Text(
                         DateConverter.differenceInMinute('0', _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
                             : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
                             '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
                         style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                      ),
+                      ): SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL) ,
                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
-                      Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)),
+                      _order.orderStatus != 'handover' &&  _order.orderType == 'take_away' ?Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)) : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     ]),
                   ),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
 
                 ]) : SizedBox() : SizedBox(),
+                _order.orderStatus == 'delivered' ? 
+                   Text('Заказ выполнен'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Colors.green)):
+                   SizedBox(),
 
                 Row(children: [
                   Text('${'order_id'.tr}:', style: robotoRegular),
