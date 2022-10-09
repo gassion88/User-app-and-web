@@ -126,40 +126,46 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
 
                    
                    _order.orderStatus == 'pending' ? 
-                   Text('Ресторан скоро примет ваш заказ'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor))
+                   Text('Ресторан скоро примет ваш заказ.'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor))
                    : _order.orderStatus == 'confirmed' ? 
-                   Text('Ресторан принял ваш заказ и скоро начнёт его готовить'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor))  
-                   : _order.orderStatus == 'proccesing' &&  _order.orderType == 'delivery' ? 
-                   Text('Ресторан готовит ваш заказ,мы доставим его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                   Text('Ресторан принял ваш заказ и скоро начнёт его готовить.'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor))  
+                   : _order.orderStatus == 'processing' &&  _order.orderType == 'delivery' ? 
+                   Text('Ресторан готовит ваш заказ,мы доставим его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor)) : 
                     _order.orderStatus == 'handover' &&  _order.orderType == 'delivery' ? 
-                   Text('Передаём ваш заказ курьеру, доставим его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                   Text('Передаём ваш заказ курьеру, доставим его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor)) : 
                    _order.orderStatus == 'processing' &&  _order.orderType == 'take_away' ? 
-                   Text('Ресторан готовит ваш заказ,вы сможете забрать его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                   Text('Ресторан готовит ваш заказ,вы сможете забрать его примерно через :'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor)) : 
                    _order.orderStatus == 'handover' &&  _order.orderType == 'take_away' ? 
-                   Text('Ваш заказ готов,можете его забрать!'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) : 
+                   Text('Ваш заказ готов,можете его забрать!'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor)) : 
                    _order.orderStatus == 'picked_up' ? 
-                   Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)) :
+                   Text('your_food_will_delivered_within'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor)) :
                    _order.orderStatus == 'canceled' ? 
-                   Text('Ресторан отменил ваш заказ'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor)):
+                   Text('Ресторан отменил ваш заказ'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.PADDING_SIZE_LARGE, color: Theme.of(context).primaryColor)):
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+
+                  SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
                   Center(
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
 
-                      _order.orderType == 'delivery' ? Text(
+                      _order.orderType == 'delivery' && _order.orderStatus != 'pending' && _order.orderStatus != 'confirmed' ? Text(
                         DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
                             : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
                             '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
-                        style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                      ) : _order.orderStatus != 'handover' &&  _order.orderType == 'take_away' ? Text(
-                        DateConverter.differenceInMinute('0', _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
+                        style: robotoBold.copyWith(fontSize: Dimensions.PADDING_SIZE_OVER_LARGE),
+                      ) : _order.orderType == 'take_away' && _order.orderStatus != 'handover' && _order.orderStatus != 'confirmed' ? Text(
+                        DateConverter.differenceInMinute('1', _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
                             : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
                             '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
-                        style: robotoBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge),
-                      ): SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL) ,
-                      SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                        style: robotoBold.copyWith(fontSize: Dimensions.PADDING_SIZE_OVER_LARGE),
+                      ) : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
-                      _order.orderStatus != 'handover' &&  _order.orderType == 'take_away' ?Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)) : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                      (_order.orderStatus != 'handover' &&  _order.orderType == 'take_away') 
+                      ? Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.PADDING_SIZE_EXTRA_LARGE, color: Theme.of(context).primaryColor)) 
+                     : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                      ( _order.orderType == 'delivery' && _order.orderStatus != 'pending' && _order.orderStatus != 'confirmed' ) 
+                      ? Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.PADDING_SIZE_EXTRA_LARGE, color: Theme.of(context).primaryColor)) 
+                       : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     ]),
                   ),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
@@ -232,7 +238,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     Text(
                       _order.orderStatus == 'delivered' ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered, locale)}'
-                          : _order.orderStatus.tr,
+                          : _order.orderType == 'take_away' &&  _order.orderStatus == 'handover' ?  'Заберите ваш заказ' : _order.orderStatus.tr,
                       style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
                     ),
                   ]),
