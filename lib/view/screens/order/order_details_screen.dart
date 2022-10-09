@@ -153,14 +153,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                             : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
                             '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
                         style: robotoBold.copyWith(fontSize: Dimensions.PADDING_SIZE_OVER_LARGE),
-                      ) : _order.orderType == 'take_away' && _order.orderStatus != 'handover' && _order.orderStatus != 'confirmed' ? Text(
+                      ) : _order.orderType == 'take_away' && _order.orderStatus != 'handover' && _order.orderStatus != 'confirmed' && _order.orderStatus != 'pending' ? Text(
                         DateConverter.differenceInMinute('1', _order.createdAt, _order.processingTime, _order.scheduleAt) < 5 ? '1 - 5'
                             : '${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)-5} '
                             '- ${DateConverter.differenceInMinute(_order.restaurant.deliveryTime, _order.createdAt, _order.processingTime, _order.scheduleAt)}',
                         style: robotoBold.copyWith(fontSize: Dimensions.PADDING_SIZE_OVER_LARGE),
                       ) : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
-                      (_order.orderStatus != 'handover' &&  _order.orderType == 'take_away') 
+                      (_order.orderStatus != 'handover' && _order.orderStatus != 'pending' && _order.orderType == 'take_away') 
                       ? Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.PADDING_SIZE_EXTRA_LARGE, color: Theme.of(context).primaryColor)) 
                      : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                       ( _order.orderType == 'delivery' && _order.orderStatus != 'pending' && _order.orderStatus != 'confirmed' ) 
