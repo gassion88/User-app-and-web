@@ -60,6 +60,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 String locale = Localizations.localeOf(context).languageCode;
                 DateTime _originalDateTime = DateConverter.dateTimeStringToDate(notificationController.notificationList[index].createdAt);
                 DateTime _convertedDate = DateTime(_originalDateTime.year, _originalDateTime.month, _originalDateTime.day);
+                String newFormat = notificationController.notificationList[index].createdAt;
+                List time = newFormat.split(' ');
+                String tm = time[1];
                 bool _addTitle = false;
                 if(!_dateTimeList.contains(_convertedDate)) {
                   _addTitle = true;
@@ -91,7 +94,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text(
-                            notificationController.notificationList[index].data.title ?? '', maxLines: 1, overflow: TextOverflow.ellipsis,
+                          tm.substring(0, 5), maxLines: 1, overflow: TextOverflow.ellipsis,
                             style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
                           ),
                           Text(
