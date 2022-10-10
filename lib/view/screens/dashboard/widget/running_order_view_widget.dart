@@ -15,6 +15,7 @@ class RunningOrderViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<OrderController>(builder: (orderController) {
       String _orderStatus = orderController.runningOrderList != null ? orderController.runningOrderList[orderController.runningOrderIndex].orderStatus : '';
+      String _orderType = orderController.runningOrderList != null ? orderController.runningOrderList[orderController.runningOrderIndex].orderType : '';
       print('out for delivery: $_orderStatus');
       int _status = 0;
 
@@ -60,12 +61,12 @@ class RunningOrderViewWidget extends StatelessWidget {
                     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                        Row( mainAxisAlignment: MainAxisAlignment.center, children: [
                         Text('order_status'.tr + ': ', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
-                        Text( orderController.runningOrderList != null ?orderController.runningOrderList[orderController.runningOrderIndex].orderStatus.tr : '', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)),
+                        Text( orderController.runningOrderList != null ? _status == 3 && _orderType == 'take_away' ? 'Можно забрать' : orderController.runningOrderList[orderController.runningOrderIndex].orderStatus.tr : '', style: robotoBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).primaryColor)),
                       ]) ,
                       SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                       Text(
-                        _status == 1 ? 'the_restaurant_will_soon_accept_your_order'.tr : _status == 2 ? 'cooking'.tr : _status == 3 ? 'deliveryman_will_soon_pick_your_order'.tr : _status == 4 ? 'food_is_on_the_way'.tr : 'null',
+                        _status == 1 ? 'the_restaurant_will_soon_accept_your_order'.tr : _status == 2 ? 'cooking'.tr : _status == 3 && _orderType == 'take_away' ? 'Ваш заказ готов, можете его забрать!' :  _status == 3 ? 'deliveryman_will_soon_pick_your_order'.tr : _status == 4 ? 'food_is_on_the_way'.tr : 'null',
                           style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall), maxLines: 1, overflow: TextOverflow.ellipsis,
                       ),
 
