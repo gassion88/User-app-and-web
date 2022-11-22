@@ -264,7 +264,8 @@ class _SignInScreenState extends State<SignInScreen> {
             //Get.toNamed(RouteHelper.getAccessLocationRoute('sign-in'));
           }
         }else {
-          showCustomSnackBar(status.message);
+          if(status.message == "Unauthorized." ) showCustomSnackBar('Неправильные данные');
+          else showCustomSnackBar(status.message);
         }
       });
     }
