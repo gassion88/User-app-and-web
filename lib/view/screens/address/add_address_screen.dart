@@ -104,7 +104,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                 )),
                 SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
                 Text(
-                  'Если адрес будет указан некоректно, ресторан может непринять заказ.Улица и дом должны быть указаны объязательно!',
+                  'Если адрес будет указан некорректно, ресторан может непринять заказ.Улица и дом должны быть указаны обязательно!',
                   style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.redAccent),
                 ),
                 SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
