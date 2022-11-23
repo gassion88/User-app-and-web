@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:efood_multivendor/controller/auth_controller.dart';
+import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/controller/splash_controller.dart';
+import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
@@ -9,9 +11,11 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_app_bar.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/base/custom_dialog.dart';
+import 'package:efood_multivendor/view/base/custom_loader.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -162,8 +166,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             ]),
                           ),
                         ), dismissible: false);
-                        Future.delayed(Duration(seconds: 2), () {
-                          Get.offNamed(RouteHelper.getAccessLocationRoute('verification'));
+                        Future.delayed(Duration(seconds: 2), () async {
+                           Get.dialog(CustomLoader(), barrierDismissible: false);
+            AddressModel _address = await Get.find<LocationController>()
+                .getCurrentLocation(true,
+                    defaultLatLng: LatLng(42.2128383, 43.9553117));
+            Get.find<LocationController>()
+                .saveAddressAndNavigate(_address, false, '/', '/' != null);
                         });
                       }else {
                         showCustomSnackBar(value.message);
