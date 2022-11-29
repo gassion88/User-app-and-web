@@ -160,7 +160,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                         style: robotoBold.copyWith(fontSize: Dimensions.PADDING_SIZE_OVER_LARGE),
                       ) : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
-                      (_order.orderStatus != 'handover' && _order.orderStatus != 'pending' && _order.orderType == 'take_away') 
+                      (_order.orderStatus != 'handover' && _order.orderStatus != 'confirmed'  && _order.orderStatus != 'pending' && _order.orderType == 'take_away') 
                       ? Text('min'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.PADDING_SIZE_EXTRA_LARGE, color: Theme.of(context).primaryColor)) 
                      : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                       ( _order.orderType == 'delivery' && _order.orderStatus != 'pending' && _order.orderStatus != 'confirmed' ) 
