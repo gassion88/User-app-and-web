@@ -18,7 +18,7 @@ class PaymentButton extends StatelessWidget {
       return Padding(
         padding: EdgeInsets.only(right: Dimensions.PADDING_SIZE_SMALL, bottom:  Dimensions.PADDING_SIZE_SMALL),
         child: InkWell(
-          onTap: () => orderController.setPaymentMethod(index),
+          //onTap: () => orderController.setPaymentMethod(index),
           child: Container(
             width: 200, padding: EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT),
             decoration: BoxDecoration(
