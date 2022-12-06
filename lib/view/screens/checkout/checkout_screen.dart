@@ -277,10 +277,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       houseController: _houseController, floorController: _floorController),
                                 );
                               },
-                              child: Row(
+                              child: Column(
                                 children: [
-                                  Expanded(child: AddressWidget(address: _addressList[orderController.addressIndex], fromAddress: false, fromCheckout: true)),
-                                  Icon(Icons.arrow_drop_down_sharp)
+                                  Row(
+                                    children: [
+                                      Expanded(child: AddressWidget(address: _addressList[orderController.addressIndex], fromAddress: false, fromCheckout: true)),
+                                      Icon(Icons.arrow_drop_down_sharp),
+                                    ],
+                                  ),
+                                                                    Row(
+                                    children: [
+                                      Row(children: [Text('Улица : ',style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),), Text(_addressList[orderController.addressIndex].road.toString())],),
+                                      Row(children: [Text(', Дом : ', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)), Text(_addressList[orderController.addressIndex].house.toString())],),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -661,7 +671,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       bool _isAvailable = true;
                       DateTime _scheduleStartDate = DateTime.now();
                       DateTime _scheduleEndDate = DateTime.now();
-                      if(_addressList.length == 0){
+                      if(_addressList.length == 0  && orderController.orderType != 'take_away'){
                         showCustomSnackBar('Добавьте адрес');
                         return;
                       }
@@ -739,8 +749,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           contactPersonName: _address.contactPersonName ?? '${Get.find<UserController>().userInfoModel.fName} '
                               '${Get.find<UserController>().userInfoModel.lName}',
                           contactPersonNumber: _address.contactPersonNumber ?? Get.find<UserController>().userInfoModel.phone,
-                          discountAmount: _discount, taxAmount: _tax, road: _streetNumberController.text.trim(),
-                          house: _houseController.text.trim(), floor: _floorController.text.trim(), dmTips: _tipController.text.trim(),
+                          discountAmount: _discount, taxAmount: _tax, road: _address.road != null ? _address.road.toString() : '',
+                          house: _address.house != null ? _address.house.toString() : '', floor: _address.floor != null ? _address.floor.toString() : '', dmTips: _tipController.text.trim(),
                         ), _callback, _total);
                       }
                     }) : Center(child: CircularProgressIndicator()),
