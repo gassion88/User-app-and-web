@@ -285,7 +285,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       Icon(Icons.arrow_drop_down_sharp),
                                     ],
                                   ),
-                                                                    Row(
+                                  Row(
                                     children: [
                                       Row(children: [Text('Улица : ',style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),), Text(_addressList[orderController.addressIndex].road.toString())],),
                                       Row(children: [Text(', Дом : ', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)), Text(_addressList[orderController.addressIndex].house.toString())],),

@@ -219,6 +219,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> with WidgetsBin
                     ),
                   ),
                 ]),
+                   _order.orderType == 'delivery' ? Row(
+                    children: [
+                      Row(children: [Text('Улица : ',style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),), Text(_order.deliveryAddress.road.toString())],),
+                      Row(children: [Text(', Дом : ', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor)), Text(_order.deliveryAddress.house.toString())],),
+                    ],
+                  ) : SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                 Divider(height: Dimensions.PADDING_SIZE_LARGE),
 
                 Padding(
