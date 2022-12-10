@@ -276,7 +276,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             //Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
           }
         }else {
-          showCustomSnackBar(status.message);
+          if(status.message == "phone уже занят."){
+            showCustomSnackBar("Номер телефона уже занят");
+          }
+          else{
+            showCustomSnackBar(status.message);
+          }
         }
       });
     }
